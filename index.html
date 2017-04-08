@@ -4,10 +4,29 @@
      <meta charset="UTF-8">     
      <title>Week 6 Lab</title>     
      <script src="//d3js.org/d3.v4.min.js"></script> 
+     <style>         
+         html, body, #vis {             
+            margin: 0;             
+            height: 100%;         
+         }     
+     </style> 
 </head> 
 <body> 
-
-    <script>         
+    <div id="vis"></div> 
+    <script> 
+         var width = document.getElementById("vis").clientWidth;         
+         var height = document.getElementById(“vis").clientHeight; 
+        
+         var svg = d3.select('#vis')            
+            .append('svg')                
+               .attr('height', height)                
+               .attr('width', width)         
+            .append(‘g’)      
+               .attr('transform', 'translate(' + margin.left + ',' + margin.top + ‘)');    
+             
+         width = width - margin.left - margin.right;
+         height = height - margin.top - margin.bottom;   
+   
       d3.csv('fitness.csv', function(data){             
          console.log(data);         
       });     
