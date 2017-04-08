@@ -1,35 +1,172 @@
-<!DOCTYPE html> 
-<html lang="en"> 
-<head>     
-     <meta charset="UTF-8">     
-     <title>Week 8 Lab</title>     
-     <script src="//d3js.org/d3.v4.min.js"></script> 
-     <style>         
-         html, body, #vis {             
-            margin: 0;             
-            height: 100%;         
-         }     
-     </style> 
-</head> 
-<body> 
-    <div id="vis"></div> 
-    <script> 
-         var width = document.getElementById("vis").clientWidth;         
-         var height = document.getElementById("vis").clientHeight; 
-        
-         var svg = d3.select('#vis')            
-            .append('svg')                
-               .attr('height', height)                
-               .attr('width', width)         
-            .append('g')      
-               .attr('transform', 'translate(' + margin.left + ',' + margin.top + ',');    
-             
-         width = width - margin.left - margin.right;
-         height = height - margin.top - margin.bottom;   
-   
-      d3.csv('fitness.csv', function(data){             
-         console.log(data);         
-      });     
-     </script>      
-</body> 
-</html> 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Week 7 Lab</title>
+    <script src="//d3js.org/d3.v4.min.js"></script>
+    <script src="//d3js.org/colorbrewer.v1.js"></script>
+    <style>
+        html, body, #vis {
+            margin: 0;
+            height: 100%;
+            font-family: sans-serif;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="vis"></div>
+    <script>
+
+        var width = document.getElementById("vis").clientWidth;
+        var height = document.getElementById("vis").clientHeight;
+
+        var margin = {
+            top: 50,
+            bottom: 100,
+            left: 100,
+            right: 50
+        };
+
+        var svg = d3.select('#vis')
+                    .append('svg')
+                        .attr('height', height)
+                        .attr('width', width)
+                    .append('g')
+                        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+        width = width - margin.left - margin.right;
+        height = height - margin.top - margin.bottom;
+
+        var x_scale = d3.scaleLinear()
+                    .rangeRound([0, width]);
+
+        var y_scale = d3.scaleLinear()
+                    .rangeRound([height, 0]);
+
+        var colour_scale_ran = d3.scaleQuantile()
+                    .range(colorbrewer.Reds[9]);
+
+        var colour_scale_noran = d3.scaleQuantile()
+                    .range(colorbrewer.Blues[9]);
+
+        var area_scale = d3.scaleLinear()
+                    .range([0, 400]);
+
+        var y_axis = d3.axisLeft(y_scale);
+
+        var x_axis = d3.axisBottom(x_scale);
+
+        svg.append("g")
+          .attr("class", "y axis");
+
+        svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")");
+
+
+        d3.csv('fitness.csv', function(data){
+
+            x_scale.domain(d3.extent(data, function(d){ return +d.Weight; }));
+            y_scale.domain(d3.extent(data, function(d){ return +d.Height; }));
+            colour_scale_ran.domain(d3.extent(data, function(d){ return +d.Age; }));
+            colour_scale_noran.domain(d3.extent(data, function(d){ return +d.Age; }));
+            area_scale.domain(d3.extent(data, function(d){ return +d.Pulse2; }));
+
+            var dots = svg.selectAll('.dot')
+                            .data(data);
+
+            //exit
+            dots
+                .exit()
+                .remove();
+
+            // enter
+            var new_dots = dots
+                .enter()
+                .append('circle')
+                .attr('class', 'dot')
+                .attr('stroke', 'black')
+                .attr('stroke-width', '0.5px')
+
+            //update
+            new_dots.merge(dots)
+                .attr('cx', function(d){ return x_scale(+d.Weight); })
+                .attr('cy', function(d){ return y_scale(+d.Height); })
+                .attr('fill', function(d){
+                    if(+d.Ran === 1) {
+                        return colour_scale_ran(+d.Age);
+                    } else {
+                        return colour_scale_noran(+d.Age);
+                    }
+                 })
+                .attr('r', function(d){
+                    var area = area_scale(+d.Pulse2);
+                    var radius = Math.sqrt(area / Math.PI);
+                    return radius;
+                });
+
+
+
+        var legend = svg.selectAll('.legend')
+            .data(colorbrewer.Reds[9]);
+
+        var new_legend = legend
+            .enter()
+            .append('g')
+            .attr('class', 'legend')
+
+        new_legend.merge(legend)
+                .append('rect')
+                .attr('width', 20)
+                .attr('height', 20)
+                .attr('x', width - 85)
+                .attr('y', function(d, i){ return height - 30 - (i * 20); })
+                .attr('fill', function(d, i){ return colorbrewer.Blues[9][i]; })
+                .attr('stroke', 'black')
+                .attr('stroke-width', '0.5px')
+
+        new_legend.merge(legend)
+                .append('rect')
+                .attr('width', 20)
+                .attr('height', 20)
+                .attr('x', width - 65)
+                .attr('y', function(d, i){ return height - 30 - (i * 20); })
+                .attr('fill', function(d){ return d })
+                .attr('stroke', 'black')
+                .attr('stroke-width', '0.5px');
+
+        new_legend.merge(legend)
+            .append('text')
+                .attr('x', width - 40)
+                .attr('y', function(d, i){ return height - 15 - (i * 20); })
+                .text(function(d){
+                    var low = colour_scale_ran.invertExtent(d)[0];
+                    var high = colour_scale_ran.invertExtent(d)[1];
+                    return low + " - " + high;
+                });
+
+
+        d3.select('.x.axis')
+            .call(x_axis);
+
+        d3.select('.y.axis')
+            .call(y_axis);
+
+        svg.append("text")
+              .attr("transform", "translate(" + width/2 +  "," + (height + margin.bottom/2) + ")")
+              .style("text-anchor", "end")
+              .text("Weight");
+
+        svg.append("text")
+          .attr("transform", "translate(-60," + height/2 + ")rotate(-90)")
+          .style("text-anchor", "middle")
+          .text("Height");
+
+
+
+        });
+    </script>
+
+</body>
+</html>
