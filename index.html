@@ -2,7 +2,7 @@
 <html lang="en"> 
 <head>     
      <meta charset="UTF-8">     
-     <title>Week 6 Lab</title>     
+     <title>Week 7 Lab</title>     
      <script src="//d3js.org/d3.v4.min.js"></script> 
      <style>         
          html, body, #vis {             
@@ -15,14 +15,14 @@
     <div id="vis"></div> 
     <script> 
          var width = document.getElementById("vis").clientWidth;         
-         var height = document.getElementById(“vis").clientHeight; 
+         var height = document.getElementById("vis").clientHeight; 
         
          var svg = d3.select('#vis')            
             .append('svg')                
                .attr('height', height)                
                .attr('width', width)         
             .append(‘g’)      
-               .attr('transform', 'translate(' + margin.left + ',' + margin.top + ‘)');    
+               .attr('transform', 'translate(' + margin.left + ',' + margin.top + ',');    
              
          width = width - margin.left - margin.right;
          height = height - margin.top - margin.bottom;   
