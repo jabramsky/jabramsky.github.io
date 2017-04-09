@@ -2,103 +2,161 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
-    <script src="d3.min.js"></script>
-    <script src="colorbrewer.js"></script>
+    <title>CMT212 Lab Week 4</title>
+    <link rel="stylesheet" href="../base.css">
+    <script src="//d3js.org/d3.v4.min.js" charset="utf-8"></script>
     <style>
-        html, body, #vis {
-            height: 100%;
-            margin: 0;
+        .labels {
+            fill: white;
         }
     </style>
 </head>
 <body>
+    <input type="button" onclick="update()" value="Update"/>
+    <input type="range" value="50" min="0" max="100" id="maximum">
     <div id="vis">
-
     </div>
-
     <script>
 
-        var width = document.getElementById('vis').clientWidth;
-        var height = document.getElementById('vis').clientHeight;
+        var width = 500;
+        var height = 500;
+
+        var maxValue = d3.select('#maximum').node().value;
 
         var margin = {
-            top: 10,
-            bottom: 70,
-            left: 70,
-            right: 20
-        }
+            top: 20,
+            left: 30,
+            right: 30,
+            bottom: 30
+        };
 
-        var svg = d3.select('#vis')
-            .append('svg')
+        var svg = d3.select("#vis")
+            .append("svg")
                 .attr('width', width)
                 .attr('height', height)
-            .append('g')
-                .attr('transform', 'translate('+ margin.left + ',' + margin.right +')');
+            .append("g")
+                .attr("transform", "translate(" + margin.top + "," + margin.left + ")");
 
         width = width - margin.left - margin.right;
         height = height - margin.top - margin.bottom;
 
-        var x_scale = d3.scaleBand()
-            .rangeRound([0, width])
-            .padding(0.1);
+        var yscale = d3.scaleLinear()
+                        .range([height, 0])
+                        .domain([0, maxValue]);
 
-        var y_scale = d3.scaleLinear()
-            .range([height, 0]);
+        var xscale = d3.scaleBand()
+                        .range([0, width])
+                        .padding(0.1);
 
-        var colour_scale = d3.scaleQuantile()
-            .range(colorbrewer.OrRd[9]);
+        var duration = 1000;
 
-        var y_axis = d3.axisLeft(y_scale);
-        var x_axis = d3.axisBottom(x_scale);
+        var xaxis = d3.axisBottom(xscale);
+
+        var yaxis = d3.axisLeft(yscale);
 
         svg.append('g')
-            .attr('class', 'x axis')
-            .attr('transform', 'translate(0,' + height + ')');
+            .attr('transform', 'translate(0, ' + (height) + ')')
+            .attr('class', 'x axis');
 
         svg.append('g')
             .attr('class', 'y axis');
 
-        d3.csv('monthly_data_2014.csv', function(csv_data){
-            console.log(csv_data);
+        function update() {
 
-            var months = csv_data.map(function(d){ return d.month; });
-            console.log(months);
-            x_scale.domain(months);
+            maxValue = d3.select('#maximum').node().value;
+            var exampleData = createRandomData(maxValue);
 
-            var max_value = d3.max(csv_data, function(d){ return +d.value; });
+            maxValue = d3.max(exampleData);
 
-            y_scale.domain([0, max_value]);
-            colour_scale.domain([0, max_value]);
+            xscale.domain(d3.range(exampleData.length));
 
-            var bars = svg.selectAll('.bar')
-                .data(csv_data)
+            yscale.domain([0, maxValue]);
+
+            var bars = svg.selectAll(".bar")
+               .data(exampleData);
+
+            bars
+                .enter()
+                    .append('rect')
+                    .attr('class','bar')
+                    .attr("fill", "red")
+                    .attr('width', xscale.bandwidth())
+                    .attr('height', 0)
+                    .attr('y', height)
+                .merge(bars)
+                    .transition()
+                    .duration(duration)
+                    .attr("height", function(d, i){ return height - yscale(d); })
+                    .attr("y", function(d, i){ return yscale(d); })
+                    .attr("width", xscale.bandwidth())
+                    .attr("x", function(d, i){ return xscale(i); })
+
 
             bars
                 .exit()
+                .transition()
+                .duration(duration)
+                .attr('height', 0)
+                .attr('y', height)
                 .remove();
 
-            var new_bars = bars
-                .enter()
-                .append('rect')
-                .attr('class', 'bar')
+            var labels = svg.selectAll('.label')
+                .data(exampleData);
 
-            new_bars.merge(bars)
-                .attr('x', function(d){ return x_scale(d.month); })
-                .attr('width', x_scale.bandwidth())
-                .attr('y', function(d){ return y_scale(+d.value); })
-                .attr('height', function(d){ return height - y_scale(+d.value)})
-                .attr('fill', function(d){ return colour_scale(+d.value); })
+            labels
+                .enter()
+                .append('text')
+                    .attr('class', 'label')
+                    .attr('opacity', 0)
+                    .attr('y', height)
+                    .attr('fill', 'white')
+                .merge(labels)
+                    .transition()
+                    .duration(duration)
+                    .attr('opacity', 1)
+                    .attr('x', function(d, i) {
+                        return xscale(i) + 1;
+                    })
+                    .attr('y', function(d){
+                        return yscale(d) + 20;
+                    })
+                    .text(function(d){
+                        return d;
+                    });
+
+            labels
+                .exit()
+                .transition()
+                .duration(duration)
+                .attr('y', height)
+                .attr('opacity', 0)
+                .remove();
 
             svg.select('.x.axis')
-                .call(x_axis);
+                .transition()
+                .duration(duration)
+                .call(xaxis);
 
             svg.select('.y.axis')
-                .call(y_axis);
+                .transition()
+                .duration(duration)
+                .call(yaxis);
 
-        });
+        }
+
+        function createRandomData(maxValue) {
+            var numDataItems = Math.floor((Math.random() * 30) + 1);
+            var d = [];
+            for(var i = 0; i < numDataItems; i++) {
+                d.push(Math.floor((Math.random() * maxValue) + 1));
+            }
+            return d;
+        }
+
+        update();
+
+
 
     </script>
-
 </body>
 </html>
