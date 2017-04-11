@@ -1,0 +1,108 @@
+INDUSTRY,OUTPUT,IC,COE,GOS,WAGESHARE,NUMBER
+Crop and animal production; hunting and related services  ,23111,14057,4016,7616,0.44,1
+Forestry and logging   ,1253,938,190,122,0.6,2
+Fishing and aquaculture   ,1442,953,92,381,0.19,3
+Mining of coal and lignite   ,1237,838,269,124,0.67,4
+Extraction of hydrocarbons and ores ,39325,12797,3383,23119,0.13,5
+Other mining and quarrying   ,5098,2574,1558,928,0.62,6
+Mining support services   ,4225,1556,379,2275,0.14,7
+"Meat processing, preserving and production ",14219,11353,2613,218,0.91,8
+"Fish, seafood, fruit and vegetables preserving and production ",7710,5071,2199,417,0.83,9
+Manufacture of vegetable and animal oils and fats ,901,634,201,67,0.75,10
+Manufacture of dairy products ,7290,6463,814,5,0.98,11
+"Manufacture of grain mill products, starches and starch products ",5103,4087,816,197,0.8,12
+Manufacture of bakery and farinaceous products ,8764,5000,3144,574,0.84,13
+Manufacture of other food products ,15512,10346,4307,801,0.83,14
+Manufacture of prepared animal feeds ,4574,3939,490,142,0.77,15
+Manufacture of alcoholic beverages  & tobacco products ,10207,5914,1935,2317,0.45,16
+Manufacture of soft drinks and bottled water ,3866,2579,510,772,0.4,17
+Manufacture of textiles   ,5435,3014,1708,676,0.71,18
+Manufacture of apparel   ,3792,2133,1045,602,0.63,19
+Manufacture of leather and related products   ,1155,528,241,387,0.38,20
+"Manufacture of wood, cork and straw products, except furniture ",6302,4180,1592,479,0.75,21
+Manufacture of paper and paper products   ,11200,7642,2650,847,0.74,22
+Manufacture of recorded media products ,11102,6070,3534,1391,0.7,23
+Manufacture of coke and refined petroleum products   ,34605,30398,2576,1593,0.61,24
+"Manufacture of paints, varnishes and similar coatings, printing ink and mastics ",3355,2052,908,388,0.7,25
+Manufacture of cleaning products ,6128,4183,1200,731,0.62,26
+Manufacture of other chemical products ,5332,4289,898,132,0.86,27
+"Manufacture of industrial gases, inorganics and fertilisers ",3349,2583,517,233,0.67,28
+Manufacture of petrochemicals ,17416,15749,1725,-104,1.03,29
+Manufacture of dyestuffs and agro-chemicals ,2412,1850,393,168,0.7,30
+Manufacture of pharmaceuticals ,23110,9051,4711,9327,0.34,31
+Manufacture of rubber and plastic products   ,18857,11620,5626,1468,0.78,32
+"Manufacture of concrete, cement, lime, and plaster materials and articles ",7232,5355,1480,338,0.79,33
+"Manufacture of glass, refractory, clay, porcelain, ceramic, stone products ",6415,4004,1660,574,0.69,34
+Manufacture of basic iron and steel ,9011,7429,1263,268,0.8,35
+Manufacture of other basic metals and casting ,9028,7527,1174,310,0.78,36
+Manufacture of weapons and ammunition ,3295,1910,760,627,0.55,37
+Manufacture of other fabricated metal products ,25398,13841,9583,1732,0.83,38
+"Manufacture of computer, electronic and optical products   ",19296,11917,6070,1228,0.82,39
+Manufacture of electrical equipment   ,12334,7686,3570,1021,0.77,40
+Manufacture of machinery and equipment N.E.C.   ,27453,16458,8930,1908,0.81,41
+"Manufacture of motor vehicles, trailers and semi-trailers   ",41496,33273,7170,933,0.87,42
+Building of ships and boats ,3360,2059,1292,-10,0.99,43
+Manufacture of air and spacecraft and related machinery ,22008,14602,4860,2509,0.66,44
+Manufacture of other transport equipment ,3293,1992,701,600,0.54,45
+Manufacture of furniture   ,6909,3789,2029,1027,0.65,46
+Other manufacturing   ,8515,3871,2184,2401,0.47,47
+Repair and maintenance of ships and boats ,906,435,395,76,0.84,48
+Repair and maintenance of aircraft and spacecraft ,3682,2210,1102,366,0.75,49
+Rest of repair; installation ,7883,4359,2200,1274,0.62,50
+"Electric power generation, transmission and distribution ",69587,60555,4241,4079,0.47,51
+Manufacture and distribution of gas; steam and aircon supply ,22524,17579,2111,2474,0.43,52
+"Water collection, treatment and supply   ",6450,1994,1147,2854,0.26,53
+Sewerage   ,6740,1898,1675,3095,0.35,54
+"Waste collection, treatment and disposal activities; materials recovery   ",20941,12491,4266,4087,0.5,55
+Remediation activities; other waste management services   ,240,155,116,-31,1.36,56
+Construction ,209500,124327,46521,37749,0.55,57
+Wholesale and retail trade; repair of motor vehicles ,46725,19478,17396,9042,0.64,58
+"Wholesale trade, exc. motor vehicles ",106648,54658,33929,16405,0.65,59
+"Retail trade, exc. motor vehicles  ",137508,57042,50081,24417,0.62,60
+Rail transport ,10221,6157,3917,124,0.96,61
+Land transport services exc trains; pipeline use services ,42370,20475,13826,7680,0.63,62
+Water transport   ,14687,9617,3603,1444,0.71,63
+Air transport   ,16339,9724,3603,3013,0.54,64
+Warehousing; transportation support ,34147,19900,12667,823,0.89,65
+Postal and courier activities   ,19774,9250,8250,2037,0.78,66
+Accommodation   ,20219,11237,6190,2080,0.69,67
+Food and beverage services ,57468,29721,19478,6719,0.7,68
+Publishing ,20781,9974,7108,3599,0.66,69
+"TV, film, music and book production, broadcasting and publishing ",25430,12772,6016,6717,0.48,70
+Telecommunications   ,47981,22545,13186,11902,0.52,71
+Computer programming; related activities   ,57494,20014,24598,12469,0.66,72
+Information services ,7691,2836,3178,1659,0.65,73
+"Financial services, exc. insurance and pension funds   ",137169,64879,39191,31676,0.54,74
+Insurance ,72358,50038,7503,14084,0.34,75
+Financial service support activities ,34007,14489,14328,4901,0.73,76
+Letting of own property ,66279,26677,7357,32728,0.19,77
+Owner-occupier housing services ,162920,35238,0,127682,0,78
+Estate and letting agency services ,9298,1392,2717,4987,0.34,79
+Legal activities   ,27724,8296,8778,10229,0.45,80
+Accountancy; tax consultancy   ,19477,4385,8681,6251,0.58,81
+Head offices; management consultancy ,32387,16131,10220,5713,0.63,82
+Architecture and engineering services ,42281,20032,16666,5213,0.75,83
+Research and development   ,15321,6842,4284,4130,0.51,84
+Advertising; market research   ,15952,7587,5097,3064,0.61,85
+"Other professional, scientific and technical services ",14517,6625,5439,2326,0.69,86
+Veterinary services ,3345,1036,1564,741,0.68,87
+Non-real-estate rental and leasing services ,21578,8221,6959,6182,0.52,88
+Employment agency services ,25488,11127,8367,5847,0.58,89
+Travel agency services; tour operation ,15283,6887,5820,2495,0.69,90
+Security and investigation services ,5044,1994,1482,1541,0.49,91
+Building maintenance services; landscaping ,16758,8463,3960,4276,0.48,92
+Office admin; business support ,32025,15560,11049,5161,0.67,93
+Public administration; defence ,146207,66958,60963,18286,0.77,94
+Education   ,128196,31947,85111,10898,0.88,95
+Healthcare ,124859,40703,61107,22968,0.73,96
+Residential care & social work ,50969,23560,21644,5629,0.79,97
+Arts and entertainment ,9245,5023,2051,2132,0.49,98
+Cultural services ,4750,1981,2902,-141,1.05,99
+Gambling services ,13350,4082,2810,6285,0.3,100
+Sports and recreation services ,11432,7442,2450,1366,0.61,101
+Unions and similar societies ,19337,6225,11137,1886,0.85,102
+Repair of computers and other personal goods ,3499,1204,1794,472,0.78,103
+Other personal services ,21841,6474,4473,10643,0.29,104
+Households as employers of domestic staff ,5868,0,5473,395,0.93,105
+,,,,,,
+,,,,,,
