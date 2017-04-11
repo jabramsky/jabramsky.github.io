@@ -65,10 +65,10 @@
           .attr("transform", "translate(0," + height + ")");
 
 
-        d3.csv('fitness.csv', function(data){
+        d3.csv('prodfunction.csv', function(data){
 
-            x_scale.domain(d3.extent(data, function(d){ return +d.Height; }));
-            y_scale.domain(d3.extent(data, function(d){ return +d.Weight; }));
+            x_scale.domain(d3.extent(data, function(d){ return +d.COE; }));
+            y_scale.domain(d3.extent(data, function(d){ return +d.GOS; }));
 
             var dots = svg.selectAll('.dot')
                             .data(data);
@@ -86,13 +86,13 @@
                 .attr('stroke', 'black')
                 .attr('stroke-width', '0.5px')
 
-            //update
+            // update
             new_dots.merge(dots)
                 .attr('cx', function(d){ return x_scale(+d.Height); })
                 .attr('cy', function(d){ return y_scale(+d.Weight); })
                 .attr('fill', 'red')
                 .attr('r', function(d){
-                    var area = 5
+                    var area = 100
                     var radius = Math.sqrt(area / Math.PI);
                     return radius;
                 });
