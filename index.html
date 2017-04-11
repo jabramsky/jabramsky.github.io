@@ -88,8 +88,8 @@
 
             // update
             new_dots.merge(dots)
-                .attr('cx', function(d){ return x_scale(+d.Height); })
-                .attr('cy', function(d){ return y_scale(+d.Weight); })
+                .attr('cx', function(d){ return x_scale(+d.COE); })
+                .attr('cy', function(d){ return y_scale(+d.GOSs); })
                 .attr('fill', 'red')
                 .attr('r', function(d){
                     var area = 100
