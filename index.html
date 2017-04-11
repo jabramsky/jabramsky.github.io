@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>CMT212 Lab Week 4</title>
+    <link rel="stylesheet" href="../base.css">
     <script src="//d3js.org/d3.v4.min.js" charset="utf-8"></script>
     <style>
         .labels {
@@ -58,6 +59,9 @@
 
         d3.csv('prodfunction.csv', function(data){
 
+            x_scale.domain(d3.extent(data, function(d){ return +d.NUMBER; }));
+            y_scale.domain(d3.extent(data, function(d){ return +d.WAGESHARE; }));
+
             var bars = svg.selectAll('.bar')
                             .data(data);
 
@@ -80,10 +84,10 @@
             new_bars.merge(bars)
                 .transition()
                 .duration(duration)
-                .attr("height", function(d, i){ return height - yscale(d); })
-                .attr("y", function(d, i){ return yscale(d); })
+                .attr("height", function(d){ return height - yscale(d.WAGESHARE); })
+                .attr("y", function(d){ return yscale(d.WAGESHARE); })
                 .attr("width", xscale.bandwidth())
-                .attr("x", function(d, i){ return xscale(i); })
+                .attr("x", function(d){ return xscale(d.NUMBER); })
 
             // exit
             bars
@@ -93,7 +97,7 @@
                 .attr('height', 0)
                 .attr('y', height)
                 .remove();
-
+            });
     </script>
 </body>
 </html>
