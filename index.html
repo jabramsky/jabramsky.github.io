@@ -76,7 +76,7 @@
     var y_axis = d3.axisLeft()
         .scale(y_scale);
 
-    d3.csv('unemployment_monthly.csv', function(csv_data){
+    d3.csv('timeseries.csv', function(csv_data){
         console.log(csv_data);
 
         x_scale.domain(d3.extent(csv_data, function(d){
@@ -84,7 +84,7 @@
         }))
 
         y_scale.domain([0, d3.max(csv_data, function(d){
-            return +d.value;
+            return +d.WAGESHARE;
         })]);
 
         var lines = svg.selectAll('.line')
@@ -136,7 +136,7 @@
 
             tooltip
                 .style('display', null)
-                .html('<p>Date: ' + displayDate + '<br>Unemployment Rate: ' + d.value + '%</p>');
+                .html('<p>Date: ' + displayDate + '<br>Wage share: ' + d.WAGESHARE + '%</p>');
         };
 
         function mouseMove(d){
