@@ -82,9 +82,7 @@
             return dateParse(d.date);
         }))
 
-        y_scale.domain([0, d3.max(csv_data, function(d){
-            return +d.WAGESHARE;
-        })]);
+        y_scale.domain([0, 1]);
 
         var lines = svg.selectAll('.line')
             .data([csv_data]);
