@@ -2,13 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Document</title>
-    <script src="d3.min.js"></script>
-    <script src="colorbrewer.js"></script>
+    <title>Line Chart</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.7.3/d3.min.js"></script>
     <style>
-        html, body, #vis {
-            height: 100%;
-            margin: 0;
+        #vis {
+            height: 600px;
+            width: 800px;
         }
     </style>
 </head>
@@ -16,17 +15,15 @@
     <div id="vis">
 
     </div>
-
     <script>
-
         var width = document.getElementById('vis').clientWidth;
         var height = document.getElementById('vis').clientHeight;
 
         var margin = {
+            left: 10,
+            right: 10,
             top: 10,
-            bottom: 70,
-            left: 70,
-            right: 20
+            bottom: 10
         }
 
         var svg = d3.select('#vis')
@@ -34,70 +31,49 @@
                 .attr('width', width)
                 .attr('height', height)
             .append('g')
-                .attr('transform', 'translate('+ margin.left + ',' + margin.right +')');
+                .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
         width = width - margin.left - margin.right;
         height = height - margin.top - margin.bottom;
 
-        var x_scale = d3.scaleBand()
-            .rangeRound([0, width])
-            .padding(0.1);
+        var data = createRandomData();
+        console.log(data);
+
+        var x_scale = d3.scaleLinear()
+            .range([0, width])
+            .domain(d3.extent(data, function(d){ return d.x; }));
 
         var y_scale = d3.scaleLinear()
-            .range([height, 0]);
+            .range([height, 0])
+            .domain(d3.extent(data, function(d){ return d.y; }));
 
-        var colour_scale = d3.scaleQuantile()
-            .range(colorbrewer.OrRd[9]);
+        var line = d3.line()
+            .x(function(d){  return x_scale(d.x); })
+            .y(function(d){  return y_scale(d.y); })
+            .curve(d3.curveStep)
 
-        var y_axis = d3.axisLeft(y_scale);
-        var x_axis = d3.axisBottom(x_scale);
+        var path = svg.selectAll('path')
+            .data([data])
 
-        svg.append('g')
-            .attr('class', 'x axis')
-            .attr('transform', 'translate(0,' + height + ')');
+        path
+            .enter()
+            .append('path')
+            .attr('fill', 'none')
+            .attr('stroke', 'black')
+            .attr('d', line)
 
-        svg.append('g')
-            .attr('class', 'y axis');
-
-        d3.csv('monthly_data_2014.csv', function(csv_data){
-            console.log(csv_data);
-
-            var months = csv_data.map(function(d){ return d.month; });
-            console.log(months);
-            x_scale.domain(months);
-
-            var max_value = d3.max(csv_data, function(d){ return +d.value; });
-
-            y_scale.domain([0, max_value]);
-            colour_scale.domain([0, max_value]);
-
-            var bars = svg.selectAll('.bar')
-                .data(csv_data)
-
-            bars
-                .exit()
-                .remove();
-
-            var new_bars = bars
-                .enter()
-                .append('rect')
-                .attr('class', 'bar')
-
-            new_bars.merge(bars)
-                .attr('x', function(d){ return x_scale(d.month); })
-                .attr('width', x_scale.bandwidth())
-                .attr('y', function(d){ return y_scale(+d.value); })
-                .attr('height', function(d){ return height - y_scale(+d.value)})
-                .attr('fill', function(d){ return colour_scale(+d.value); })
-
-            svg.select('.x.axis')
-                .call(x_axis);
-
-            svg.select('.y.axis')
-                .call(y_axis);
-
-        });
-
+        /* create an array between 1 and 100 items long,
+        filled with arrays containing two random values between 1 and 50 */
+        function createRandomData() {
+            var numDataItems = 100;
+            var d = [];
+            for(var i = 0; i < numDataItems; i++) {
+                var x = i;
+                var y = Math.floor((Math.random() * 50) + 1);
+                d.push({"x": x, "y": y});
+            }
+            return d;
+        }
     </script>
 
 </body>
