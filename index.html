@@ -68,7 +68,7 @@
         .y(function(d){
             return y_scale(+d.WAGESHARE);
         })
-        .curve(d3.curveBasis);
+        .curve(d3.curveStep);
 
     var x_axis = d3.axisBottom()
         .scale(x_scale);
