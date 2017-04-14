@@ -2,170 +2,159 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Week 7 Lab</title>
-    <script src="//d3js.org/d3.v4.min.js"></script>
-    <script src="//d3js.org/colorbrewer.v1.js"></script>
+    <title>Unemployment Rate</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.7.3/d3.min.js"></script>
     <style>
-        html, body, #vis {
-            margin: 0;
-            height: 100%;
-            font-family: sans-serif;
-        }
+    html, body, #vis {
+        height: 100%;
+        margin: 0;
+    }
 
-    </style>
+    .tooltip {
+        position: absolute;
+    }
+
+    .tooltip p {
+        background-color: white;
+        border: #eee 1px solid;
+        padding: 2px;
+        font-family: sans-serif;
+        font-size: 11px;
+    }
+</style>
 </head>
 <body>
-    <div id="vis"></div>
+    <div id="vis">
+
+    </div>
     <script>
+    var width = document.getElementById('vis').clientWidth;
+    var height = document.getElementById('vis').clientHeight;
 
-        var width = document.getElementById("vis").clientWidth;
-        var height = document.getElementById("vis").clientHeight;
+    var margin = {
+        top: 10,
+        bottom: 100,
+        left: 100,
+        right: 120
+    };
 
-        var margin = {
-            top: 50,
-            bottom: 100,
-            left: 100,
-            right: 50
-        };
+    var svg = d3.select('#vis')
+        .append('svg')
+            .attr('width', width)
+            .attr('height', height)
+        .append('g')
+            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-        var svg = d3.select('#vis')
-                    .append('svg')
-                        .attr('height', height)
-                        .attr('width', width)
-                    .append('g')
-                        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+    var tooltip = d3.select('body')
+        .append('div')
+        .attr('class', 'tooltip');
 
-        width = width - margin.left - margin.right;
-        height = height - margin.top - margin.bottom;
+    width = width - margin.left - margin.right;
+    height = height - margin.top - margin.bottom;
 
-        var x_scale = d3.scaleLinear()
-                    .rangeRound([0, width]);
+    var dateParse = d3.timeParse('%Y %b');
+    var tooltipFormat = d3.timeFormat('%B %Y');
 
-        var y_scale = d3.scaleLinear()
-                    .rangeRound([height, 0]);
+    var x_scale = d3.scaleTime()
+        .range([0, width]);
 
-        var colour_scale_ran = d3.scaleQuantile()
-                    .range(colorbrewer.Reds[9]);
+    var y_scale = d3.scaleLinear()
+        .range([height, 0]);
 
-        var colour_scale_noran = d3.scaleQuantile()
-                    .range(colorbrewer.Blues[9]);
+    var line = d3.line()
+        .x(function(d){
+            return x_scale(dateParse(d.date));
+        })
+        .y(function(d){
+            return y_scale(+d.value);
+        })
+        .curve(d3.curveBasis);
 
-        var area_scale = d3.scaleLinear()
-                    .range([0, 400]);
+    var x_axis = d3.axisBottom()
+        .scale(x_scale);
 
-        var y_axis = d3.axisLeft(y_scale);
+    var y_axis = d3.axisLeft()
+        .scale(y_scale);
 
-        var x_axis = d3.axisBottom(x_scale);
+    d3.csv('unemployment_monthly.csv', function(csv_data){
+        console.log(csv_data);
 
-        svg.append("g")
-          .attr("class", "y axis");
+        x_scale.domain(d3.extent(csv_data, function(d){
+            return dateParse(d.date);
+        }))
 
-        svg.append("g")
-          .attr("class", "x axis")
-          .attr("transform", "translate(0," + height + ")");
+        y_scale.domain([0, d3.max(csv_data, function(d){
+            return +d.value;
+        })]);
 
+        var lines = svg.selectAll('.line')
+            .data([csv_data]);
 
-        d3.csv('fitness.csv', function(data){
-
-            x_scale.domain(d3.extent(data, function(d){ return +d.Weight; }));
-            y_scale.domain(d3.extent(data, function(d){ return +d.Height; }));
-            colour_scale_ran.domain(d3.extent(data, function(d){ return +d.Age; }));
-            colour_scale_noran.domain(d3.extent(data, function(d){ return +d.Age; }));
-            area_scale.domain(d3.extent(data, function(d){ return +d.Pulse2; }));
-
-            var dots = svg.selectAll('.dot')
-                            .data(data);
-
-            //exit
-            dots
-                .exit()
-                .remove();
-
-            // enter
-            var new_dots = dots
-                .enter()
-                .append('circle')
-                .attr('class', 'dot')
-                .attr('stroke', 'black')
-                .attr('stroke-width', '0.5px')
-
-            //update
-            new_dots.merge(dots)
-                .attr('cx', function(d){ return x_scale(+d.Weight); })
-                .attr('cy', function(d){ return y_scale(+d.Height); })
-                .attr('fill', function(d){
-                    if(+d.Ran === 1) {
-                        return colour_scale_ran(+d.Age);
-                    } else {
-                        return colour_scale_noran(+d.Age);
-                    }
-                 })
-                .attr('r', function(d){
-                    var area = area_scale(+d.Pulse2);
-                    var radius = Math.sqrt(area / Math.PI);
-                    return radius;
-                });
-
-
-
-        var legend = svg.selectAll('.legend')
-            .data(colorbrewer.Reds[9]);
-
-        var new_legend = legend
+        lines
             .enter()
-            .append('g')
-            .attr('class', 'legend')
+            .append('path')
+            .attr('class', 'line')
+            .attr('fill', 'none')
+            .attr('stroke', 'black')
+            .attr('d', line);
 
-        new_legend.merge(legend)
-                .append('rect')
-                .attr('width', 20)
-                .attr('height', 20)
-                .attr('x', width - 85)
-                .attr('y', function(d, i){ return height - 30 - (i * 20); })
-                .attr('fill', function(d, i){ return colorbrewer.Blues[9][i]; })
-                .attr('stroke', 'black')
-                .attr('stroke-width', '0.5px')
+        var points = svg.selectAll('.point')
+            .data(csv_data);
 
-        new_legend.merge(legend)
-                .append('rect')
-                .attr('width', 20)
-                .attr('height', 20)
-                .attr('x', width - 65)
-                .attr('y', function(d, i){ return height - 30 - (i * 20); })
-                .attr('fill', function(d){ return d })
-                .attr('stroke', 'black')
-                .attr('stroke-width', '0.5px');
+        points
+            .enter()
+            .append('circle')
+            .attr('class', 'point')
+            .attr('r', 10)
+            .attr('cx', function(d){
+                return x_scale(dateParse(d.date));
+            })
+            .attr('cy', function(d){
+                return y_scale(+d.value);
+            })
+            .attr('fill', 'black')
+            .attr('opacity', 0)
+            .on('mouseover', mouseOver)
+            .on('mousemove', mouseMove)
+            .on('mouseout', mouseOut);
 
-        new_legend.merge(legend)
-            .append('text')
-                .attr('x', width - 40)
-                .attr('y', function(d, i){ return height - 15 - (i * 20); })
-                .text(function(d){
-                    var low = colour_scale_ran.invertExtent(d)[0];
-                    var high = colour_scale_ran.invertExtent(d)[1];
-                    return low + " - " + high;
-                });
-
-
-        d3.select('.x.axis')
+        svg.append('g')
+            .attr('transform', 'translate(0, ' + height + ')')
             .call(x_axis);
 
-        d3.select('.y.axis')
+        svg.append('g')
             .call(y_axis);
 
-        svg.append("text")
-              .attr("transform", "translate(" + width/2 +  "," + (height + margin.bottom/2) + ")")
-              .style("text-anchor", "end")
-              .text("Weight");
+        function mouseOver(d){
+            console.log(d);
+            var date = dateParse(d.date);
+            var displayDate = tooltipFormat(date);
 
-        svg.append("text")
-          .attr("transform", "translate(-60," + height/2 + ")rotate(-90)")
-          .style("text-anchor", "middle")
-          .text("Height");
+            d3.select(this)
+                .transition()
+                .style('opacity', 1)
 
+            tooltip
+                .style('display', null)
+                .html('<p>Date: ' + displayDate + '<br>Unemployment Rate: ' + d.value + '%</p>');
+        };
 
+        function mouseMove(d){
+            tooltip
+                .style('top', (d3.event.pageY - 20) + "px")
+                .style('left', (d3.event.pageX + 20) + "px");
+        };
 
-        });
+        function mouseOut(d){
+            d3.select(this)
+                .transition()
+                .style('opacity', 0)
+
+            tooltip
+                .style('display', 'none');
+        };
+    })
+
     </script>
 
 </body>
