@@ -52,8 +52,8 @@
     width = width - margin.left - margin.right;
     height = height - margin.top - margin.bottom;
 
-    var dateParse = d3.timeParse('%Y %b');
-    var tooltipFormat = d3.timeFormat('%B %Y');
+    var dateParse = d3.timeParse('%Y');
+    var tooltipFormat = d3.timeFormat('%Y');
 
     var x_scale = d3.scaleTime()
         .range([0, width]);
