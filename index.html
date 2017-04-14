@@ -2,83 +2,170 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Line Chart</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.7.3/d3.min.js"></script>
+    <title>Week 7 Lab</title>
+    <script src="//d3js.org/d3.v4.min.js"></script>
+    <script src="//d3js.org/colorbrewer.v1.js"></script>
     <style>
-        #vis {
-            height: 600px;
-            width: 800px;
+        html, body, #vis {
+            margin: 0;
+            height: 100%;
+            font-family: sans-serif;
         }
+
     </style>
 </head>
 <body>
-    <div id="vis">
-
-    </div>
+    <div id="vis"></div>
     <script>
-        var width = document.getElementById('vis').clientWidth;
-        var height = document.getElementById('vis').clientHeight;
+
+        var width = document.getElementById("vis").clientWidth;
+        var height = document.getElementById("vis").clientHeight;
 
         var margin = {
-            left: 10,
-            right: 10,
-            top: 10,
-            bottom: 10
-        }
+            top: 50,
+            bottom: 100,
+            left: 100,
+            right: 50
+        };
 
         var svg = d3.select('#vis')
-            .append('svg')
-                .attr('width', width)
-                .attr('height', height)
-            .append('g')
-                .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+                    .append('svg')
+                        .attr('height', height)
+                        .attr('width', width)
+                    .append('g')
+                        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
         width = width - margin.left - margin.right;
         height = height - margin.top - margin.bottom;
 
-        var data = createRandomData();
-        console.log(data);
-
         var x_scale = d3.scaleLinear()
-            .range([0, width])
-            .domain(d3.extent(data, function(d){ return d.x; }));
+                    .rangeRound([0, width]);
 
         var y_scale = d3.scaleLinear()
-            .range([height, 0])
-            .domain(d3.extent(data, function(d){ return d.y; }));
+                    .rangeRound([height, 0]);
 
-        var path = svg.selectAll('path')
-            .data([data])
+        var colour_scale_ran = d3.scaleQuantile()
+                    .range(colorbrewer.Reds[9]);
 
-        path
+        var colour_scale_noran = d3.scaleQuantile()
+                    .range(colorbrewer.Blues[9]);
+
+        var area_scale = d3.scaleLinear()
+                    .range([0, 400]);
+
+        var y_axis = d3.axisLeft(y_scale);
+
+        var x_axis = d3.axisBottom(x_scale);
+
+        svg.append("g")
+          .attr("class", "y axis");
+
+        svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")");
+
+
+        d3.csv('fitness.csv', function(data){
+
+            x_scale.domain(d3.extent(data, function(d){ return +d.Weight; }));
+            y_scale.domain(d3.extent(data, function(d){ return +d.Height; }));
+            colour_scale_ran.domain(d3.extent(data, function(d){ return +d.Age; }));
+            colour_scale_noran.domain(d3.extent(data, function(d){ return +d.Age; }));
+            area_scale.domain(d3.extent(data, function(d){ return +d.Pulse2; }));
+
+            var dots = svg.selectAll('.dot')
+                            .data(data);
+
+            //exit
+            dots
+                .exit()
+                .remove();
+
+            // enter
+            var new_dots = dots
+                .enter()
+                .append('circle')
+                .attr('class', 'dot')
+                .attr('stroke', 'black')
+                .attr('stroke-width', '0.5px')
+
+            //update
+            new_dots.merge(dots)
+                .attr('cx', function(d){ return x_scale(+d.Weight); })
+                .attr('cy', function(d){ return y_scale(+d.Height); })
+                .attr('fill', function(d){
+                    if(+d.Ran === 1) {
+                        return colour_scale_ran(+d.Age);
+                    } else {
+                        return colour_scale_noran(+d.Age);
+                    }
+                 })
+                .attr('r', function(d){
+                    var area = area_scale(+d.Pulse2);
+                    var radius = Math.sqrt(area / Math.PI);
+                    return radius;
+                });
+
+
+
+        var legend = svg.selectAll('.legend')
+            .data(colorbrewer.Reds[9]);
+
+        var new_legend = legend
             .enter()
-            .append('path')
-            .attr('fill', 'none')
-            .attr('stroke', 'black')
-            .attr('d', function(d){
-                console.log(d);
-                d_string = "";
-                d_string += "M " + x_scale(d[0].x) + " " + y_scale(d[0].y);
-                console.log(d_string);
-                for(var i = 1; i < d.length; i++) {
-                    d_string += "L " + x_scale(d[i].x) + " " + y_scale(d[i].y);
-                }
-                console.log(d_string);
-                return d_string;
-            })
+            .append('g')
+            .attr('class', 'legend')
 
-        /* create an array between 1 and 100 items long,
-        filled with arrays containing two random values between 1 and 50 */
-        function createRandomData() {
-            var numDataItems = 100;
-            var d = [];
-            for(var i = 0; i < numDataItems; i++) {
-                var x = i;
-                var y = Math.floor((Math.random() * 50) + 1);
-                d.push({"x": x, "y": y});
-            }
-            return d;
-        }
+        new_legend.merge(legend)
+                .append('rect')
+                .attr('width', 20)
+                .attr('height', 20)
+                .attr('x', width - 85)
+                .attr('y', function(d, i){ return height - 30 - (i * 20); })
+                .attr('fill', function(d, i){ return colorbrewer.Blues[9][i]; })
+                .attr('stroke', 'black')
+                .attr('stroke-width', '0.5px')
+
+        new_legend.merge(legend)
+                .append('rect')
+                .attr('width', 20)
+                .attr('height', 20)
+                .attr('x', width - 65)
+                .attr('y', function(d, i){ return height - 30 - (i * 20); })
+                .attr('fill', function(d){ return d })
+                .attr('stroke', 'black')
+                .attr('stroke-width', '0.5px');
+
+        new_legend.merge(legend)
+            .append('text')
+                .attr('x', width - 40)
+                .attr('y', function(d, i){ return height - 15 - (i * 20); })
+                .text(function(d){
+                    var low = colour_scale_ran.invertExtent(d)[0];
+                    var high = colour_scale_ran.invertExtent(d)[1];
+                    return low + " - " + high;
+                });
+
+
+        d3.select('.x.axis')
+            .call(x_axis);
+
+        d3.select('.y.axis')
+            .call(y_axis);
+
+        svg.append("text")
+              .attr("transform", "translate(" + width/2 +  "," + (height + margin.bottom/2) + ")")
+              .style("text-anchor", "end")
+              .text("Weight");
+
+        svg.append("text")
+          .attr("transform", "translate(-60," + height/2 + ")rotate(-90)")
+          .style("text-anchor", "middle")
+          .text("Height");
+
+
+
+        });
     </script>
 
 </body>
