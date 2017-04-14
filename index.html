@@ -47,11 +47,6 @@
             .range([height, 0])
             .domain(d3.extent(data, function(d){ return d.y; }));
 
-        var line = d3.line()
-            .x(function(d){  return x_scale(d.x); })
-            .y(function(d){  return y_scale(d.y); })
-            .curve(d3.curveStep)
-
         var path = svg.selectAll('path')
             .data([data])
 
@@ -60,7 +55,17 @@
             .append('path')
             .attr('fill', 'none')
             .attr('stroke', 'black')
-            .attr('d', line)
+            .attr('d', function(d){
+                console.log(d);
+                d_string = "";
+                d_string += "M " + x_scale(d[0].x) + " " + y_scale(d[0].y);
+                console.log(d_string);
+                for(var i = 1; i < d.length; i++) {
+                    d_string += "L " + x_scale(d[i].x) + " " + y_scale(d[i].y);
+                }
+                console.log(d_string);
+                return d_string;
+            })
 
         /* create an array between 1 and 100 items long,
         filled with arrays containing two random values between 1 and 50 */
