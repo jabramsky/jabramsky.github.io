@@ -62,18 +62,18 @@
         .range([0, width]);
 
         
-        x_scale.domain(d3.extent(csv_data, function(d){
+        x_scale.domain([0, d3.max(csv_data, function(d){
             return (+d.OUTPUT);
-            }))
+            })])
 
         var x_axis = d3.axisBottom()
             .scale(x_scale);
 
-        var ic = d3.extent(csv_data, function(d){
+        var ic = d3.max(csv_data, function(d){
             return (+d.IC);
         })
 
-        var gva = d3.extent(csv_data, function(d){
+        var gva = d3.max(csv_data, function(d){
             return (+d.GVA);
         })
 
