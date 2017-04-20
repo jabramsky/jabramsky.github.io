@@ -59,8 +59,12 @@
     d3.csv('industry_gva_and_supply.csv', function(csv_data){
         console.log(csv_data);
 
+        x_scale.domain(d3.extent(csv_data, function(d){
+            return (d.OUTPUT);
+            }))
+
         var x_axis = d3.axisBottom()
-        .scale(x_scale);
+            .scale(x_scale);
 
 
         var gvap_rect = svg.selectAll('.gvap_rect')
