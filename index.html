@@ -63,7 +63,7 @@
 
         
         var output = d3.max(csv_data, function(d){
-            return (+d.IC);
+            return (+d.OUTPUT);
         })
 
         x_scale.domain([0, output]);
