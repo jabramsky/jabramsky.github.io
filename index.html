@@ -108,7 +108,7 @@
                 .attr("fill", "black")
                 .attr('width', gva_scaled)
                 .attr('height', 100)
-                .attr('y', 290) 
+                .attr('y', 440) 
                 .attr('x', ic_scaled)
 
         output_rect
@@ -156,7 +156,7 @@
                     .enter()
                     .append('text')
                     .attr('class', 'output_text_name')
-                    .attr('x', width - 70)
+                    .attr('x', width - 75)
                     .attr('y', 162)
                     .text('Output:')
                     .attr("font-family", "serif")
@@ -170,12 +170,41 @@
                     .enter()
                     .append('text')
                     .attr('class', 'output_text_label')
-                    .attr('x', width - 70)
+                    .attr('x', width - 75)
                     .attr('y', 182)
                     .text('£' + output + 'm')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
                     .attr("fill", "white");
+
+        var gvap_text_name = svg.selectAll('gvap_text_name')
+            .data([csv_data])
+
+        gvap_text_name
+                    .enter()
+                    .append('text')
+                    .attr('class', 'gvap_text_name')
+                    .attr('x', width - 75)
+                    .attr('y', 482)
+                    .text('GVA:')
+                    .attr("font-family", "serif")
+                    .attr("font-size", "20px")
+                    .attr("fill", "white");
+
+        var gvap_text_label = svg.selectAll('gvap_text_label')
+            .data([csv_data])
+            
+        gvap_text_label
+                    .enter()
+                    .append('text')
+                    .attr('class', 'gvap_text_label')
+                    .attr('x', width - 75)
+                    .attr('y', 502)
+                    .text('£' + gva + 'm')
+                    .attr("font-family", "serif")
+                    .attr("font-size", "20px")
+                    .attr("fill", "white");
+
 
 
         svg.append('g')
