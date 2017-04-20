@@ -116,7 +116,7 @@
                 .append('rect')
                 .attr('class','output_rect')
                 .attr("fill", "green")
-                .attr('width', output)
+                .attr('width', width)
                 .attr('height', 100)
                 .attr('y', 140) 
                 .attr('x', 0)
@@ -161,7 +161,7 @@
                     .text('Output:')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
-                    .attr("fill", "white");
+                    .attr("fill", "blue");
 
         var output_text_label = svg.selectAll('output_text_label')
             .data([csv_data])
@@ -170,12 +170,12 @@
                     .enter()
                     .append('text')
                     .attr('class', 'output_text_label')
-                    .attr('x', output - 100)
+                    .attr('x', width - 100)
                     .attr('y', 182)
-                    .text('£' + output + 'm')
+                    .text('£' + width + 'm')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
-                    .attr("fill", "white");
+                    .attr("fill", "blue");
 
 
         svg.append('g')
