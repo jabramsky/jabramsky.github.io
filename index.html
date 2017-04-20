@@ -75,6 +75,10 @@
                 .attr('height', 100)
                 .attr('y', 300) 
                 .attr('x', 10)
+
+        svg.append('g')
+            .attr('transform', 'translate(0, ' + height + ')')
+            .call(x_axis);
         
     })
 
