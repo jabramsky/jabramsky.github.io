@@ -29,7 +29,7 @@
     </div>
     <script>
 
-    var width = 5000;
+    var width = 2500;
     var height = 500;
 
     var margin = {
@@ -53,11 +53,13 @@
     width = width - margin.left - margin.right;
     height = height - margin.top - margin.bottom;
 
-    var x_scale = d3.scaleLinear()
-        .range([0, width]);
+    
 
     d3.csv('industry_gva_and_supply.csv', function(csv_data){
         console.log(csv_data);
+
+        var x_scale = d3.scaleLinear()
+        .range([0, width]);
 
         x_scale.domain(d3.extent(csv_data, function(d){
             return (d.OUTPUT);
