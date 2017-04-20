@@ -108,16 +108,16 @@
 
         var ic_text_name = svg.selectAll('ic_text_name')
             .data([csv_data])
+            
+        ic_text_name
             .enter()
             .append('ic_text_name')
-
-        var ic_name_label = ic_text_name
-                            .attr('x', ic_scaled - 20)
-                            .attr('y', 288)
-                            .text('Int. Cons.')
-                            .attr("font-family", "sans-serif")
-                            .attr("font-size", "30px")
-                            .attr("fill", "white");
+            .attr('x', ic_scaled - 20)
+            .attr('y', 288)
+            .text('Int. Cons.')
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "30px")
+            .attr("fill", "white");
 
 
         svg.append('g')
