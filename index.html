@@ -218,16 +218,24 @@
             .append('line')
             .enter()
             .attr('class','line1')
-            .attr('x', (ic_scaled))
-            .attr('y', ([240, 440]))
+            .attr('x1', (ic_scaled))
+            .attr('y1', (240))
+            .attr('x2', (ic_scaled))
+            .attr('y2', (440))
+            .attr("stroke-width", 2)
+            .attr("stroke", "black");
 
-        var line2 
+
+        var line1  
             .append('line')
             .enter()
             .attr('class','line2')
-            .attr('x', (width))
-            .attr('y', ([240, 440]))
-
+            .attr('x1', (width))
+            .attr('y1', (240))
+            .attr('x2', (width))
+            .attr('y2', (440))
+            .attr("stroke-width", 2)
+            .attr("stroke", "black");
 
     </script>
 
