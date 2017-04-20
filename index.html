@@ -69,11 +69,11 @@
         var x_axis = d3.axisBottom()
             .scale(x_scale);
 
-        ic = d3.extent(csv_data, function(d){
+        var ic = d3.extent(csv_data, function(d){
             return (+d.IC);
         })
 
-        gva = d3.extent(csv_data, function(d){
+        var gva = d3.extent(csv_data, function(d){
             return (+d.GVA);
         })
 
