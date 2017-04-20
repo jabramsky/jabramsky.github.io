@@ -77,9 +77,8 @@
             return (+d.GVA);
         })
 
-        var ic_scaled = ic.scale(x_scale)
-
-        var gva_scaled = gva.scale(x_scale)
+        var ic_scaled = x_scale(ic)
+        var gva_scaled = x_scale(gva)
 
         var ic_rect = svg.selectAll('.ic_rect')
             .data([csv_data]);
