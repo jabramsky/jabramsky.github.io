@@ -62,9 +62,11 @@
         .range([0, width]);
 
         
-        x_scale.domain([0, d3.max(csv_data, function(d){
-            return (+d.OUTPUT);
-            })])
+        var output = d3.max(csv_data, function(d){
+            return (+d.IC);
+        })
+
+        x_scale.domain([0, output]);
 
         var x_axis = d3.axisBottom()
             .scale(x_scale);
@@ -77,6 +79,8 @@
             return (+d.GVA);
         })
 
+        v
+
         var ic_scaled = x_scale(ic)
         var gva_scaled = x_scale(gva)
 
@@ -84,6 +88,9 @@
             .data([csv_data]);
 
         var gvap_rect = svg.selectAll('.gvap_rect')
+            .data([csv_data]);
+
+        var output_rect = svg.selectAll('.output_rect')
             .data([csv_data]);
 
         ic_rect
@@ -105,6 +112,16 @@
                 .attr('height', 100)
                 .attr('y', 290) 
                 .attr('x', ic_scaled)
+
+        output_rect
+                .enter()
+                .append('rect')
+                .attr('class','output_rect')
+                .attr("fill", "green")
+                .attr('width', output)
+                .attr('height', 100)
+                .attr('y', 140) 
+                .attr('x', 0)
 
         var ic_text_name = svg.selectAll('ic_text_name')
             .data([csv_data])
@@ -130,6 +147,34 @@
                     .attr('x', ic_scaled - 220)
                     .attr('y', 332)
                     .text('£' + ic + 'm')
+                    .attr("font-family", "serif")
+                    .attr("font-size", "20px")
+                    .attr("fill", "white");
+
+        var output_text_name = svg.selectAll('output_text_name')
+            .data([csv_data])
+
+        output_text_name
+                    .enter()
+                    .append('text')
+                    .attr('class', 'output_text_name')
+                    .attr('x', output - 100)
+                    .attr('y', 162)
+                    .text('Output:')
+                    .attr("font-family", "serif")
+                    .attr("font-size", "20px")
+                    .attr("fill", "white");
+
+        var output_text_label = svg.selectAll('output_text_label')
+            .data([csv_data])
+            
+        output_text_label
+                    .enter()
+                    .append('text')
+                    .attr('class', 'output_text_label')
+                    .attr('x', output - 100)
+                    .attr('y', 182)
+                    .text('£' + output + 'm')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
                     .attr("fill", "white");
