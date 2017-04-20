@@ -120,6 +120,20 @@
                     .attr("font-size", "20px")
                     .attr("fill", "white");
 
+        var ic_text_label = svg.selectAll('ic_text_label')
+            .data([csv_data])
+            
+        ic_text_label
+                    .enter()
+                    .append('text')
+                    .attr('class', 'ic_text_label')
+                    .attr('x', ic_scaled - 220)
+                    .attr('y', 332)
+                    .text('£' + ic + 'm')
+                    .attr("font-family", "serif")
+                    .attr("font-size", "20px")
+                    .attr("fill", "white");
+
 
         svg.append('g')
             .attr('transform', 'translate(0, ' + height + ')')
