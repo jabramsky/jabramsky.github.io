@@ -61,6 +61,7 @@
         var x_scale = d3.scaleLinear()
         .range([0, width]);
 
+        
         x_scale.domain(d3.extent(csv_data, function(d){
             return (+d.OUTPUT);
             }))
@@ -68,19 +69,40 @@
         var x_axis = d3.axisBottom()
             .scale(x_scale);
 
+        ic = d3.extent(csv_data, function(d){
+            return (+d.IC);
+        })
 
-        var gvap_rect = svg.selectAll('.gvap_rect')
+        gva = d3.extent(csv_data, function(d){
+            return (+d.GVA);
+        })
+
+        var ic_scaled = ic.scale(x_scale)
+
+        var gva_scaled = gva.scale(x_scale)
+
+        var ic_rect = svg.selectAll('.ic_rect')
             .data([csv_data]);
+
+        ic_rect
+                .enter()
+                .append('rect')
+                .attr('class','ic_rect')
+                .attr("fill", "red")
+                .attr('width', ic_scaled)
+                .attr('height', 100)
+                .attr('y', 290) 
+                .attr('x', 0)
 
         gvap_rect
                 .enter()
                 .append('rect')
                 .attr('class','gvap_rect')
-                .attr("fill", "red")
-                .attr('width', width)
+                .attr("fill", "black")
+                .attr('width', gva_scaled)
                 .attr('height', 100)
-                .attr('y', 300) 
-                .attr('x', 10)
+                .attr('y', 290) 
+                .attr('x', ic_scaled)
 
         svg.append('g')
             .attr('transform', 'translate(0, ' + height + ')')
