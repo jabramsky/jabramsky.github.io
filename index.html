@@ -55,7 +55,7 @@
 
     
 
-    d3.csv('industry_gva_and_supply.csv', function(csv_data){
+    d3.csv('industry_gva_and_supply_small.csv', function(csv_data){
         console.log(csv_data);
 
         var x_scale = d3.scaleLinear()
@@ -79,8 +79,6 @@
 
         var ic_scaled = x_scale(ic)
         var gva_scaled = x_scale(gva)
-
-        console.log (ic_scaled, gva_scaled)
 
         var ic_rect = svg.selectAll('.ic_rect')
             .data([csv_data]);
