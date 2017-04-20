@@ -30,7 +30,7 @@
     <script>
 
     var width = 1800;
-    var height = 500;
+    var height = 1000;
 
     var margin = {
         top: 10,
@@ -204,14 +204,16 @@
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
                     .attr("fill", "white");
-
-
-
-        svg.append('g')
-            .attr('transform', 'translate(0, ' + height + ')')
-            .call(x_axis);
         
     })
+
+        var line1 = d3.line()
+            .x(ic_scaled)
+            .y([240, 440])
+
+        var line2 = d3.line()
+            .x(width)
+            .y([240, 440])
 
     </script>
 
