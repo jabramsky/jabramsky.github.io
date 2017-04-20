@@ -62,7 +62,7 @@
         .range([0, width]);
 
         x_scale.domain(d3.extent(csv_data, function(d){
-            return (d.OUTPUT);
+            return (+d.OUTPUT);
             }))
 
         var x_axis = d3.axisBottom()
