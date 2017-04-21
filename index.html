@@ -58,15 +58,12 @@
     d3.csv('industry_gva_and_supply_small.csv', function(csv_data){
         console.log(csv_data);
 
-        var x_scale = d3.scaleLinear()
-        .range([0, width]);
-
         
         var output = d3.max(csv_data, function(d){
             return (+d.OUTPUT);
         })
 
-        x_scale.domain([0, output]);
+        
 
         var x_axis = d3.axisBottom()
             .scale(x_scale);
@@ -101,6 +98,7 @@
             edgecase_2 = 1
         }
 
+
         if(edgecase_1 == 1){
             var no_activity_box = svg.selectAll('.ts_nab')
                .data([csv_data])
@@ -113,6 +111,8 @@
                .attr('height', 100)
                .attr('x', 10)
                .attr('y', 10)
+               .attr('stroke', "black")
+               .attr('stroke-width', 2)
                .attr('fill', "white");
 
 
@@ -134,7 +134,20 @@
 
         else{
 
-        var ic_scaled = x_scale(ic)
+        
+        var higher = output
+        var lower = ic
+
+        if(edgecase_2 == 1){
+            higher = ic
+            lower = output
+        }
+
+        var x_scale = d3.scaleLinear()
+        .range([0, width]);
+        x_scale.domain([0, higher]);
+
+        var lower_scaled = x_scale(lower)
         var gva_scaled = x_scale(gva)
         var coe_scaled = x_scale(coe)
         var gos_scaled = x_scale(gos)
@@ -170,13 +183,13 @@
             .attr("stroke-width", 2)
             .attr("stroke", "black");
 
-        var ic_rect = svg.selectAll('.ic_rect')
+        var lower_rect = svg.selectAll('.lower_rect')
             .data([csv_data]);
 
         var gvap_rect = svg.selectAll('.gvap_rect')
             .data([csv_data]);
 
-        var output_rect = svg.selectAll('.output_rect')
+        var higher_rect = svg.selectAll('.higher_rect')
             .data([csv_data]);
 
         var coe_rect = svg.selectAll('.coe_rect')
@@ -188,12 +201,12 @@
         var ts_rect = svg.selectAll('.ts_rect')
             .data([csv_data]);
 
-        ic_rect
+        lower_rect
                 .enter()
                 .append('rect')
-                .attr('class','ic_rect')
+                .attr('class','lower_rect')
                 .attr("fill", "red")
-                .attr('width', ic_scaled)
+                .attr('width', lower_scaled)
                 .attr('height', 100)
                 .attr('y', 290) 
                 .attr('x', 0)
@@ -206,17 +219,72 @@
                 .attr('width', gva_scaled)
                 .attr('height', 100)
                 .attr('y', 440) 
-                .attr('x', ic_scaled)
+                .attr('x', lower_scaled)
 
-        output_rect
+        higher_rect
                 .enter()
                 .append('rect')
-                .attr('class','output_rect')
+                .attr('class','higher_rect')
                 .attr("fill", "green")
                 .attr('width', width)
                 .attr('height', 100)
                 .attr('y', 140) 
                 .attr('x', 0)
+
+        var coe_y = 0
+        var gos_y = 0
+        var ts_y = 0
+        if(edgecase_2 == 1 || (gos >= 0 & ts >= 0)){
+            coe_y = 590
+        }
+        else{
+            coe_y = 740
+        }
+        if(edgecase_2 == 0 & (gos >= 0)){
+            gos_y = 590
+        }
+        else{
+            gos_y = 740
+        }
+        if(edgecase_2 == 0 & (ts >= 0)){
+            ts_y = 590
+        }
+        else{
+            ts_y = 740
+        }
+
+        var coe_x = 0
+        var gos_x = 0
+        var ts_x = 0
+        if(coe <= gva){
+            coe_x = lower_scaled
+        }
+        else if(gos < 0 & ts < 0){
+            coe_x = width - coe_scaled
+        }
+        else if(gos > 0){
+            coe_x = width - coe_scaled - gos_scaled
+        }
+        else{
+            coe_x = width - coe_scaled - ts_scaled
+        }
+        if()
+
+        if(gos > 0){
+            gos_x = coe_x + coe_scaled
+        }
+        else{
+            gos_x = coe_x
+        }
+        if((ts > 0 & gos > 0) || (ts <= 0 & gos <= 0)){
+            ts_x = gos_x + gos_scaled
+        }
+        else{
+            ts_x = coe_x + coe_scaled
+        }
+        
+        
+
 
         coe_rect
                 .enter()
@@ -225,8 +293,8 @@
                 .attr("fill", "blue")
                 .attr('width', coe_scaled)
                 .attr('height', 100)
-                .attr('y', 590) 
-                .attr('x', ic_scaled)
+                .attr('y', coe_y) 
+                .attr('x', coe_x)
 
         gos_rect
                 .enter()
@@ -235,8 +303,8 @@
                 .attr("fill", "black")
                 .attr('width', gos_scaled)
                 .attr('height', 100)
-                .attr('y', 590) 
-                .attr('x', ic_scaled + coe_scaled)
+                .attr('y', gos_y) 
+                .attr('x', gos_x)
 
         ts_rect
                 .enter()
@@ -245,10 +313,10 @@
                 .attr("fill", "red")
                 .attr('width', ts_scaled)
                 .attr('height', 100)
-                .attr('y', 590) 
-                .attr('x', ic_scaled + coe_scaled + gos_scaled)
+                .attr('y', ts_y) 
+                .attr('x', gts_x)
 
-    if (ic_scaled > 200){
+    if (edgecase_2 == 0 & lower_scaled > 250){
         var ic_text_name = svg.selectAll('ic_text_name')
             .data([csv_data])
             
@@ -279,10 +347,10 @@
 
         }
 
-        if (output > 0){
         var output_text_name = svg.selectAll('output_text_name')
             .data([csv_data])
 
+    if (edgecase_2 == 1 & lower_scaled > 250){
         output_text_name
                     .enter()
                     .append('text')
@@ -307,6 +375,7 @@
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
                     .attr("fill", "white");
+
         }
 
         if (gva_scaled > 200){
