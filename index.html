@@ -91,7 +91,47 @@
             return (+d.T_S);
         })
 
+        var edgecase_1 = 0
+        var edgecase_2 = 0
 
+        if(output == 0){
+            edgecase_1 = 1
+        }
+        if(edgecase_1 == 0 & gva < 0){
+            edgecase_2 = 1
+        }
+
+        if(edgecase_1 == 1){
+            var no_activity_box = svg.selectAll('.ts_nab')
+               .data([csv_data]);
+
+            no_activity_box
+               .enter()
+               .append('rect')
+               .attr('class', '.ts_nab')
+               .attr('width', 200)
+               .attr('height', 100)
+               .attr('x', 10)
+               .attr('y', 10)
+
+
+            var no_activity_text svg.selectAll('.ts_nat')
+               .data([csv_data]);
+
+            no_activity_text
+                .enter()
+                .append('text')
+                .attr('class', '.ts_nat')
+                .attr('x', 20)
+                .attr('y', 30)
+                .text('This industry had no UK activity this year.')
+                .attr("font-family", "serif")
+                .attr("font-size", "20px")
+                .attr("fill", "black");
+
+        }
+
+        else{
 
         var ic_scaled = x_scale(ic)
         var gva_scaled = x_scale(gva)
@@ -393,7 +433,7 @@
         
         
 
-        
+        }
 
         })
 
