@@ -349,6 +349,9 @@
                     .attr("fill", "white");
 
 
+        var ts_text_name = svg.selectAll('ts_text_name')
+            .data([csv_data])
+
         ts_text_name
                     .enter()
                     .append('text')
