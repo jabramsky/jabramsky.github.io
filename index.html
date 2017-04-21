@@ -87,11 +87,17 @@
             return (+d.GOS);
         })
 
+        var ts = d3.max(csv_data, function(d){
+            return (+d.T_S);
+        })
+
+
 
         var ic_scaled = x_scale(ic)
         var gva_scaled = x_scale(gva)
         var coe_scaled = x_scale(coe)
         var gos_scaled = x_scale(gos)
+        var ts_scaled = x_scale(ts)
 
         var ic_rect = svg.selectAll('.ic_rect')
             .data([csv_data]);
@@ -106,6 +112,9 @@
             .data([csv_data]);
 
         var gos_rect = svg.selectAll('.gos_rect')
+            .data([csv_data]);
+
+        var ts_rect = svg.selectAll('.ts_rect')
             .data([csv_data]);
 
         ic_rect
@@ -157,6 +166,17 @@
                 .attr('height', 100)
                 .attr('y', 590) 
                 .attr('x', ic_scaled + coe_scaled)
+
+        ts_rect
+                .enter()
+                .append('rect')
+                .attr('class','ts_rect')
+                .attr("fill", "red")
+                .attr('width', ts_scaled)
+                .attr('height', 100)
+                .attr('y', 590) 
+                .attr('x', ic_scaled + coe_scaled + gos_scaled)
+
 
         var ic_text_name = svg.selectAll('ic_text_name')
             .data([csv_data])
@@ -291,9 +311,35 @@
                     .enter()
                     .append('text')
                     .attr('class', 'gos_text_label')
-                    .attr('x', width - 85)
+                    .attr('x', ic_scaled + coe_scaled + gos_scaled - 85)
                     .attr('y', 652)
                     .text('£' + gos + 'm')
+                    .attr("font-family", "serif")
+                    .attr("font-size", "20px")
+                    .attr("fill", "white");
+
+
+        ts_text_name
+                    .enter()
+                    .append('text')
+                    .attr('class', 'ts_text_name')
+                    .attr('x', width - 85)
+                    .attr('y', 632)
+                    .text('Net taxes (D.29):')
+                    .attr("font-family", "serif")
+                    .attr("font-size", "20px")
+                    .attr("fill", "white");
+
+        var ts_text_label = svg.selectAll('ts_text_label')
+            .data([csv_data])
+            
+        ts_text_label
+                    .enter()
+                    .append('text')
+                    .attr('class', 'ts_text_label')
+                    .attr('x', width - 85)
+                    .attr('y', 652)
+                    .text('£' + ts + 'm')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
                     .attr("fill", "white");
@@ -313,7 +359,7 @@
             .attr('x1', (ic_scaled + 2))
             .attr('y1', (240))
             .attr('x2', (ic_scaled + 2))
-            .attr('y2', (440))
+            .attr('y2', (590))
             .attr("stroke-width", 2)
             .attr("stroke", "black");
 
@@ -325,7 +371,7 @@
             .attr('x1', (width - 2))
             .attr('y1', (240))
             .attr('x2', (width - 2))
-            .attr('y2', (440))
+            .attr('y2', (590))
             .attr("stroke-width", 2)
             .attr("stroke", "black");
 
