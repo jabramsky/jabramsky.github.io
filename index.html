@@ -207,7 +207,7 @@
                 .attr('y', 590) 
                 .attr('x', ic_scaled + coe_scaled + gos_scaled)
 
-
+    if (ic_scaled > 200){
         var ic_text_name = svg.selectAll('ic_text_name')
             .data([csv_data])
             
@@ -236,6 +236,9 @@
                     .attr("font-size", "20px")
                     .attr("fill", "white");
 
+        }
+
+        if (output > 0){
         var output_text_name = svg.selectAll('output_text_name')
             .data([csv_data])
 
@@ -263,7 +266,9 @@
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
                     .attr("fill", "white");
+        }
 
+        if (gva_scaled > 200){
         var gvap_text_name = svg.selectAll('gvap_text_name')
             .data([csv_data])
 
@@ -291,7 +296,9 @@
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
                     .attr("fill", "white");
+        }
 
+        if (coe_scaled > 200){
         var coe_text_name = svg.selectAll('coe_text_name')
             .data([csv_data])
 
@@ -319,7 +326,9 @@
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
                     .attr("fill", "white");
+        }
 
+        if (gos_scaled > 200){
         var gos_text_name = svg.selectAll('gos_text_name')
             .data([csv_data])
 
@@ -347,12 +356,14 @@
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
                     .attr("fill", "white");
+        }
 
+        if(ts_scaled > 200){
 
         var ts_text_name = svg.selectAll('ts_text_name')
             .data([csv_data])
 
-        if(ts_scaled > 100){
+        
         ts_text_name
                     .enter()
                     .append('text')
