@@ -79,8 +79,19 @@
             return (+d.GVA);
         })
 
+        var coe = d3.max(csv_data, function(d){
+            return (+d.COE);
+        })
+
+        var gos = d3.max(csv_data, function(d){
+            return (+d.GOS);
+        })
+
+
         var ic_scaled = x_scale(ic)
         var gva_scaled = x_scale(gva)
+        var coe_scaled = x_scale(coe)
+        var gos_scaled = x_scale(gos)
 
         var ic_rect = svg.selectAll('.ic_rect')
             .data([csv_data]);
@@ -89,6 +100,12 @@
             .data([csv_data]);
 
         var output_rect = svg.selectAll('.output_rect')
+            .data([csv_data]);
+
+        var coe_rect = svg.selectAll('.coe_rect')
+            .data([csv_data]);
+
+        var gos_rect = svg.selectAll('.gos_rect')
             .data([csv_data]);
 
         ic_rect
@@ -120,6 +137,26 @@
                 .attr('height', 100)
                 .attr('y', 140) 
                 .attr('x', 0)
+
+        coe_rect
+                .enter()
+                .append('rect')
+                .attr('class','coe_rect')
+                .attr("fill", "blue")
+                .attr('width', coe_scaled)
+                .attr('height', 100)
+                .attr('y', 590) 
+                .attr('x', ic_scaled)
+
+        gos_rect
+                .enter()
+                .append('rect')
+                .attr('class','gos_rect')
+                .attr("fill", "orange")
+                .attr('width', gos_scaled)
+                .attr('height', 100)
+                .attr('y', 590) 
+                .attr('x', ic_scaled + coe_scaled)
 
         var ic_text_name = svg.selectAll('ic_text_name')
             .data([csv_data])
@@ -185,7 +222,7 @@
                     .append('text')
                     .attr('class', 'gvap_text_name')
                     .attr('x', width - 85)
-                    .attr('y', 482)
+                    .attr('y', 462)
                     .text('GVA:')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
@@ -199,8 +236,64 @@
                     .append('text')
                     .attr('class', 'gvap_text_label')
                     .attr('x', width - 85)
-                    .attr('y', 502)
+                    .attr('y', 482)
                     .text('£' + gva + 'm')
+                    .attr("font-family", "serif")
+                    .attr("font-size", "20px")
+                    .attr("fill", "white");
+
+        var coe_text_name = svg.selectAll('coe_text_name')
+            .data([csv_data])
+
+        coe_text_name
+                    .enter()
+                    .append('text')
+                    .attr('class', 'coe_text_name')
+                    .attr('x', ic_scaled + coe_scaled - 85)
+                    .attr('y', 632)
+                    .text('COE:')
+                    .attr("font-family", "serif")
+                    .attr("font-size", "20px")
+                    .attr("fill", "white");
+
+        var coe_text_label = svg.selectAll('coe_text_label')
+            .data([csv_data])
+            
+        coe_text_label
+                    .enter()
+                    .append('text')
+                    .attr('class', 'coe_text_label')
+                    .attr('x', ic_scaled + coe_scaled - 85)
+                    .attr('y', 652)
+                    .text('£' + coe + 'm')
+                    .attr("font-family", "serif")
+                    .attr("font-size", "20px")
+                    .attr("fill", "white");
+
+        var gos_text_name = svg.selectAll('gos_text_name')
+            .data([csv_data])
+
+        gos_text_name
+                    .enter()
+                    .append('text')
+                    .attr('class', 'gos_text_name')
+                    .attr('x', width - 85)
+                    .attr('y', 632)
+                    .text('GOS:')
+                    .attr("font-family", "serif")
+                    .attr("font-size", "20px")
+                    .attr("fill", "white");
+
+        var coe_text_label = svg.selectAll('coe_text_label')
+            .data([csv_data])
+            
+        gos_text_label
+                    .enter()
+                    .append('text')
+                    .attr('class', 'gos_text_label')
+                    .attr('x', width - 85)
+                    .attr('y', 652)
+                    .text('£' + gos + 'm')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
                     .attr("fill", "white");
