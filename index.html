@@ -352,6 +352,7 @@
         var ts_text_name = svg.selectAll('ts_text_name')
             .data([csv_data])
 
+        if(ts_scaled > 100){
         ts_text_name
                     .enter()
                     .append('text')
@@ -376,6 +377,9 @@
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
                     .attr("fill", "white");
+        }
+
+        
         
 
         
