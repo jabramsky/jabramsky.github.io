@@ -200,6 +200,9 @@
         var ts_rect = svg.selectAll('.ts_rect')
             .data([csv_data]);
 
+        var lower_y = 290
+        var higher_y = 140
+
         lower_rect
                 .enter()
                 .append('rect')
@@ -207,7 +210,7 @@
                 .attr("fill", "red")
                 .attr('width', lower_scaled)
                 .attr('height', 100)
-                .attr('y', 290) 
+                .attr('y', lower_y) 
                 .attr('x', 0)
 
         gvap_rect
@@ -227,7 +230,7 @@
                 .attr("fill", "green")
                 .attr('width', width)
                 .attr('height', 100)
-                .attr('y', 140) 
+                .attr('y', higher_y) 
                 .attr('x', 0)
 
         var coe_y = 0
@@ -251,6 +254,10 @@
         else{
             ts_y = 740
         }
+
+
+
+        
 
         var coe_x = 0
         var gos_x = 0
@@ -312,7 +319,7 @@
                 .attr('width', ts_scaled)
                 .attr('height', 100)
                 .attr('y', ts_y) 
-                .attr('x', gts_x)
+                .attr('x', ts_x)
 
     if (edgecase_2 == 0 & lower_scaled > 250){
         var ic_text_name = svg.selectAll('ic_text_name')
@@ -322,8 +329,8 @@
                     .enter()
                     .append('text')
                     .attr('class', 'ic_text_name')
-                    .attr('x', ic_scaled - 220)
-                    .attr('y', 312)
+                    .attr('x', lower_scaled - 220)
+                    .attr('y', lower_y + 22)
                     .text('Intermediate consumption:')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
@@ -336,14 +343,48 @@
                     .enter()
                     .append('text')
                     .attr('class', 'ic_text_label')
-                    .attr('x', ic_scaled - 220)
-                    .attr('y', 332)
+                    .attr('x', lower_scaled - 220)
+                    .attr('y', lower_y + 42)
                     .text('£' + ic + 'm')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
                     .attr("fill", "white");
 
         }
+
+
+    if (edgecase_2 == 1){
+        var ic_text_name = svg.selectAll('ic_text_name')
+            .data([csv_data])
+            
+        ic_text_name
+                    .enter()
+                    .append('text')
+                    .attr('class', 'ic_text_name')
+                    .attr('x', width - 220)
+                    .attr('y', higher_y + 22)
+                    .text('Intermediate consumption:')
+                    .attr("font-family", "serif")
+                    .attr("font-size", "20px")
+                    .attr("fill", "white");
+
+        var ic_text_label = svg.selectAll('ic_text_label')
+            .data([csv_data])
+            
+        ic_text_label
+                    .enter()
+                    .append('text')
+                    .attr('class', 'ic_text_label')
+                    .attr('x', width - 220)
+                    .attr('y', higher_y + 42)
+                    .text('£' + ic + 'm')
+                    .attr("font-family", "serif")
+                    .attr("font-size", "20px")
+                    .attr("fill", "white");
+
+        }
+
+
 
         var output_text_name = svg.selectAll('output_text_name')
             .data([csv_data])
@@ -353,8 +394,8 @@
                     .enter()
                     .append('text')
                     .attr('class', 'output_text_name')
-                    .attr('x', width - 90)
-                    .attr('y', 162)
+                    .attr('x', lower_scaled - 90)
+                    .attr('y', lower_y + 22)
                     .text('Output:')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
@@ -367,14 +408,44 @@
                     .enter()
                     .append('text')
                     .attr('class', 'output_text_label')
-                    .attr('x', width - 90)
-                    .attr('y', 182)
+                    .attr('x', lower_scaled - 90)
+                    .attr('y', lower_y + 42)
                     .text('£' + output + 'm')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
                     .attr("fill", "white");
 
         }
+
+     if (edgecase_2 == 0){
+        output_text_name
+                    .enter()
+                    .append('text')
+                    .attr('class', 'output_text_name')
+                    .attr('x', higher - 90)
+                    .attr('y', higher_y + 22)
+                    .text('Output:')
+                    .attr("font-family", "serif")
+                    .attr("font-size", "20px")
+                    .attr("fill", "white");
+
+        var output_text_label = svg.selectAll('output_text_label')
+            .data([csv_data])
+            
+        output_text_label
+                    .enter()
+                    .append('text')
+                    .attr('class', 'output_text_label')
+                    .attr('x', higher - 90)
+                    .attr('y', higher_y + 42)
+                    .text('£' + output + 'm')
+                    .attr("font-family", "serif")
+                    .attr("font-size", "20px")
+                    .attr("fill", "white");
+
+        }
+
+
 
         if (gva_scaled > 200){
         var gvap_text_name = svg.selectAll('gvap_text_name')
@@ -384,7 +455,7 @@
                     .enter()
                     .append('text')
                     .attr('class', 'gvap_text_name')
-                    .attr('x', width - 85)
+                    .attr('x', width - 90)
                     .attr('y', 462)
                     .text('GVA:')
                     .attr("font-family", "serif")
@@ -398,7 +469,7 @@
                     .enter()
                     .append('text')
                     .attr('class', 'gvap_text_label')
-                    .attr('x', width - 85)
+                    .attr('x', width - 90)
                     .attr('y', 482)
                     .text('£' + gva + 'm')
                     .attr("font-family", "serif")
@@ -414,8 +485,8 @@
                     .enter()
                     .append('text')
                     .attr('class', 'coe_text_name')
-                    .attr('x', ic_scaled + coe_scaled - 85)
-                    .attr('y', 632)
+                    .attr('x', coe_x + coe_scaled - 90)
+                    .attr('y', coe_y + 22)
                     .text('COE:')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
@@ -428,8 +499,8 @@
                     .enter()
                     .append('text')
                     .attr('class', 'coe_text_label')
-                    .attr('x', ic_scaled + coe_scaled - 85)
-                    .attr('y', 652)
+                    .attr('x', coe_x + coe_scaled - 90)
+                    .attr('y', coe_y + 42)
                     .text('£' + coe + 'm')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
@@ -444,8 +515,8 @@
                     .enter()
                     .append('text')
                     .attr('class', 'gos_text_name')
-                    .attr('x', width - 85)
-                    .attr('y', 632)
+                    .attr('x', gos_x + gos_scaled - 90)
+                    .attr('y', gos_y + 22)
                     .text('GOS:')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
@@ -458,8 +529,8 @@
                     .enter()
                     .append('text')
                     .attr('class', 'gos_text_label')
-                    .attr('x', ic_scaled + coe_scaled + gos_scaled - 85)
-                    .attr('y', 652)
+                    .attr('x', gos_x + gos_scaled - 90)
+                    .attr('y', gos_y + 42)
                     .text('£' + gos + 'm')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
@@ -476,8 +547,8 @@
                     .enter()
                     .append('text')
                     .attr('class', 'ts_text_name')
-                    .attr('x', width - 85)
-                    .attr('y', 632)
+                    .attr('x', ts_x + ts_scaled - 90)
+                    .attr('y', ts_y + 22)
                     .text('Net taxes (D.29):')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
@@ -490,8 +561,8 @@
                     .enter()
                     .append('text')
                     .attr('class', 'ts_text_label')
-                    .attr('x', width - 85)
-                    .attr('y', 652)
+                    .attr('x', ts_x + ts_scaled - 90)
+                    .attr('y', ts_y + 42)
                     .text('£' + ts + 'm')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
