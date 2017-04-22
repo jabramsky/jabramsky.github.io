@@ -330,8 +330,11 @@
         if((ts_real >= 0 & gos_real >= 0) || (ts_real < 0 & gos_real < 0)){
             ts_x = gos_x + gos_scaled
         }
-        else{
+        else if (ts_real >= 0){
             ts_x = coe_x + coe_scaled
+        }
+        else{
+            ts_x = coe_x
         }
         
         
