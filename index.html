@@ -248,13 +248,13 @@
         else{
             coe_y = 740
         }
-        if(edgecase_2 == 0 & gos_real >= 0){
+        if((edgecase_2 == 0 & gos_real >= 0) || (edgecase_2 == 1 & gos_real < 0)){
             gos_y = 590
         }
         else{
             gos_y = 740
         }
-        if(edgecase_2 == 0 & (ts_real >= 0)){
+        if(edgecase_2 == 0 & (ts_real >= 0) || (edgecase_2 == 1 & ts_real < 0)){
             ts_y = 590
         }
         else{
