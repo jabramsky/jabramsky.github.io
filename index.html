@@ -72,21 +72,27 @@
             return (+d.IC);
         })
 
-        var gva = d3.max(csv_data, function(d){
+        var gva_real = d3.max(csv_data, function(d){
             return (+d.GVA);
         })
+
+        var gva = Math.abs(gva_real)
 
         var coe = d3.max(csv_data, function(d){
             return (+d.COE);
         })
 
-        var gos = d3.max(csv_data, function(d){
+        var gos_real = d3.max(csv_data, function(d){
             return (+d.GOS);
         })
 
-        var ts = d3.max(csv_data, function(d){
+        var gos = Math.abs(gos_real)
+
+        var ts_real = d3.max(csv_data, function(d){
             return (+d.T_S);
         })
+
+        var ts = Math.abs(ts_real)
 
         var edgecase_1 = 0
         var edgecase_2 = 0
@@ -236,19 +242,19 @@
         var coe_y = 0
         var gos_y = 0
         var ts_y = 0
-        if(edgecase_2 == 1 || (gos >= 0 & ts >= 0)){
+        if(edgecase_2 == 1 || (gos_real >= 0 & ts_real >= 0)){
             coe_y = 590
         }
         else{
             coe_y = 740
         }
-        if(edgecase_2 == 0 & (gos >= 0)){
+        if(edgecase_2 == 0 & (gos_real >= 0)){
             gos_y = 590
         }
         else{
             gos_y = 740
         }
-        if(edgecase_2 == 0 & (ts >= 0)){
+        if(edgecase_2 == 0 & (ts_real >= 0)){
             ts_y = 590
         }
         else{
@@ -256,16 +262,13 @@
         }
 
 
-
-        
-
         var coe_x = 0
         var gos_x = 0
         var ts_x = 0
         if(coe <= gva){
             coe_x = lower_scaled
         }
-        else if(gos < 0 & ts < 0){
+        else if(gos_real < 0 & ts_real < 0){
             coe_x = width - coe_scaled
         }
         else if(gos > 0){
@@ -275,13 +278,13 @@
             coe_x = width - coe_scaled - ts_scaled
         }
 
-        if(gos > 0){
+        if(gos_real > 0){
             gos_x = coe_x + coe_scaled
         }
         else{
             gos_x = coe_x
         }
-        if((ts > 0 & gos > 0) || (ts <= 0 & gos <= 0)){
+        if((ts_real > 0 & gos_real > 0) || (ts_real <= 0 & gos_real <= 0)){
             ts_x = gos_x + gos_scaled
         }
         else{
