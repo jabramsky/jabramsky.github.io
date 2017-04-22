@@ -242,13 +242,13 @@
         var coe_y = 0
         var gos_y = 0
         var ts_y = 0
-        if(edgecase_2 == 1 || (gos_real >= 0 & ts_real >= 0)){
+        if(edgecase_2 == 1 & (gos_real >= 0 & ts_real >= 0)){
             coe_y = 590
         }
         else{
             coe_y = 740
         }
-        if(edgecase_2 == 0 & (gos_real >= 0)){
+        if(edgecase_2 == 0 & gos_real >= 0){
             gos_y = 590
         }
         else{
