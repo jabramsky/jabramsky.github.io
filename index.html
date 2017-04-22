@@ -94,8 +94,25 @@
 
         var ts = Math.abs(ts_real)
 
+        var positive_sum = 0
+        var negative_sum = 0
+        if(gos_real >= 0 & ts_real >= 0){
+            positive_sum = coe + gos + ts
+        }
+        else if(gos_real >= 0 & ts_real < 0){
+            positive_sum = coe + gos
+            negative_sum = ts
+        }
+        else{
+            positive_sum = coe
+            negative_sum = gos + ts
+        }
+        
+
         var edgecase_1 = 0
         var edgecase_2 = 0
+        var edgecase_3 = 0
+        var edgecase_4 = 0
 
         if(output == 0){
             edgecase_1 = 1
@@ -103,6 +120,13 @@
         if(edgecase_1 == 0 & gva < 0){
             edgecase_2 = 1
         }
+        if (edgecase_1 == 0 & edgecase_2 == 0 & positive_sum > output){
+            edgecase_3 = 1
+        }
+        if (edgecase_1 == 0 & edgecase_2 == 1 & negative_sum > ic){
+            edgecase_4 = 1
+        }
+
 
 
         if(edgecase_1 == 1){
@@ -148,10 +172,24 @@
             lower = output
         }
 
+        
         var x_scale = d3.scaleLinear()
         .range([0, width]);
-        x_scale.domain([0, higher]);
+        if (edgecase_3 == 0 & edgecase_4 == 0){
+            x_scale.domain([0, higher])
+        }
+        else if(edgecase_3 == 1){
+            x_scale.domain([0, positive_sum])
+        }
+        else if(edgecase_4 == 1){
+            x_scale.domain([0, negative_sum])
+        }
 
+        
+        var higher_scaled = width
+        if(edgecase_3 == 1 || edgecase_4 == 1){
+            higher_scaled = x_scale(higher)
+        }
         var lower_scaled = x_scale(lower)
         var gva_scaled = x_scale(gva)
         var coe_scaled = x_scale(coe)
@@ -209,6 +247,14 @@
         var lower_y = 290
         var higher_y = 140
 
+        var higher_x = 0
+        if(edgecase_3 == 1 || edgecase_4 == 1){
+            higher_x = width - higher_scaled
+        }
+        var lower_x = higher_x
+
+        
+
         lower_rect
                 .enter()
                 .append('rect')
@@ -217,7 +263,7 @@
                 .attr('width', lower_scaled)
                 .attr('height', 100)
                 .attr('y', lower_y) 
-                .attr('x', 0)
+                .attr('x', lower_x)
 
         gvap_rect
                 .enter()
@@ -234,10 +280,10 @@
                 .append('rect')
                 .attr('class','higher_rect')
                 .attr("fill", "green")
-                .attr('width', width)
+                .attr('width', higher_scaled)
                 .attr('height', 100)
                 .attr('y', higher_y) 
-                .attr('x', 0)
+                .attr('x', higher_x)
 
         var coe_y = 0
         var gos_y = 0
@@ -265,26 +311,23 @@
         var coe_x = 0
         var gos_x = 0
         var ts_x = 0
-        if(coe <= gva){
-            coe_x = lower_scaled
-        }
-        else if(gos_real < 0 & ts_real < 0){
+        if(gos_real < 0 & ts_real < 0){
             coe_x = width - coe_scaled
         }
-        else if(gos > 0){
+        else if(gos_real >= 0){
             coe_x = width - coe_scaled - gos_scaled
         }
-        else{
+        else if (ts_real >= 0){
             coe_x = width - coe_scaled - ts_scaled
         }
 
-        if(gos_real > 0){
+        if(gos_real >= 0){
             gos_x = coe_x + coe_scaled
         }
         else{
             gos_x = coe_x
         }
-        if((ts_real > 0 & gos_real > 0) || (ts_real <= 0 & gos_real <= 0)){
+        if((ts_real >= 0 & gos_real >= 0) || (ts_real < 0 & gos_real < 0)){
             ts_x = gos_x + gos_scaled
         }
         else{
@@ -332,7 +375,7 @@
                     .enter()
                     .append('text')
                     .attr('class', 'ic_text_name')
-                    .attr('x', lower_scaled - 220)
+                    .attr('x', lower_x + lower_scaled - 220)
                     .attr('y', lower_y + 22)
                     .text('Intermediate consumption:')
                     .attr("font-family", "serif")
@@ -364,7 +407,7 @@
                     .enter()
                     .append('text')
                     .attr('class', 'ic_text_name')
-                    .attr('x', width - 220)
+                    .attr('x', higher_scaled + higher_x - 220)
                     .attr('y', higher_y + 22)
                     .text('Intermediate consumption:')
                     .attr("font-family", "serif")
@@ -378,7 +421,7 @@
                     .enter()
                     .append('text')
                     .attr('class', 'ic_text_label')
-                    .attr('x', width - 220)
+                    .attr('x', higher_scaled + higher_x - 220)
                     .attr('y', higher_y + 42)
                     .text('£' + ic + 'm')
                     .attr("font-family", "serif")
@@ -397,7 +440,7 @@
                     .enter()
                     .append('text')
                     .attr('class', 'output_text_name')
-                    .attr('x', lower_scaled - 90)
+                    .attr('x', lower_x + lower_scaled - 90)
                     .attr('y', lower_y + 22)
                     .text('Output:')
                     .attr("font-family", "serif")
@@ -411,7 +454,7 @@
                     .enter()
                     .append('text')
                     .attr('class', 'output_text_label')
-                    .attr('x', lower_scaled - 90)
+                    .attr('x', lower_x + lower_scaled - 90)
                     .attr('y', lower_y + 42)
                     .text('£' + output + 'm')
                     .attr("font-family", "serif")
@@ -425,7 +468,7 @@
                     .enter()
                     .append('text')
                     .attr('class', 'output_text_name')
-                    .attr('x', higher - 90)
+                    .attr('x', higher_x + higher_scaled - 90)
                     .attr('y', higher_y + 22)
                     .text('Output:')
                     .attr("font-family", "serif")
@@ -439,7 +482,7 @@
                     .enter()
                     .append('text')
                     .attr('class', 'output_text_label')
-                    .attr('x', higher - 90)
+                    .attr('x', higher_x + higher_scaled - 90)
                     .attr('y', higher_y + 42)
                     .text('£' + output + 'm')
                     .attr("font-family", "serif")
