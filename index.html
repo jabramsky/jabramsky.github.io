@@ -253,8 +253,6 @@
         }
         var lower_x = higher_x
 
-        
-
         lower_rect
                 .enter()
                 .append('rect')
@@ -273,7 +271,7 @@
                 .attr('width', gva_scaled)
                 .attr('height', 100)
                 .attr('y', 440) 
-                .attr('x', lower_scaled)
+                .attr('x', lower_scaled + lower_x)
 
         higher_rect
                 .enter()
