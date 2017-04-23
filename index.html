@@ -288,7 +288,7 @@
         var coe_y = 0
         var gos_y = 0
         var ts_y = 0
-        if(edgecase_2 == 1 & (gos_real >= 0 & ts_real >= 0)){
+        if(edgecase_2 == 1 || (gos_real >= 0 & ts_real >= 0)){
             coe_y = 590
         }
         else{
@@ -311,8 +311,11 @@
         var coe_x = 0
         var gos_x = 0
         var ts_x = 0
-        if(gos_real < 0 & ts_real < 0){
+        if(edgecase_4 == 0 & (gos_real < 0 & ts_real < 0)){
             coe_x = width - coe_scaled
+        }
+        else if (gos_real < 0 & ts_real < 0){
+            coe_x = width - gos_scaled - ts_scaled
         }
         else if(gos_real >= 0){
             coe_x = width - coe_scaled - gos_scaled
