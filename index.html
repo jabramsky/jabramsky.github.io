@@ -209,6 +209,7 @@
                 .remove()
 
             var newline1 = line1
+                .enter()
                 .append('line')
                 .attr('class', 'line1')
 
@@ -222,8 +223,7 @@
                 .remove()
 
 
-            newline1.merge(line1)
-                .enter()  
+            newline1.merge(line1)  
                 .attr('x1', (lower_scaled + 2))
                 .attr('y1', (240))
                 .attr('x2', (lower_scaled + 2))
