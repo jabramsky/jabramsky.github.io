@@ -62,11 +62,9 @@
             console.log(full_data);
 
             var line1 = svg.selectAll('line1')
-            .data([full_data])
+            .data([])
 
-            line1
-                .exit()
-                .remove()
+            line1.exit().remove()
 
             year_data = full_data.filter(function(d){return +d.DATE == refyear})
             csv_data = year_data.filter(function(d){return +d.INDUSTRY == refind})
