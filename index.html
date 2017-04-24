@@ -62,6 +62,7 @@
             console.log(full_data);
 
             var line1 = svg.selectAll('line1')
+            .data([full_data])
 
             line1
                 .exit()
