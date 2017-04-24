@@ -62,11 +62,6 @@
         d3.csv('industry_gva_and_supply.csv', function(full_data){
             console.log(full_data);
 
-            var line1 = svg.selectAll('.line1')
-            .data([csv_data])
-
-            line1.exit().remove()
-
             year_data = full_data.filter(function(d){return +d.DATE == refyear})
             csv_data = year_data.filter(function(d){return +d.INDUSTRY == refind})
 
@@ -206,6 +201,11 @@
             var coe_scaled = x_scale(coe)
             var gos_scaled = x_scale(gos)
             var ts_scaled = x_scale(ts)
+
+            var line1 = svg.selectAll('.line1')
+            .data([csv_data])
+
+            line1.exit().remove()
 
 
             var newline1 = line1
