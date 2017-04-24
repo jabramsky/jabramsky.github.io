@@ -223,41 +223,24 @@
 
 
 
-            var line2 = svg.selectAll('line2')
-                .data([csv_data])
+            var line2 = svg.selectAll('.line2')
+            .data([csv_data])
 
-            line2
-                .exit()
-                .remove()
+            line2.exit().remove()
 
-            line2  
+
+            var newline2 = line2
                 .enter()
                 .append('line')
-                .attr('class','line2')
-                .attr('x1', (width - 2))
+                .attr('class', 'line1')
+
+            newline2.merge(line2)  
+                .attr('x1', (lower_scaled + 2))
                 .attr('y1', (240))
-                .attr('x2', (width - 2))
+                .attr('x2', (lower_scaled + 2))
                 .attr('y2', (590))
                 .attr("stroke-width", 2)
                 .attr("stroke", "black");
-
-            var lower_rect = svg.selectAll('.lower_rect')
-                .data([csv_data]);
-
-            var gvap_rect = svg.selectAll('.gvap_rect')
-                .data([csv_data]);
-
-            var higher_rect = svg.selectAll('.higher_rect')
-                .data([csv_data]);
-
-            var coe_rect = svg.selectAll('.coe_rect')
-                .data([csv_data]);
-
-            var gos_rect = svg.selectAll('.gos_rect')
-                .data([csv_data]);
-
-            var ts_rect = svg.selectAll('.ts_rect')
-                .data([csv_data]);
 
             var lower_y = 290
             var higher_y = 140
@@ -268,49 +251,50 @@
             }
             var lower_x = higher_x
 
-            lower_rect
-                    .exit()
-                    .remove()
-
-            lower_rect
+            var lower_rect = svg.selectAll('.lower_rect')
+                .data([csv_data]);
+            lower_rect.exit().remove()
+            var new_lower_rect = lower_rect
                     .enter()
                     .append('rect')
                     .attr('class','lower_rect')
+            new_lower_rect.merge(lower_rect)
                     .attr("fill", "red")
                     .attr('width', lower_scaled)
                     .attr('height', 100)
                     .attr('y', lower_y) 
                     .attr('x', lower_x)
 
-            gvap_rect
-                    .exit()
-                    .remove()
-
-            gvap_rect
+            var gvap_rect = svg.selectAll('.gvap_rect')
+                .data([csv_data]);
+            gvap_rect.exit().remove()
+            var new_gvap_rect = gvap_rect
                     .enter()
                     .append('rect')
                     .attr('class','gvap_rect')
+            new_gvap_rect.merge(gvap_rect)                    
                     .attr("fill", "black")
                     .attr('width', gva_scaled)
                     .attr('height', 100)
                     .attr('y', 440) 
                     .attr('x', lower_scaled + lower_x)
 
-            higher_rect
-                    .exit()
-                    .remove()
 
-            higher_rect
+            var higher_rect = svg.selectAll('.higher_rect')
+                .data([csv_data]);
+            higher_rect.exit().remove()
+            var new_higher_rect = higher_rect
                     .enter()
                     .append('rect')
                     .attr('class','higher_rect')
+            new_higher_rect.merge(higher_rect)                
                     .attr("fill", "green")
                     .attr('width', higher_scaled)
                     .attr('height', 100)
                     .attr('y', higher_y) 
                     .attr('x', higher_x)
 
-            var coe_y = 0
+              var coe_y = 0
             var gos_y = 0
             var ts_y = 0
             if(edgecase_2 == 1 || (gos_real >= 0 & ts_real >= 0)){
@@ -366,77 +350,76 @@
             }
 
 
-            coe_rect
-                    .exit()
-                    .remove()
-            coe_rect
+            var coe_rect = svg.selectAll('.coe_rect')
+                .data([csv_data]);
+            coe_rect.exit().remove()
+            var new_coe_rect = coe_rect
                     .enter()
                     .append('rect')
                     .attr('class','coe_rect')
+            new_coe_rect.merge(coe_rect)
                     .attr("fill", "blue")
                     .attr('width', coe_scaled)
                     .attr('height', 100)
                     .attr('y', coe_y) 
                     .attr('x', coe_x)
 
-            gos_rect
-                    .exit()
-                    .remove()
-            gos_rect
+
+            var gos_rect = svg.selectAll('.gos_rect')
+                .data([csv_data]);
+            gos_rect.exit().remove()
+            var new_gos_rect = gos_rect
                     .enter()
                     .append('rect')
                     .attr('class','gos_rect')
+            new_gos_rect.merge(gos_rect)
                     .attr("fill", "black")
                     .attr('width', gos_scaled)
                     .attr('height', 100)
                     .attr('y', gos_y) 
                     .attr('x', gos_x)
 
-            ts_rect
-                    .exit()
-                    .remove()
-            ts_rect
+
+            var ts_rect = svg.selectAll('.ts_rect')
+                .data([csv_data])
+            ts_rect.exit().remove()
+            var new_ts_rect = ts_rect
                     .enter()
                     .append('rect')
                     .attr('class','ts_rect')
+            new_ts_rect.merge(ts_rect)
                     .attr("fill", "red")
                     .attr('width', ts_scaled)
                     .attr('height', 100)
                     .attr('y', ts_y) 
                     .attr('x', ts_x)
 
-            var ic_text_name = svg.selectAll('ic_text_name')
+            var ic_text_name = svg.selectAll('.ic_text_name')
                 .data([csv_data])
+            ic_text_name.exit().remove()
 
-            ic_text_name
-                    .exit()
-                    .remove()
-
-             var ic_text_label = svg.selectAll('ic_text_label')
-                    .data([csv_data])
-
-            ic_text_label
-                    .exit()
-                    .remove()
-
+            var ic_text_label = svg.selectAll('.ic_text_label')
+                .data([csv_data])
+            ic_text_label.exit().remove()
 
             if (edgecase_2 == 0 & lower_scaled > 250){
                 
-               ic_text_name
+                var new_ic_text_name = ic_text_name
                         .enter()
                         .append('text')
                         .attr('class', 'ic_text_name')
+                var new_ic_text_name.merge(ic_text_name)
                         .attr('x', lower_x + lower_scaled - 220)
                         .attr('y', lower_y + 22)
                         .text('Intermediate consumption:')
                         .attr("font-family", "serif")
                         .attr("font-size", "20px")
                         .attr("fill", "white");
-                
-                ic_text_label
+                var new_ic_text_label = ic_text_label
                         .enter()
                         .append('text')
                         .attr('class', 'ic_text_label')
+                new_ic_text_label.merge(ic_text_label)
                         .attr('x', lower_scaled - 220)
                         .attr('y', lower_y + 42)
                         .text('£' + ic + 'm')
@@ -449,23 +432,23 @@
 
             if (edgecase_2 == 1){
                 
-                ic_text_name
+                var new_ic_text_name = ic_text_name
                         .enter()
                         .append('text')
                         .attr('class', 'ic_text_name')
-                        .attr('x', higher_scaled + higher_x - 220)
+                var new_ic_text_name.merge(ic_text_name)
+                        .attr('x', higher_x + higher_scaled - 220)
                         .attr('y', higher_y + 22)
                         .text('Intermediate consumption:')
                         .attr("font-family", "serif")
                         .attr("font-size", "20px")
                         .attr("fill", "white");
-
-                
-                ic_text_label
+                var new_ic_text_label = ic_text_label
                         .enter()
                         .append('text')
                         .attr('class', 'ic_text_label')
-                        .attr('x', higher_scaled + higher_x - 220)
+                new_ic_text_label.merge(ic_text_label)
+                        .attr('x', higher_scaled - 220)
                         .attr('y', higher_y + 42)
                         .text('£' + ic + 'm')
                         .attr("font-family", "serif")
@@ -476,94 +459,78 @@
 
 
 
-            var output_text_name = svg.selectAll('output_text_name')
+            var output_text_name = svg.selectAll('.output_text_name')
                 .data([csv_data])
-
-            output_text_name
-                .exit()
-                .remove()
-
-            var output_text_label = svg.selectAll('output_text_label')
+            output_text_name.exit().remove()
+            var output_text_label = svg.selectAll('.output_text_label')
                 .data([csv_data])
-
-            output_text_name
-                .exit()
-                .remove()
+            output_text_label.exit().remove()
 
             if (edgecase_2 == 1 & lower_scaled > 250){
-                output_text_name
+
+                var new_output_text_name = output_text_name
                         .enter()
                         .append('text')
                         .attr('class', 'output_text_name')
-                        .attr('x', lower_x + lower_scaled - 90)
+                var new_output_text_name.merge(output_text_name)
+                        .attr('x', lower_x + lower_scaled - 220)
                         .attr('y', lower_y + 22)
-                        .text('Output:')
+                        .text('Intermediate consumption:')
                         .attr("font-family", "serif")
                         .attr("font-size", "20px")
                         .attr("fill", "white");
-
-                
-                output_text_label
+                var new_output_text_label = output_text_label
                         .enter()
                         .append('text')
                         .attr('class', 'output_text_label')
-                        .attr('x', lower_x + lower_scaled - 90)
+                new_output_text_label.merge(output_text_label)
+                        .attr('x', lower_scaled - 220)
                         .attr('y', lower_y + 42)
                         .text('£' + output + 'm')
                         .attr("font-family", "serif")
                         .attr("font-size", "20px")
                         .attr("fill", "white");
-
                 }
 
             if (edgecase_2 == 0){
-                output_text_name
+                var new_output_text_name = output_text_name
                         .enter()
                         .append('text')
                         .attr('class', 'output_text_name')
-                        .attr('x', higher_x + higher_scaled - 90)
+                var new_output_text_name.merge(output_text_name)
+                        .attr('x', higher_x + higher_scaled - 220)
                         .attr('y', higher_y + 22)
-                        .text('Output:')
+                        .text('Intermediate consumption:')
                         .attr("font-family", "serif")
                         .attr("font-size", "20px")
                         .attr("fill", "white");
-
-                
-                output_text_label
+                var new_output_text_label = output_text_label
                         .enter()
                         .append('text')
                         .attr('class', 'output_text_label')
-                        .attr('x', higher_x + higher_scaled - 90)
+                new_output_text_label.merge(output_text_label)
+                        .attr('x', higher_scaled - 220)
                         .attr('y', higher_y + 42)
                         .text('£' + output + 'm')
                         .attr("font-family", "serif")
                         .attr("font-size", "20px")
                         .attr("fill", "white");
-
             }
 
-            var gvap_text_name = svg.selectAll('gvap_text_name')
+            var gvap_text_name = svg.selectAll('.gvap_text_name')
                 .data([csv_data])
-
-            gvap_text_name
-                .exit()
-                .remove()
-
-            var gvap_text_label = svg.selectAll('gvap_text_label')
+            gvap_text_name.exit().remove()
+            var gvap_text_label = svg.selectAll('.gvap_text_label')
                 .data([csv_data])
-
-            gvap_text_name
-                .exit()
-                .remove()
-
-
+            gvap_text_name.exit().remove()
 
             if (gva_scaled > 200){
 
-                gvap_text_name
+                var new_gvap_text_name = gvap_text_name
                         .enter()
                         .append('text')
                         .attr('class', 'gvap_text_name')
+                new_gvap_text_name.merge(gvap_text_name)
                         .attr('x', width - 90)
                         .attr('y', 462)
                         .text('GVA:')
@@ -571,10 +538,11 @@
                         .attr("font-size", "20px")
                         .attr("fill", "white");
 
-                gvap_text_label
+                var new_gvap_text_label = gvap_text_label
                         .enter()
                         .append('text')
                         .attr('class', 'gvap_text_label')
+                new_gvap_text_label.merge(gvap_text_label)
                         .attr('x', width - 90)
                         .attr('y', 482)
                         .text('£' + gva + 'm')
@@ -583,37 +551,32 @@
                         .attr("fill", "white");
                 }
 
-            var coe_text_name = svg.selectAll('coe_text_name')
+
+            var coe_text_name = svg.selectAll('.coe_text_name')
                 .data([csv_data])
-
-            coe_text_name
-                .exit()
-                .remove()
-
-            var coe_text_label = svg.selectAll('coe_text_label')
+            coe_text_name.exit().remove()    
+            var coe_text_label = svg.selectAll('.coe_text_label')
                 .data([csv_data])
-
-            coe_text_name
-                .exit()
-                .remove()
+            coe_text_name.exit().remove()
 
             if (coe_scaled > 200){
 
-                coe_text_name
+                var new_coe_text_name = coe_text_name
                         .enter()
                         .append('text')
                         .attr('class', 'coe_text_name')
+                new_coe_text_name.merge(coe_text_name)
                         .attr('x', coe_x + coe_scaled - 90)
                         .attr('y', coe_y + 22)
                         .text('COE:')
                         .attr("font-family", "serif")
                         .attr("font-size", "20px")
-                        .attr("fill", "white");
-                
-                coe_text_label
+                        .attr("fill", "white");                
+                var new_coe_text_label = coe_text_label
                         .enter()
                         .append('text')
                         .attr('class', 'coe_text_label')
+                new_coe_text_label.merge(coe_text_label)
                         .attr('x', coe_x + coe_scaled - 90)
                         .attr('y', coe_y + 42)
                         .text('£' + coe + 'm')
@@ -622,26 +585,21 @@
                         .attr("fill", "white");
                 }
 
-            var gos_text_name = svg.selectAll('gos_text_name')
+            var gos_text_name = svg.selectAll('.gos_text_name')
                 .data([csv_data])
+            gos_text_name.exit().remove()
 
-            gos_text_name
-                .exit()
-                .remove()
-
-            var gos_text_label = svg.selectAll('gos_text_label')
+            var gos_text_label = svg.selectAll('.gos_text_label')
                 .data([csv_data])
-
-            gos_text_name
-                .exit()
-                .remove()
+            gos_text_name.exit().remove()
 
             if (gos_scaled > 200){
             
-                gos_text_name
+                var new_gos_text_name = gos_text_name
                         .enter()
                         .append('text')
                         .attr('class', 'gos_text_name')
+                new_gos_text_name.merge(gos_text_name)
                         .attr('x', gos_x + gos_scaled - 90)
                         .attr('y', gos_y + 22)
                         .text('GOS:')
@@ -649,11 +607,11 @@
                         .attr("font-size", "20px")
                         .attr("fill", "white");
 
-                
-                gos_text_label
+                var new_gos_text_label = gos_text_label
                         .enter()
                         .append('text')
                         .attr('class', 'gos_text_label')
+                new_gos_text_label.merge(gos_text_label)
                         .attr('x', gos_x + gos_scaled - 90)
                         .attr('y', gos_y + 42)
                         .text('£' + gos + 'm')
@@ -662,41 +620,30 @@
                         .attr("fill", "white");
             }
 
-            var ts_text_name = svg.selectAll('ts_text_name')
+            var ts_text_name = svg.selectAll('.ts_text_name')
                 .data([csv_data])
-
-            ts_text_name
-                .exit()
-                .remove()
-
-            var ts_text_label = svg.selectAll('ts_text_label')
+            ts_text_name.exit().remove()
+            var ts_text_label = svg.selectAll('.ts_text_label')
                 .data([csv_data])
-
-            ts_text_name
-                .exit()
-                .remove()
+            ts_text_label.exit().remove()
 
             if(ts_scaled > 200){
-
-                var ts_text_name = svg.selectAll('ts_text_name')
-                .data([csv_data])
-
-            
-                ts_text_name
+                var new_ts_text_name = ts_text_name
                         .enter()
                         .append('text')
                         .attr('class', 'ts_text_name')
+                new_ts_text_name.merge(ts_text_name)
                         .attr('x', ts_x + ts_scaled - 90)
                         .attr('y', ts_y + 22)
                         .text('Net taxes (D.29):')
                         .attr("font-family", "serif")
                         .attr("font-size", "20px")
                         .attr("fill", "white");
-
-                ts_text_label
+                var new_ts_text_label = ts_text_label
                         .enter()
                         .append('text')
                         .attr('class', 'ts_text_label')
+                new_ts_text_label.merge(ts_text_label)
                         .attr('x', ts_x + ts_scaled - 90)
                         .attr('y', ts_y + 42)
                         .text('£' + ts + 'm')
