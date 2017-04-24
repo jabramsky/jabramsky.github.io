@@ -62,7 +62,7 @@
         d3.csv('industry_gva_and_supply.csv', function(full_data){
             console.log(full_data);
 
-            var line1 = svg.selectAll('line1')
+            var line1 = svg.selectAll('.line1')
             .data([csv_data])
 
             line1.exit().remove()
