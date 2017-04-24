@@ -208,6 +208,11 @@
                 .exit()
                 .remove()
 
+            var newline1 = line1
+                append('line')
+                attr('class', 'line1')
+
+
 
             var line2 = svg.selectAll('line2')
                 .data([csv_data])
@@ -217,7 +222,7 @@
                 .remove()
 
 
-            line1
+            newline1.merge(line1)
                 .enter()  
                 .append('line')
                 .attr('class','line1')
