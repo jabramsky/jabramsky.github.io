@@ -53,577 +53,604 @@
     width = width - margin.left - margin.right;
     height = height - margin.top - margin.bottom;
 
+    var refyear = 1997
+    var refind = 1
+
     
+    function update(){
+        d3.csv('industry_gva_and_supply.csv', function(full_data){
+            console.log(full_data);
 
-    d3.csv('industry_gva_and_supply_small.csv', function(csv_data){
-        console.log(csv_data);
+            year_data = full_data.filter(function(d){return +d.DATE == refyear})
+            csv_data = year_data.filter(function(d){return +d.INDUSTRY == refind})
 
-        
-        var output = d3.max(csv_data, function(d){
-            return (+d.OUTPUT);
-        })
+            var output = d3.max(csv_data, function(d){
+                return (+d.OUTPUT);
+            })
 
-        
-
-        var x_axis = d3.axisBottom()
-            .scale(x_scale);
-
-        var ic = d3.max(csv_data, function(d){
-            return (+d.IC);
-        })
-
-        var gva_real = d3.max(csv_data, function(d){
-            return (+d.GVA);
-        })
-
-        var gva = Math.abs(gva_real)
-
-        var coe = d3.max(csv_data, function(d){
-            return (+d.COE);
-        })
-
-        var gos_real = d3.max(csv_data, function(d){
-            return (+d.GOS);
-        })
-
-        var gos = Math.abs(gos_real)
-
-        var ts_real = d3.max(csv_data, function(d){
-            return (+d.T_S);
-        })
-
-        var ts = Math.abs(ts_real)
-
-        var positive_sum = 0
-        var negative_sum = 0
-        if(gos_real >= 0 & ts_real >= 0){
-            positive_sum = coe + gos + ts
-        }
-        else if(gos_real >= 0 & ts_real < 0){
-            positive_sum = coe + gos
-            negative_sum = ts
-        }
-        else{
-            positive_sum = coe
-            negative_sum = gos + ts
-        }
-        
-
-        var edgecase_1 = 0
-        var edgecase_2 = 0
-        var edgecase_3 = 0
-        var edgecase_4 = 0
-
-        if(output == 0){
-            edgecase_1 = 1
-        }
-        if(edgecase_1 == 0 & gva_real < 0){
-            edgecase_2 = 1
-        }
-        if (edgecase_1 == 0 & edgecase_2 == 0 & positive_sum > output){
-            edgecase_3 = 1
-        }
-        if (edgecase_1 == 0 & edgecase_2 == 1 & negative_sum > ic){
-            edgecase_4 = 1
-        }
-
-
-
-        if(edgecase_1 == 1){
-            var no_activity_box = svg.selectAll('.ts_nab')
-               .data([csv_data])
-
-            no_activity_box
-               .enter()
-               .append('rect')
-               .attr('class', '.ts_nab')
-               .attr('width', 400)
-               .attr('height', 100)
-               .attr('x', 10)
-               .attr('y', 10)
-               .attr('stroke', "black")
-               .attr('stroke-width', 2)
-               .attr('fill', "white");
-
-            var no_activity_text = svg.selectAll('.ts_nat')
-               .data([csv_data])
-
-            no_activity_text
-                .enter()
-                .append('text')
-                .attr('class', '.ts_nat')
-                .attr('x', 20)
-                .attr('y', 30)
-                .text('This industry had no UK activity this year.')
-                .attr("font-family", "serif")
-                .attr("font-size", "20px")
-                .attr("fill", "black");
-
-        }
-
-        else{
-
-        
-        var higher = output
-        var lower = ic
-
-        if(edgecase_2 == 1){
-            higher = ic
-            lower = output
-        }
-
-        
-        var x_scale = d3.scaleLinear()
-        .range([0, width]);
-        if (edgecase_3 == 0 & edgecase_4 == 0){
-            x_scale.domain([0, higher])
-        }
-        else if(edgecase_3 == 1){
-            x_scale.domain([0, positive_sum])
-        }
-        else if(edgecase_4 == 1){
-            x_scale.domain([0, negative_sum])
-        }
-
-        
-        var higher_scaled = width
-        if(edgecase_3 == 1 || edgecase_4 == 1){
-            higher_scaled = x_scale(higher)
-        }
-        var lower_scaled = x_scale(lower)
-        var gva_scaled = x_scale(gva)
-        var coe_scaled = x_scale(coe)
-        var gos_scaled = x_scale(gos)
-        var ts_scaled = x_scale(ts)
-
-        var line1 = svg.selectAll('line1')
-            .data([csv_data])
-
-
-        var line2 = svg.selectAll('line2')
-            .data([csv_data])
-
-        line1
-            .enter()  
-            .append('line')
-            .attr('class','line1')
-            .attr('x1', (lower_scaled + 2))
-            .attr('y1', (240))
-            .attr('x2', (lower_scaled + 2))
-            .attr('y2', (590))
-            .attr("stroke-width", 2)
-            .attr("stroke", "black");
-
-
-        line2  
-            .enter()
-            .append('line')
-            .attr('class','line2')
-            .attr('x1', (width - 2))
-            .attr('y1', (240))
-            .attr('x2', (width - 2))
-            .attr('y2', (590))
-            .attr("stroke-width", 2)
-            .attr("stroke", "black");
-
-        var lower_rect = svg.selectAll('.lower_rect')
-            .data([csv_data]);
-
-        var gvap_rect = svg.selectAll('.gvap_rect')
-            .data([csv_data]);
-
-        var higher_rect = svg.selectAll('.higher_rect')
-            .data([csv_data]);
-
-        var coe_rect = svg.selectAll('.coe_rect')
-            .data([csv_data]);
-
-        var gos_rect = svg.selectAll('.gos_rect')
-            .data([csv_data]);
-
-        var ts_rect = svg.selectAll('.ts_rect')
-            .data([csv_data]);
-
-        var lower_y = 290
-        var higher_y = 140
-
-        var higher_x = 0
-        if(edgecase_3 == 1 || edgecase_4 == 1){
-            higher_x = width - higher_scaled
-        }
-        var lower_x = higher_x
-
-        lower_rect
-                .enter()
-                .append('rect')
-                .attr('class','lower_rect')
-                .attr("fill", "red")
-                .attr('width', lower_scaled)
-                .attr('height', 100)
-                .attr('y', lower_y) 
-                .attr('x', lower_x)
-
-        gvap_rect
-                .enter()
-                .append('rect')
-                .attr('class','gvap_rect')
-                .attr("fill", "black")
-                .attr('width', gva_scaled)
-                .attr('height', 100)
-                .attr('y', 440) 
-                .attr('x', lower_scaled + lower_x)
-
-        higher_rect
-                .enter()
-                .append('rect')
-                .attr('class','higher_rect')
-                .attr("fill", "green")
-                .attr('width', higher_scaled)
-                .attr('height', 100)
-                .attr('y', higher_y) 
-                .attr('x', higher_x)
-
-        var coe_y = 0
-        var gos_y = 0
-        var ts_y = 0
-        if(edgecase_2 == 1 || (gos_real >= 0 & ts_real >= 0)){
-            coe_y = 590
-        }
-        else{
-            coe_y = 740
-        }
-        if((edgecase_2 == 0 & ((gos_real >= 0 & ts_real >= 0) || gos_real <= 0) || (edgecase_2 == 1 & gos_real >= 0))){
-            gos_y = 590
-        }
-        else{
-            gos_y = 740
-        }
-        if((edgecase_2 == 0 & ((gos_real >= 0 & ts_real >= 0) || ts_real <= 0) || (edgecase_2 == 1 & ts_real >= 0))){
-            ts_y = 590
-        }
-        else{
-            ts_y = 740
-        }
-
-
-        var coe_x = 0
-        var gos_x = 0
-        var ts_x = 0
-        if(edgecase_4 == 0 & (gos_real < 0 & ts_real < 0)){
-            coe_x = width - coe_scaled
-        }
-        else if (gos_real < 0 & ts_real < 0){
-            coe_x = width - gos_scaled - ts_scaled
-        }
-        else if(gos_real >= 0){
-            coe_x = width - coe_scaled - gos_scaled
-        }
-        else if (ts_real >= 0){
-            coe_x = width - coe_scaled - ts_scaled
-        }
-
-        if(gos_real >= 0){
-            gos_x = coe_x + coe_scaled
-        }
-        else{
-            gos_x = coe_x
-        }
-        if((ts_real >= 0 & gos_real >= 0) || (ts_real < 0 & gos_real < 0)){
-            ts_x = gos_x + gos_scaled
-        }
-        else if (ts_real >= 0){
-            ts_x = coe_x + coe_scaled
-        }
-        else{
-            ts_x = coe_x
-        }
-        
-        
-
-
-        coe_rect
-                .enter()
-                .append('rect')
-                .attr('class','coe_rect')
-                .attr("fill", "blue")
-                .attr('width', coe_scaled)
-                .attr('height', 100)
-                .attr('y', coe_y) 
-                .attr('x', coe_x)
-
-        gos_rect
-                .enter()
-                .append('rect')
-                .attr('class','gos_rect')
-                .attr("fill", "black")
-                .attr('width', gos_scaled)
-                .attr('height', 100)
-                .attr('y', gos_y) 
-                .attr('x', gos_x)
-
-        ts_rect
-                .enter()
-                .append('rect')
-                .attr('class','ts_rect')
-                .attr("fill", "red")
-                .attr('width', ts_scaled)
-                .attr('height', 100)
-                .attr('y', ts_y) 
-                .attr('x', ts_x)
-
-        if (edgecase_2 == 0 & lower_scaled > 250){
-            var ic_text_name = svg.selectAll('ic_text_name')
-            .data([csv_data])
             
-           ic_text_name
+
+            var x_axis = d3.axisBottom()
+                .scale(x_scale);
+
+            var ic = d3.max(csv_data, function(d){
+                return (+d.IC);
+            })
+
+            var gva_real = d3.max(csv_data, function(d){
+                return (+d.GVA);
+            })
+
+            var gva = Math.abs(gva_real)
+
+            var coe = d3.max(csv_data, function(d){
+                return (+d.COE);
+            })
+
+            var gos_real = d3.max(csv_data, function(d){
+                return (+d.GOS);
+            })
+
+            var gos = Math.abs(gos_real)
+
+            var ts_real = d3.max(csv_data, function(d){
+                return (+d.T_S);
+            })
+
+            var ts = Math.abs(ts_real)
+
+            var positive_sum = 0
+            var negative_sum = 0
+            if(gos_real >= 0 & ts_real >= 0){
+                positive_sum = coe + gos + ts
+            }
+            else if(gos_real >= 0 & ts_real < 0){
+                positive_sum = coe + gos
+                negative_sum = ts
+            }
+            else{
+                positive_sum = coe
+                negative_sum = gos + ts
+            }
+            
+
+            var edgecase_1 = 0
+            var edgecase_2 = 0
+            var edgecase_3 = 0
+            var edgecase_4 = 0
+
+            if(output == 0){
+                edgecase_1 = 1
+            }
+            if(edgecase_1 == 0 & gva_real < 0){
+                edgecase_2 = 1
+            }
+            if (edgecase_1 == 0 & edgecase_2 == 0 & positive_sum > output){
+                edgecase_3 = 1
+            }
+            if (edgecase_1 == 0 & edgecase_2 == 1 & negative_sum > ic){
+                edgecase_4 = 1
+            }
+
+
+
+            if(edgecase_1 == 1){
+                var no_activity_box = svg.selectAll('.ts_nab')
+                   .data([csv_data])
+
+                no_activity_box
+                   .enter()
+                   .append('rect')
+                   .attr('class', '.ts_nab')
+                   .attr('width', 400)
+                   .attr('height', 100)
+                   .attr('x', 10)
+                   .attr('y', 10)
+                   .attr('stroke', "black")
+                   .attr('stroke-width', 2)
+                   .attr('fill', "white");
+
+                var no_activity_text = svg.selectAll('.ts_nat')
+                   .data([csv_data])
+
+                no_activity_text
                     .enter()
                     .append('text')
-                    .attr('class', 'ic_text_name')
-                    .attr('x', lower_x + lower_scaled - 220)
-                    .attr('y', lower_y + 22)
-                    .text('Intermediate consumption:')
+                    .attr('class', '.ts_nat')
+                    .attr('x', 20)
+                    .attr('y', 30)
+                    .text('This industry had no UK activity this year.')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
-                    .attr("fill", "white");
+                    .attr("fill", "black");
+
+            }
+
+            else{
+
+            
+            var higher = output
+            var lower = ic
+
+            if(edgecase_2 == 1){
+                higher = ic
+                lower = output
+            }
+
+            
+            var x_scale = d3.scaleLinear()
+            .range([0, width]);
+            if (edgecase_3 == 0 & edgecase_4 == 0){
+                x_scale.domain([0, higher])
+            }
+            else if(edgecase_3 == 1){
+                x_scale.domain([0, positive_sum])
+            }
+            else if(edgecase_4 == 1){
+                x_scale.domain([0, negative_sum])
+            }
+
+            
+            var higher_scaled = width
+            if(edgecase_3 == 1 || edgecase_4 == 1){
+                higher_scaled = x_scale(higher)
+            }
+            var lower_scaled = x_scale(lower)
+            var gva_scaled = x_scale(gva)
+            var coe_scaled = x_scale(coe)
+            var gos_scaled = x_scale(gos)
+            var ts_scaled = x_scale(ts)
+
+            var line1 = svg.selectAll('line1')
+                .data([csv_data])
+
+
+            var line2 = svg.selectAll('line2')
+                .data([csv_data])
+
+            line1
+                .enter()  
+                .append('line')
+                .attr('class','line1')
+                .attr('x1', (lower_scaled + 2))
+                .attr('y1', (240))
+                .attr('x2', (lower_scaled + 2))
+                .attr('y2', (590))
+                .attr("stroke-width", 2)
+                .attr("stroke", "black");
+
+
+            line2  
+                .enter()
+                .append('line')
+                .attr('class','line2')
+                .attr('x1', (width - 2))
+                .attr('y1', (240))
+                .attr('x2', (width - 2))
+                .attr('y2', (590))
+                .attr("stroke-width", 2)
+                .attr("stroke", "black");
+
+            var lower_rect = svg.selectAll('.lower_rect')
+                .data([csv_data]);
+
+            var gvap_rect = svg.selectAll('.gvap_rect')
+                .data([csv_data]);
+
+            var higher_rect = svg.selectAll('.higher_rect')
+                .data([csv_data]);
+
+            var coe_rect = svg.selectAll('.coe_rect')
+                .data([csv_data]);
+
+            var gos_rect = svg.selectAll('.gos_rect')
+                .data([csv_data]);
+
+            var ts_rect = svg.selectAll('.ts_rect')
+                .data([csv_data]);
+
+            var lower_y = 290
+            var higher_y = 140
+
+            var higher_x = 0
+            if(edgecase_3 == 1 || edgecase_4 == 1){
+                higher_x = width - higher_scaled
+            }
+            var lower_x = higher_x
+
+            lower_rect
+                    .enter()
+                    .append('rect')
+                    .attr('class','lower_rect')
+                    .attr("fill", "red")
+                    .attr('width', lower_scaled)
+                    .attr('height', 100)
+                    .attr('y', lower_y) 
+                    .attr('x', lower_x)
+
+            gvap_rect
+                    .enter()
+                    .append('rect')
+                    .attr('class','gvap_rect')
+                    .attr("fill", "black")
+                    .attr('width', gva_scaled)
+                    .attr('height', 100)
+                    .attr('y', 440) 
+                    .attr('x', lower_scaled + lower_x)
+
+            higher_rect
+                    .enter()
+                    .append('rect')
+                    .attr('class','higher_rect')
+                    .attr("fill", "green")
+                    .attr('width', higher_scaled)
+                    .attr('height', 100)
+                    .attr('y', higher_y) 
+                    .attr('x', higher_x)
+
+            var coe_y = 0
+            var gos_y = 0
+            var ts_y = 0
+            if(edgecase_2 == 1 || (gos_real >= 0 & ts_real >= 0)){
+                coe_y = 590
+            }
+            else{
+                coe_y = 740
+            }
+            if((edgecase_2 == 0 & ((gos_real >= 0 & ts_real >= 0) || gos_real <= 0) || (edgecase_2 == 1 & gos_real >= 0))){
+                gos_y = 590
+            }
+            else{
+                gos_y = 740
+            }
+            if((edgecase_2 == 0 & ((gos_real >= 0 & ts_real >= 0) || ts_real <= 0) || (edgecase_2 == 1 & ts_real >= 0))){
+                ts_y = 590
+            }
+            else{
+                ts_y = 740
+            }
+
+
+            var coe_x = 0
+            var gos_x = 0
+            var ts_x = 0
+            if(edgecase_4 == 0 & (gos_real < 0 & ts_real < 0)){
+                coe_x = width - coe_scaled
+            }
+            else if (gos_real < 0 & ts_real < 0){
+                coe_x = width - gos_scaled - ts_scaled
+            }
+            else if(gos_real >= 0){
+                coe_x = width - coe_scaled - gos_scaled
+            }
+            else if (ts_real >= 0){
+                coe_x = width - coe_scaled - ts_scaled
+            }
+
+            if(gos_real >= 0){
+                gos_x = coe_x + coe_scaled
+            }
+            else{
+                gos_x = coe_x
+            }
+            if((ts_real >= 0 & gos_real >= 0) || (ts_real < 0 & gos_real < 0)){
+                ts_x = gos_x + gos_scaled
+            }
+            else if (ts_real >= 0){
+                ts_x = coe_x + coe_scaled
+            }
+            else{
+                ts_x = coe_x
+            }
+            
+            
+
+
+            coe_rect
+                    .enter()
+                    .append('rect')
+                    .attr('class','coe_rect')
+                    .attr("fill", "blue")
+                    .attr('width', coe_scaled)
+                    .attr('height', 100)
+                    .attr('y', coe_y) 
+                    .attr('x', coe_x)
+
+            gos_rect
+                    .enter()
+                    .append('rect')
+                    .attr('class','gos_rect')
+                    .attr("fill", "black")
+                    .attr('width', gos_scaled)
+                    .attr('height', 100)
+                    .attr('y', gos_y) 
+                    .attr('x', gos_x)
+
+            ts_rect
+                    .enter()
+                    .append('rect')
+                    .attr('class','ts_rect')
+                    .attr("fill", "red")
+                    .attr('width', ts_scaled)
+                    .attr('height', 100)
+                    .attr('y', ts_y) 
+                    .attr('x', ts_x)
+
+            if (edgecase_2 == 0 & lower_scaled > 250){
+                var ic_text_name = svg.selectAll('ic_text_name')
+                .data([csv_data])
+                
+               ic_text_name
+                        .enter()
+                        .append('text')
+                        .attr('class', 'ic_text_name')
+                        .attr('x', lower_x + lower_scaled - 220)
+                        .attr('y', lower_y + 22)
+                        .text('Intermediate consumption:')
+                        .attr("font-family", "serif")
+                        .attr("font-size", "20px")
+                        .attr("fill", "white");
+
+                var ic_text_label = svg.selectAll('ic_text_label')
+                    .data([csv_data])
+                
+                ic_text_label
+                        .enter()
+                        .append('text')
+                        .attr('class', 'ic_text_label')
+                        .attr('x', lower_scaled - 220)
+                        .attr('y', lower_y + 42)
+                        .text('£' + ic + 'm')
+                        .attr("font-family", "serif")
+                        .attr("font-size", "20px")
+                        .attr("fill", "white");
+
+                }
+
+
+            if (edgecase_2 == 1){
+                var ic_text_name = svg.selectAll('ic_text_name')
+                .data([csv_data])
+                
+                ic_text_name
+                        .enter()
+                        .append('text')
+                        .attr('class', 'ic_text_name')
+                        .attr('x', higher_scaled + higher_x - 220)
+                        .attr('y', higher_y + 22)
+                        .text('Intermediate consumption:')
+                        .attr("font-family", "serif")
+                        .attr("font-size", "20px")
+                        .attr("fill", "white");
 
             var ic_text_label = svg.selectAll('ic_text_label')
                 .data([csv_data])
-            
+                
             ic_text_label
-                    .enter()
-                    .append('text')
-                    .attr('class', 'ic_text_label')
-                    .attr('x', lower_scaled - 220)
-                    .attr('y', lower_y + 42)
-                    .text('£' + ic + 'm')
-                    .attr("font-family", "serif")
-                    .attr("font-size", "20px")
-                    .attr("fill", "white");
+                        .enter()
+                        .append('text')
+                        .attr('class', 'ic_text_label')
+                        .attr('x', higher_scaled + higher_x - 220)
+                        .attr('y', higher_y + 42)
+                        .text('£' + ic + 'm')
+                        .attr("font-family", "serif")
+                        .attr("font-size", "20px")
+                        .attr("fill", "white");
 
             }
 
 
-        if (edgecase_2 == 1){
-            var ic_text_name = svg.selectAll('ic_text_name')
-            .data([csv_data])
-            
-            ic_text_name
-                    .enter()
-                    .append('text')
-                    .attr('class', 'ic_text_name')
-                    .attr('x', higher_scaled + higher_x - 220)
-                    .attr('y', higher_y + 22)
-                    .text('Intermediate consumption:')
-                    .attr("font-family", "serif")
-                    .attr("font-size", "20px")
-                    .attr("fill", "white");
 
-        var ic_text_label = svg.selectAll('ic_text_label')
-            .data([csv_data])
-            
-        ic_text_label
-                    .enter()
-                    .append('text')
-                    .attr('class', 'ic_text_label')
-                    .attr('x', higher_scaled + higher_x - 220)
-                    .attr('y', higher_y + 42)
-                    .text('£' + ic + 'm')
-                    .attr("font-family", "serif")
-                    .attr("font-size", "20px")
-                    .attr("fill", "white");
+            var output_text_name = svg.selectAll('output_text_name')
+                .data([csv_data])
 
-        }
+            if (edgecase_2 == 1 & lower_scaled > 250){
+                output_text_name
+                        .enter()
+                        .append('text')
+                        .attr('class', 'output_text_name')
+                        .attr('x', lower_x + lower_scaled - 90)
+                        .attr('y', lower_y + 22)
+                        .text('Output:')
+                        .attr("font-family", "serif")
+                        .attr("font-size", "20px")
+                        .attr("fill", "white");
 
+                var output_text_label = svg.selectAll('output_text_label')
+                .data([csv_data])
+                
+                output_text_label
+                        .enter()
+                        .append('text')
+                        .attr('class', 'output_text_label')
+                        .attr('x', lower_x + lower_scaled - 90)
+                        .attr('y', lower_y + 42)
+                        .text('£' + output + 'm')
+                        .attr("font-family", "serif")
+                        .attr("font-size", "20px")
+                        .attr("fill", "white");
 
+                }
 
-        var output_text_name = svg.selectAll('output_text_name')
-            .data([csv_data])
+             if (edgecase_2 == 0){
+                output_text_name
+                        .enter()
+                        .append('text')
+                        .attr('class', 'output_text_name')
+                        .attr('x', higher_x + higher_scaled - 90)
+                        .attr('y', higher_y + 22)
+                        .text('Output:')
+                        .attr("font-family", "serif")
+                        .attr("font-size", "20px")
+                        .attr("fill", "white");
 
-        if (edgecase_2 == 1 & lower_scaled > 250){
-            output_text_name
-                    .enter()
-                    .append('text')
-                    .attr('class', 'output_text_name')
-                    .attr('x', lower_x + lower_scaled - 90)
-                    .attr('y', lower_y + 22)
-                    .text('Output:')
-                    .attr("font-family", "serif")
-                    .attr("font-size", "20px")
-                    .attr("fill", "white");
-
-            var output_text_label = svg.selectAll('output_text_label')
-            .data([csv_data])
-            
-            output_text_label
-                    .enter()
-                    .append('text')
-                    .attr('class', 'output_text_label')
-                    .attr('x', lower_x + lower_scaled - 90)
-                    .attr('y', lower_y + 42)
-                    .text('£' + output + 'm')
-                    .attr("font-family", "serif")
-                    .attr("font-size", "20px")
-                    .attr("fill", "white");
+                var output_text_label = svg.selectAll('output_text_label')
+                .data([csv_data])
+                
+                output_text_label
+                        .enter()
+                        .append('text')
+                        .attr('class', 'output_text_label')
+                        .attr('x', higher_x + higher_scaled - 90)
+                        .attr('y', higher_y + 42)
+                        .text('£' + output + 'm')
+                        .attr("font-family", "serif")
+                        .attr("font-size", "20px")
+                        .attr("fill", "white");
 
             }
 
-         if (edgecase_2 == 0){
-            output_text_name
-                    .enter()
-                    .append('text')
-                    .attr('class', 'output_text_name')
-                    .attr('x', higher_x + higher_scaled - 90)
-                    .attr('y', higher_y + 22)
-                    .text('Output:')
-                    .attr("font-family", "serif")
-                    .attr("font-size", "20px")
-                    .attr("fill", "white");
-
-            var output_text_label = svg.selectAll('output_text_label')
-            .data([csv_data])
-            
-            output_text_label
-                    .enter()
-                    .append('text')
-                    .attr('class', 'output_text_label')
-                    .attr('x', higher_x + higher_scaled - 90)
-                    .attr('y', higher_y + 42)
-                    .text('£' + output + 'm')
-                    .attr("font-family", "serif")
-                    .attr("font-size", "20px")
-                    .attr("fill", "white");
-
-        }
 
 
+            if (gva_scaled > 200){
+                var gvap_text_name = svg.selectAll('gvap_text_name')
+                .data([csv_data])
 
-        if (gva_scaled > 200){
-            var gvap_text_name = svg.selectAll('gvap_text_name')
-            .data([csv_data])
+                gvap_text_name
+                        .enter()
+                        .append('text')
+                        .attr('class', 'gvap_text_name')
+                        .attr('x', width - 90)
+                        .attr('y', 462)
+                        .text('GVA:')
+                        .attr("font-family", "serif")
+                        .attr("font-size", "20px")
+                        .attr("fill", "white");
 
-            gvap_text_name
-                    .enter()
-                    .append('text')
-                    .attr('class', 'gvap_text_name')
-                    .attr('x', width - 90)
-                    .attr('y', 462)
-                    .text('GVA:')
-                    .attr("font-family", "serif")
-                    .attr("font-size", "20px")
-                    .attr("fill", "white");
+                var gvap_text_label = svg.selectAll('gvap_text_label')
+                .data([csv_data])
+                
+                gvap_text_label
+                        .enter()
+                        .append('text')
+                        .attr('class', 'gvap_text_label')
+                        .attr('x', width - 90)
+                        .attr('y', 482)
+                        .text('£' + gva + 'm')
+                        .attr("font-family", "serif")
+                        .attr("font-size", "20px")
+                        .attr("fill", "white");
+                }
 
-            var gvap_text_label = svg.selectAll('gvap_text_label')
-            .data([csv_data])
-            
-            gvap_text_label
-                    .enter()
-                    .append('text')
-                    .attr('class', 'gvap_text_label')
-                    .attr('x', width - 90)
-                    .attr('y', 482)
-                    .text('£' + gva + 'm')
-                    .attr("font-family", "serif")
-                    .attr("font-size", "20px")
-                    .attr("fill", "white");
+            if (coe_scaled > 200){
+                var coe_text_name = svg.selectAll('coe_text_name')
+                .data([csv_data])
+
+                coe_text_name
+                        .enter()
+                        .append('text')
+                        .attr('class', 'coe_text_name')
+                        .attr('x', coe_x + coe_scaled - 90)
+                        .attr('y', coe_y + 22)
+                        .text('COE:')
+                        .attr("font-family", "serif")
+                        .attr("font-size", "20px")
+                        .attr("fill", "white");
+
+                var coe_text_label = svg.selectAll('coe_text_label')
+                .data([csv_data])
+                
+                coe_text_label
+                        .enter()
+                        .append('text')
+                        .attr('class', 'coe_text_label')
+                        .attr('x', coe_x + coe_scaled - 90)
+                        .attr('y', coe_y + 42)
+                        .text('£' + coe + 'm')
+                        .attr("font-family", "serif")
+                        .attr("font-size", "20px")
+                        .attr("fill", "white");
+                }
+
+            if (gos_scaled > 200){
+                var gos_text_name = svg.selectAll('gos_text_name')
+                .data([csv_data])
+
+                gos_text_name
+                        .enter()
+                        .append('text')
+                        .attr('class', 'gos_text_name')
+                        .attr('x', gos_x + gos_scaled - 90)
+                        .attr('y', gos_y + 22)
+                        .text('GOS:')
+                        .attr("font-family", "serif")
+                        .attr("font-size", "20px")
+                        .attr("fill", "white");
+
+                var gos_text_label = svg.selectAll('gos_text_label')
+                .data([csv_data])
+                
+                gos_text_label
+                        .enter()
+                        .append('text')
+                        .attr('class', 'gos_text_label')
+                        .attr('x', gos_x + gos_scaled - 90)
+                        .attr('y', gos_y + 42)
+                        .text('£' + gos + 'm')
+                        .attr("font-family", "serif")
+                        .attr("font-size", "20px")
+                        .attr("fill", "white");
             }
 
-        if (coe_scaled > 200){
-            var coe_text_name = svg.selectAll('coe_text_name')
-            .data([csv_data])
+            if(ts_scaled > 200){
 
-            coe_text_name
-                    .enter()
-                    .append('text')
-                    .attr('class', 'coe_text_name')
-                    .attr('x', coe_x + coe_scaled - 90)
-                    .attr('y', coe_y + 22)
-                    .text('COE:')
-                    .attr("font-family", "serif")
-                    .attr("font-size", "20px")
-                    .attr("fill", "white");
+                var ts_text_name = svg.selectAll('ts_text_name')
+                .data([csv_data])
 
-            var coe_text_label = svg.selectAll('coe_text_label')
-            .data([csv_data])
             
-            coe_text_label
-                    .enter()
-                    .append('text')
-                    .attr('class', 'coe_text_label')
-                    .attr('x', coe_x + coe_scaled - 90)
-                    .attr('y', coe_y + 42)
-                    .text('£' + coe + 'm')
-                    .attr("font-family", "serif")
-                    .attr("font-size", "20px")
-                    .attr("fill", "white");
+                ts_text_name
+                        .enter()
+                        .append('text')
+                        .attr('class', 'ts_text_name')
+                        .attr('x', ts_x + ts_scaled - 90)
+                        .attr('y', ts_y + 22)
+                        .text('Net taxes (D.29):')
+                        .attr("font-family", "serif")
+                        .attr("font-size", "20px")
+                        .attr("fill", "white");
+
+                var ts_text_label = svg.selectAll('ts_text_label')
+                .data([csv_data])
+                
+                ts_text_label
+                        .enter()
+                        .append('text')
+                        .attr('class', 'ts_text_label')
+                        .attr('x', ts_x + ts_scaled - 90)
+                        .attr('y', ts_y + 42)
+                        .text('£' + ts + 'm')
+                        .attr("font-family", "serif")
+                        .attr("font-size", "20px")
+                        .attr("fill", "white");
             }
 
-        if (gos_scaled > 200){
-            var gos_text_name = svg.selectAll('gos_text_name')
-            .data([csv_data])
-
-            gos_text_name
-                    .enter()
-                    .append('text')
-                    .attr('class', 'gos_text_name')
-                    .attr('x', gos_x + gos_scaled - 90)
-                    .attr('y', gos_y + 22)
-                    .text('GOS:')
-                    .attr("font-family", "serif")
-                    .attr("font-size", "20px")
-                    .attr("fill", "white");
-
-            var gos_text_label = svg.selectAll('gos_text_label')
-            .data([csv_data])
             
-            gos_text_label
-                    .enter()
-                    .append('text')
-                    .attr('class', 'gos_text_label')
-                    .attr('x', gos_x + gos_scaled - 90)
-                    .attr('y', gos_y + 42)
-                    .text('£' + gos + 'm')
-                    .attr("font-family", "serif")
-                    .attr("font-size", "20px")
-                    .attr("fill", "white");
-        }
-
-        if(ts_scaled > 200){
-
-            var ts_text_name = svg.selectAll('ts_text_name')
-            .data([csv_data])
-
-        
-            ts_text_name
-                    .enter()
-                    .append('text')
-                    .attr('class', 'ts_text_name')
-                    .attr('x', ts_x + ts_scaled - 90)
-                    .attr('y', ts_y + 22)
-                    .text('Net taxes (D.29):')
-                    .attr("font-family", "serif")
-                    .attr("font-size", "20px")
-                    .attr("fill", "white");
-
-            var ts_text_label = svg.selectAll('ts_text_label')
-            .data([csv_data])
             
-            ts_text_label
-                    .enter()
-                    .append('text')
-                    .attr('class', 'ts_text_label')
-                    .attr('x', ts_x + ts_scaled - 90)
-                    .attr('y', ts_y + 42)
-                    .text('£' + ts + 'm')
-                    .attr("font-family", "serif")
-                    .attr("font-size", "20px")
-                    .attr("fill", "white");
-        }
 
-        
-        
+            }
 
-        }
+            })
+    }
 
+    d3.select("body")
+        .on("keydown", function(){
+            key = d3.event.keyCode
+            if (key == 37){
+                refind = Math.min(refind - 1, 1)
+                update()
+            }
+            else if(key == 39){
+                refind = Math.max(refind + 1, 105)
+                update()
+            }
+            else if(key == 38){
+                refyear = Math.min(refyear + 1, 1997)
+                update()
+            }
+            else if(key == 40){
+                refyear = Math.max(refyear - 1, 2014)
+                update()
+            }
         })
 
     </script>
