@@ -204,9 +204,18 @@
             var line1 = svg.selectAll('line1')
                 .data([csv_data])
 
+            line1
+                .exit()
+                .remove()
+
 
             var line2 = svg.selectAll('line2')
                 .data([csv_data])
+
+            line2
+                .exit()
+                .remove()
+
 
             line1
                 .enter()  
@@ -259,6 +268,10 @@
             var lower_x = higher_x
 
             lower_rect
+                    .exit()
+                    .remove()
+
+            lower_rect
                     .enter()
                     .append('rect')
                     .attr('class','lower_rect')
@@ -269,6 +282,10 @@
                     .attr('x', lower_x)
 
             gvap_rect
+                    .exit()
+                    .remove()
+
+            gvap_rect
                     .enter()
                     .append('rect')
                     .attr('class','gvap_rect')
@@ -277,6 +294,10 @@
                     .attr('height', 100)
                     .attr('y', 440) 
                     .attr('x', lower_scaled + lower_x)
+
+            higher_rect
+                    .exit()
+                    .remove()
 
             higher_rect
                     .enter()
@@ -342,10 +363,11 @@
             else{
                 ts_x = coe_x
             }
-            
-            
 
 
+            coe_rect
+                    .exit()
+                    .remove()
             coe_rect
                     .enter()
                     .append('rect')
@@ -357,6 +379,9 @@
                     .attr('x', coe_x)
 
             gos_rect
+                    .exit()
+                    .remove()
+            gos_rect
                     .enter()
                     .append('rect')
                     .attr('class','gos_rect')
@@ -367,6 +392,9 @@
                     .attr('x', gos_x)
 
             ts_rect
+                    .exit()
+                    .remove()
+            ts_rect
                     .enter()
                     .append('rect')
                     .attr('class','ts_rect')
@@ -376,9 +404,22 @@
                     .attr('y', ts_y) 
                     .attr('x', ts_x)
 
-            if (edgecase_2 == 0 & lower_scaled > 250){
-                var ic_text_name = svg.selectAll('ic_text_name')
+            var ic_text_name = svg.selectAll('ic_text_name')
                 .data([csv_data])
+
+            ic_text_name
+                    .exit()
+                    .remove()
+
+             var ic_text_label = svg.selectAll('ic_text_label')
+                    .data([csv_data])
+
+            ic_text_label
+                    .exit()
+                    .remove()
+
+
+            if (edgecase_2 == 0 & lower_scaled > 250){
                 
                ic_text_name
                         .enter()
@@ -390,9 +431,6 @@
                         .attr("font-family", "serif")
                         .attr("font-size", "20px")
                         .attr("fill", "white");
-
-                var ic_text_label = svg.selectAll('ic_text_label')
-                    .data([csv_data])
                 
                 ic_text_label
                         .enter()
@@ -409,8 +447,6 @@
 
 
             if (edgecase_2 == 1){
-                var ic_text_name = svg.selectAll('ic_text_name')
-                .data([csv_data])
                 
                 ic_text_name
                         .enter()
@@ -423,10 +459,8 @@
                         .attr("font-size", "20px")
                         .attr("fill", "white");
 
-            var ic_text_label = svg.selectAll('ic_text_label')
-                .data([csv_data])
                 
-            ic_text_label
+                ic_text_label
                         .enter()
                         .append('text')
                         .attr('class', 'ic_text_label')
@@ -444,6 +478,17 @@
             var output_text_name = svg.selectAll('output_text_name')
                 .data([csv_data])
 
+            output_text_name
+                .exit()
+                .remove()
+
+            var output_text_label = svg.selectAll('output_text_label')
+                .data([csv_data])
+
+            output_text_name
+                .exit()
+                .remove()
+
             if (edgecase_2 == 1 & lower_scaled > 250){
                 output_text_name
                         .enter()
@@ -456,8 +501,6 @@
                         .attr("font-size", "20px")
                         .attr("fill", "white");
 
-                var output_text_label = svg.selectAll('output_text_label')
-                .data([csv_data])
                 
                 output_text_label
                         .enter()
@@ -472,7 +515,7 @@
 
                 }
 
-             if (edgecase_2 == 0){
+            if (edgecase_2 == 0){
                 output_text_name
                         .enter()
                         .append('text')
@@ -484,8 +527,6 @@
                         .attr("font-size", "20px")
                         .attr("fill", "white");
 
-                var output_text_label = svg.selectAll('output_text_label')
-                .data([csv_data])
                 
                 output_text_label
                         .enter()
@@ -500,11 +541,23 @@
 
             }
 
+            var gvap_text_name = svg.selectAll('gvap_text_name')
+                .data([csv_data])
+
+            gvap_text_name
+                .exit()
+                .remove()
+
+            var gvap_text_label = svg.selectAll('gvap_text_label')
+                .data([csv_data])
+
+            gvap_text_name
+                .exit()
+                .remove()
+
 
 
             if (gva_scaled > 200){
-                var gvap_text_name = svg.selectAll('gvap_text_name')
-                .data([csv_data])
 
                 gvap_text_name
                         .enter()
@@ -517,9 +570,6 @@
                         .attr("font-size", "20px")
                         .attr("fill", "white");
 
-                var gvap_text_label = svg.selectAll('gvap_text_label')
-                .data([csv_data])
-                
                 gvap_text_label
                         .enter()
                         .append('text')
@@ -532,9 +582,21 @@
                         .attr("fill", "white");
                 }
 
-            if (coe_scaled > 200){
-                var coe_text_name = svg.selectAll('coe_text_name')
+            var coe_text_name = svg.selectAll('coe_text_name')
                 .data([csv_data])
+
+            coe_text_name
+                .exit()
+                .remove()
+
+            var coe_text_label = svg.selectAll('coe_text_label')
+                .data([csv_data])
+
+            coe_text_name
+                .exit()
+                .remove()
+
+            if (coe_scaled > 200){
 
                 coe_text_name
                         .enter()
@@ -546,9 +608,6 @@
                         .attr("font-family", "serif")
                         .attr("font-size", "20px")
                         .attr("fill", "white");
-
-                var coe_text_label = svg.selectAll('coe_text_label')
-                .data([csv_data])
                 
                 coe_text_label
                         .enter()
@@ -562,10 +621,22 @@
                         .attr("fill", "white");
                 }
 
-            if (gos_scaled > 200){
-                var gos_text_name = svg.selectAll('gos_text_name')
+            var gos_text_name = svg.selectAll('gos_text_name')
                 .data([csv_data])
 
+            gos_text_name
+                .exit()
+                .remove()
+
+            var gos_text_label = svg.selectAll('gos_text_label')
+                .data([csv_data])
+
+            gos_text_name
+                .exit()
+                .remove()
+
+            if (gos_scaled > 200){
+            
                 gos_text_name
                         .enter()
                         .append('text')
@@ -577,8 +648,6 @@
                         .attr("font-size", "20px")
                         .attr("fill", "white");
 
-                var gos_text_label = svg.selectAll('gos_text_label')
-                .data([csv_data])
                 
                 gos_text_label
                         .enter()
@@ -591,6 +660,20 @@
                         .attr("font-size", "20px")
                         .attr("fill", "white");
             }
+
+            var ts_text_name = svg.selectAll('ts_text_name')
+                .data([csv_data])
+
+            ts_text_name
+                .exit()
+                .remove()
+
+            var ts_text_label = svg.selectAll('ts_text_label')
+                .data([csv_data])
+
+            ts_text_name
+                .exit()
+                .remove()
 
             if(ts_scaled > 200){
 
@@ -609,9 +692,6 @@
                         .attr("font-size", "20px")
                         .attr("fill", "white");
 
-                var ts_text_label = svg.selectAll('ts_text_label')
-                .data([csv_data])
-                
                 ts_text_label
                         .enter()
                         .append('text')
@@ -623,66 +703,7 @@
                         .attr("font-size", "20px")
                         .attr("fill", "white");
 
-                lower_rect
-                    .exit()
-                    .remove()
-                higher_rect
-                    .exit()
-                    .remove()
-                coe_rect
-                    .exit()
-                    .remove()
-                gos_rect
-                    .exit()
-                    .remove()
-                ts_rect
-                    .exit()
-                    .remove()
-                gvap.rect
-                    .exit()
-                    .remove()
-                output_text_label
-                    .exit()
-                    .remove()
-                output_text_name
-                    .exit()
-                    .remove()
-                ic_text_label
-                    .exit()
-                    .remove()
-                ic_text_name
-                    .exit()
-                    .remove()
-                coe_text_label
-                    .exit()
-                    .remove()
-                coe_text_name
-                    .exit()
-                    .remove()
-                gos_text_label
-                    .exit()
-                    .remove()
-                gos_text_name
-                    .exit()
-                    .remove()
-                ts_text_label
-                    .exit()
-                    .remove()
-                ts_text_name
-                    .exit()
-                    .remove()
-                gvap_text_label
-                    .exit()
-                    .remove()
-                gvap_text_name
-                    .exit()
-                    .remove()
-                line1_text_label
-                    .exit()
-                    .remove()
-                line2_text_name
-                    .exit()
-                    .remove()
+            
 
 
 
