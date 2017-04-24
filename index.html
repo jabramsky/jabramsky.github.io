@@ -55,6 +55,7 @@
 
     var refyear = 1997
     var refind = 1
+    csv_data =[]
 
     
     function update(){
@@ -62,7 +63,7 @@
             console.log(full_data);
 
             var line1 = svg.selectAll('line1')
-            .data([])
+            .data([csv_data])
 
             line1.exit().remove()
 
