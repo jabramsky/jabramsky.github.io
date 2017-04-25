@@ -232,7 +232,7 @@
             var newline2 = line2
                 .enter()
                 .append('line')
-                .attr('class', 'line1')
+                .attr('class', 'line2')
 
             newline2.merge(line2)  
                 .attr('x1', (lower_scaled + 2))
@@ -402,7 +402,7 @@
                 .data([csv_data])
             ic_text_label.exit().remove()
 
-            if (edgecase_2 == 0 & lower_scaled > 250){
+            if (edgecase_2 == 0){
                 
                 var new_ic_text_name = ic_text_name
                         .enter()
@@ -466,7 +466,7 @@
                 .data([csv_data])
             output_text_label.exit().remove()
 
-            if (edgecase_2 == 1 & lower_scaled > 250){
+            if (edgecase_2 == 1){
 
                 var new_output_text_name = output_text_name
                         .enter()
@@ -524,32 +524,31 @@
                 .data([csv_data])
             gvap_text_name.exit().remove()
 
-            if (gva_scaled > 200){
+            var new_gvap_text_name = gvap_text_name
+                    .enter()
+                    .append('text')
+                    .attr('class', 'gvap_text_name')
+            new_gvap_text_name.merge(gvap_text_name)
+                    .attr('x', width - 90)
+                    .attr('y', 462)
+                    .text('GVA:')
+                    .attr("font-family", "serif")
+                    .attr("font-size", "20px")
+                    .attr("fill", "white");
 
-                var new_gvap_text_name = gvap_text_name
-                        .enter()
-                        .append('text')
-                        .attr('class', 'gvap_text_name')
-                new_gvap_text_name.merge(gvap_text_name)
-                        .attr('x', width - 90)
-                        .attr('y', 462)
-                        .text('GVA:')
-                        .attr("font-family", "serif")
-                        .attr("font-size", "20px")
-                        .attr("fill", "white");
+            var new_gvap_text_label = gvap_text_label
+                    .enter()
+                    .append('text')
+                    .attr('class', 'gvap_text_label')
+            new_gvap_text_label.merge(gvap_text_label)
+                    .attr('x', width - 90)
+                    .attr('y', 482)
+                    .text('£' + gva + 'm')
+                    .attr("font-family", "serif")
+                    .attr("font-size", "20px")
+                    .attr("fill", "white");
 
-                var new_gvap_text_label = gvap_text_label
-                        .enter()
-                        .append('text')
-                        .attr('class', 'gvap_text_label')
-                new_gvap_text_label.merge(gvap_text_label)
-                        .attr('x', width - 90)
-                        .attr('y', 482)
-                        .text('£' + gva + 'm')
-                        .attr("font-family", "serif")
-                        .attr("font-size", "20px")
-                        .attr("fill", "white");
-                }
+            }
 
 
             var coe_text_name = svg.selectAll('.coe_text_name')
@@ -559,31 +558,29 @@
                 .data([csv_data])
             coe_text_name.exit().remove()
 
-            if (coe_scaled > 200){
 
-                var new_coe_text_name = coe_text_name
-                        .enter()
-                        .append('text')
-                        .attr('class', 'coe_text_name')
-                new_coe_text_name.merge(coe_text_name)
-                        .attr('x', coe_x + coe_scaled - 90)
-                        .attr('y', coe_y + 22)
-                        .text('COE:')
-                        .attr("font-family", "serif")
-                        .attr("font-size", "20px")
-                        .attr("fill", "white");                
-                var new_coe_text_label = coe_text_label
-                        .enter()
-                        .append('text')
-                        .attr('class', 'coe_text_label')
-                new_coe_text_label.merge(coe_text_label)
-                        .attr('x', coe_x + coe_scaled - 90)
-                        .attr('y', coe_y + 42)
-                        .text('£' + coe + 'm')
-                        .attr("font-family", "serif")
-                        .attr("font-size", "20px")
-                        .attr("fill", "white");
-                }
+            var new_coe_text_name = coe_text_name
+                    .enter()
+                    .append('text')
+                    .attr('class', 'coe_text_name')
+            new_coe_text_name.merge(coe_text_name)
+                    .attr('x', coe_x + coe_scaled - 90)
+                    .attr('y', coe_y + 22)
+                    .text('COE:')
+                    .attr("font-family", "serif")
+                    .attr("font-size", "20px")
+                    .attr("fill", "white");                
+            var new_coe_text_label = coe_text_label
+                    .enter()
+                    .append('text')
+                    .attr('class', 'coe_text_label')
+            new_coe_text_label.merge(coe_text_label)
+                    .attr('x', coe_x + coe_scaled - 90)
+                    .attr('y', coe_y + 42)
+                    .text('£' + coe + 'm')
+                    .attr("font-family", "serif")
+                    .attr("font-size", "20px")
+                    .attr("fill", "white");
 
             var gos_text_name = svg.selectAll('.gos_text_name')
                 .data([csv_data])
@@ -593,13 +590,12 @@
                 .data([csv_data])
             gos_text_name.exit().remove()
 
-            if (gos_scaled > 200){
             
-                var new_gos_text_name = gos_text_name
+            var new_gos_text_name = gos_text_name
                         .enter()
                         .append('text')
                         .attr('class', 'gos_text_name')
-                new_gos_text_name.merge(gos_text_name)
+            new_gos_text_name.merge(gos_text_name)
                         .attr('x', gos_x + gos_scaled - 90)
                         .attr('y', gos_y + 22)
                         .text('GOS:')
@@ -607,18 +603,18 @@
                         .attr("font-size", "20px")
                         .attr("fill", "white");
 
-                var new_gos_text_label = gos_text_label
+            var new_gos_text_label = gos_text_label
                         .enter()
                         .append('text')
                         .attr('class', 'gos_text_label')
-                new_gos_text_label.merge(gos_text_label)
+            new_gos_text_label.merge(gos_text_label)
                         .attr('x', gos_x + gos_scaled - 90)
                         .attr('y', gos_y + 42)
                         .text('£' + gos + 'm')
                         .attr("font-family", "serif")
                         .attr("font-size", "20px")
                         .attr("fill", "white");
-            }
+            
 
             var ts_text_name = svg.selectAll('.ts_text_name')
                 .data([csv_data])
@@ -627,39 +623,32 @@
                 .data([csv_data])
             ts_text_label.exit().remove()
 
-            if(ts_scaled > 200){
-                var new_ts_text_name = ts_text_name
-                        .enter()
-                        .append('text')
-                        .attr('class', 'ts_text_name')
-                new_ts_text_name.merge(ts_text_name)
-                        .attr('x', ts_x + ts_scaled - 90)
-                        .attr('y', ts_y + 22)
-                        .text('Net taxes (D.29):')
-                        .attr("font-family", "serif")
-                        .attr("font-size", "20px")
-                        .attr("fill", "white");
-                var new_ts_text_label = ts_text_label
-                        .enter()
-                        .append('text')
-                        .attr('class', 'ts_text_label')
-                new_ts_text_label.merge(ts_text_label)
-                        .attr('x', ts_x + ts_scaled - 90)
-                        .attr('y', ts_y + 42)
-                        .text('£' + ts + 'm')
-                        .attr("font-family", "serif")
-                        .attr("font-size", "20px")
-                        .attr("fill", "white");
-
             
-
-
-
-
-            }
-
-            
-            
+            var new_ts_text_name = ts_text_name
+                    .enter()
+                    .append('text')
+                    .attr('class', 'ts_text_name')
+            new_ts_text_name.merge(ts_text_name)
+                    .attr('x', ts_x + ts_scaled - 90)
+                    .attr('y', ts_y + 22)
+                    .text('Net taxes (D.29):')
+                    .attr("font-family", "serif")
+                    .attr("font-size", "20px")
+                    .attr("fill", "white");
+            var new_ts_text_label = ts_text_label
+                    .enter()
+                    .append('text')
+                    .attr('class', 'ts_text_label')
+            new_ts_text_label.merge(ts_text_label)
+                    .attr('x', ts_x + ts_scaled - 90)
+                    .attr('y', ts_y + 42)
+                    .text('£' + ts + 'm')
+                    .attr("font-family", "serif")
+                    .attr("font-size", "20px")
+                    .attr("fill", "white");
+            if(ts_scaled < 200){
+                new_ts_text_name.exit().remove()
+                new_ts_text_label.exit().remove()
 
             }
 
