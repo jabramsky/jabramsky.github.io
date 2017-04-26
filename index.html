@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>dummy1</title>
+    <title>dummy2</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.7.3/d3.min.js"></script>
     <style>
     html, body, #vis {
@@ -702,7 +702,7 @@
                 coe_text_fill = "white"
             }
             else{
-                coe_text_x = coe_text_x - 100
+                coe_text_x = coe_text_x - 200
                 coe_text_fill = coe_colour
             }
 
@@ -734,12 +734,12 @@
                 ts_text_fill = "white"
             }
             else if (ts_real < 0 || coe_scaled == 0){
-                ts_text_x = ts_x - 90
+                ts_text_x = ts_x - 200
                 ts_name_y = ts_y + 22
                 ts_text_fill = ts_colour
             }
             else if (ts_real >= 0){
-                ts_text_x = ts_x - 90
+                ts_text_x = ts_x - 200
                 ts_name_y = ts_y - 22
                 ts_text_fill = ts_colour
             }
@@ -819,7 +819,7 @@
             new_ts_text_name.merge(ts_text_name)
                     .attr('x', ts_text_x)
                     .attr('y', ts_name_y)
-                    .text('Net taxes (D.29):')
+                    .text('Net taxes (D.29-D39):')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
                     .attr("fill", ts_text_fill);
