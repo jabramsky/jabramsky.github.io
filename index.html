@@ -544,6 +544,10 @@
                 .data([csv_data])
             ic_text_label.exit().remove()
 
+            var ic_label_text = ""
+            if(ic >= 1000){ic_label_text = '£' + ic/1000 + 'bn'}
+            else{ic_label_text = '£' + ic + 'm'}
+
             if (edgecase_2 == 0){
                 
                 var new_ic_text_name = ic_text_name
@@ -564,7 +568,7 @@
                 new_ic_text_label.merge(ic_text_label)
                         .attr('x', lower_scaled - 220)
                         .attr('y', lower_y + 42)
-                        .text('£' + ic + 'm')
+                        .text(ic_label_text)
                         .attr("font-family", "serif")
                         .attr("font-size", "20px")
                         .attr("fill", "white");
@@ -592,15 +596,16 @@
                 new_ic_text_label.merge(ic_text_label)
                         .attr('x', higher_scaled - 220)
                         .attr('y', higher_y + 42)
-                        .text('£' + ic + 'm')
+                        .text(ic_label_text)
                         .attr("font-family", "serif")
                         .attr("font-size", "20px")
                         .attr("fill", "white");
 
             }
 
-
-
+            var output_label_text = ""
+            if(output >= 1000){output_label_text = '£' + output/1000 + 'bn'}
+            else{output_label_text = '£' + output + 'm'}
 
             var output_text_name = svg.selectAll('.output_text_name')
                 .data([csv_data])
@@ -629,7 +634,7 @@
                 new_output_text_label.merge(output_text_label)
                         .attr('x', lower_scaled - 220)
                         .attr('y', lower_y + 42)
-                        .text('£' + output + 'm')
+                        .text(output_label_text)
                         .attr("font-family", "serif")
                         .attr("font-size", "20px")
                         .attr("fill", "white");
@@ -655,11 +660,17 @@
                 new_output_text_label.merge(output_text_label)
                         .attr('x', higher_scaled - 220)
                         .attr('y', higher_y + 42)
-                        .text('£' + output + 'm')
+                        .text(output_label_text)
                         .attr("font-family", "serif")
                         .attr("font-size", "20px")
                         .attr("fill", "white");
             }
+
+            var gva_label_text = ""
+            if(gva >= 1000 & gva_real >= 0){gva_label_text = '£' + gva/1000 + 'bn'}
+            else if(gva < 1000 & gva_real >= 0){gva_label_text = gva_label_text = '£' + gva + 'm'}
+            else if(gva >= 1000 & gva_real < 0){gva_label_text = '-£' + gva/1000 + 'bn'}
+            else if(gva < 1000 & gva_real >= 0){gva_label_text = '-£' + gva + 'm'}
 
             var gvap_text_name = svg.selectAll('.gvap_text_name')
                 .data([csv_data])
@@ -687,7 +698,7 @@
             new_gvap_text_label.merge(gvap_text_label)
                     .attr('x', width - 90)
                     .attr('y', 482)
-                    .text('£' + gva + 'm')
+                    .text(gva_label_text)
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
                     .attr("fill", "white");
@@ -701,6 +712,8 @@
             var coe_text_label = svg.selectAll('.coe_text_label')
                 .data([csv_data])
             coe_text_name.exit().remove()
+
+
 
             var coe_text_x = 0
             var coe_text_fill = ""
@@ -741,20 +754,19 @@
                 ts_text_fill = "white"
             }
             else if (ts_real < 0 & gos_real >= 0){
-                ts_text_x = ts_x - 160
+                ts_text_x = ts_x - 180
                 ts_name_y = ts_y + 22
                 ts_text_fill = ts_colour
             }
             else if ((ts_real < 0 & gos_real < 0) || ts_real >= 0){
-                ts_text_x = ts_x - 160
+                ts_text_x = ts_x - 180
                 ts_name_y = ts_y + 122
                 ts_text_fill = ts_colour
             }
-           
-            
 
-
-
+            var coe_label_text = ""
+            if(coe >= 1000){coe_label_text = '£' + coe/1000 + 'bn'}
+            else{coe_label_text = '£' + coe + 'm'}
 
             var new_coe_text_name = coe_text_name
                     .enter()
@@ -778,6 +790,12 @@
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
                     .attr("fill", coe_text_fill);
+
+            var gos_label_text = ""
+            if(gos >= 1000 & gos_real >= 0){gos_label_text = '£' + gos/1000 + 'bn'}
+            else if(gos < 1000 & gos_real >= 0){gos_label_text = gos_label_text = '£' + gos + 'm'}
+            else if(gos >= 1000 & gos_real < 0){gos_label_text = '-£' + gos/1000 + 'bn'}
+            else if(gos < 1000 & gos_real >= 0){gos_label_text = '-£' + gos + 'm'}
 
             var gos_text_name = svg.selectAll('.gos_text_name')
                 .data([csv_data])
@@ -819,6 +837,12 @@
             var ts_text_label = svg.selectAll('.ts_text_label')
                 .data([csv_data])
             ts_text_label.exit().remove()
+
+            var ts_label_text = ""
+            if(ts >= 1000 & ts_real >= 0){ts_label_text = '£' + ts/1000 + 'bn'}
+            else if(ts < 1000 & ts_real >= 0){ts_label_text = ts_label_text = '£' + ts + 'm'}
+            else if(ts >= 1000 & ts_real < 0){ts_label_text = '-£' + ts/1000 + 'bn'}
+            else if(ts < 1000 & ts_real >= 0){ts_label_text = '-£' + ts + 'm'}
 
             
             var new_ts_text_name = ts_text_name
