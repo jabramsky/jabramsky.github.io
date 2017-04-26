@@ -702,7 +702,7 @@
                 coe_text_fill = "white"
             }
             else{
-                coe_text_x = coe_text_x - 200
+                coe_text_x = coe_x - 200
                 coe_text_fill = coe_colour
             }
 
@@ -715,8 +715,8 @@
                 gos_text_fill = "white"
             }
             else if (gos_real < 0 || coe_scaled == 0){
-                gos_text_x = gos_x - 90
-                gos_name_y = gos_y + 42
+                gos_text_x = gos_x - 50
+                gos_name_y = gos_y + 22
                 gos_text_fill = gos_colour
             }
             else if (gos_real >= 0){
@@ -733,16 +733,18 @@
                 ts_name_y = ts_y + 22
                 ts_text_fill = "white"
             }
-            else if (ts_real < 0 || coe_scaled == 0){
+            else if (ts_real < 0 & gos_real >= 0){
                 ts_text_x = ts_x - 200
                 ts_name_y = ts_y + 22
                 ts_text_fill = ts_colour
             }
-            else if (ts_real >= 0){
+            else if ((ts_real < 0 & gos_real < 0) || ts_real >= 0){
                 ts_text_x = ts_x - 200
-                ts_name_y = ts_y - 22
+                ts_name_y = ts_y + 122
                 ts_text_fill = ts_colour
             }
+           
+            
 
 
 
