@@ -56,7 +56,6 @@
 
     var refyear = 1997
     var refind = 1
-    csv_data =[]
 
     
     function update(){
@@ -78,28 +77,22 @@
             var ic = d3.max(csv_data, function(d){
                 return (+d.IC);
             })
-
             var gva_real = d3.max(csv_data, function(d){
                 return (+d.GVA);
             })
-
             var gva = Math.abs(gva_real)
-
             var coe = d3.max(csv_data, function(d){
                 return (+d.COE);
             })
-
             var gos_real = d3.max(csv_data, function(d){
                 return (+d.GOS);
             })
-
             var gos = Math.abs(gos_real)
-
             var ts_real = d3.max(csv_data, function(d){
                 return (+d.T_S);
             })
-
             var ts = Math.abs(ts_real)
+            var indname = this.(csv_data, function(d) {return d.INDUSTRY_NAME})
 
             var positive_sum = 0
             var negative_sum = 0
@@ -203,6 +196,22 @@
             var gos_scaled = x_scale(gos)
             var ts_scaled = x_scale(ts)
 
+            var title = svg.selectAll('.title')
+            .data([csv_data])
+            title.exit().remove()
+
+            var newtitle = title
+                .enter()
+                .append('text')
+                .attr('class', 'title')
+            newtitle.merge(title)
+                .attr('x', 20)
+                .attr('y', 20)
+                .text(indname, ', ', refyear)
+                .attr("font-family", "Georgia")
+                .attr("font-size", "30px")
+                .attr("fill", "black");
+                
             var line1 = svg.selectAll('.line1')
             .data([csv_data])
 
