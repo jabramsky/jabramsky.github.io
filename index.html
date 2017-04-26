@@ -478,7 +478,7 @@
                 ts_x = coe_x
             }
 
-
+            var coe_colour = "blue"
             var coe_rect = svg.selectAll('.coe_rect')
                 .data([csv_data]);
             coe_rect.exit().remove()
@@ -487,13 +487,13 @@
                     .append('rect')
                     .attr('class','coe_rect')
             new_coe_rect.merge(coe_rect)
-                    .attr("fill", "blue")
+                    .attr("fill", coe_colour)
                     .attr('width', coe_scaled)
                     .attr('height', 100)
                     .attr('y', coe_y) 
                     .attr('x', coe_x)
 
-
+            var gos_colour = "black"
             var gos_rect = svg.selectAll('.gos_rect')
                 .data([csv_data]);
             gos_rect.exit().remove()
@@ -502,13 +502,13 @@
                     .append('rect')
                     .attr('class','gos_rect')
             new_gos_rect.merge(gos_rect)
-                    .attr("fill", "black")
+                    .attr("fill", gos_colour)
                     .attr('width', gos_scaled)
                     .attr('height', 100)
                     .attr('y', gos_y) 
                     .attr('x', gos_x)
 
-
+            var ts_colour = "red"
             var ts_rect = svg.selectAll('.ts_rect')
                 .data([csv_data])
             ts_rect.exit().remove()
@@ -517,11 +517,17 @@
                     .append('rect')
                     .attr('class','ts_rect')
             new_ts_rect.merge(ts_rect)
-                    .attr("fill", "red")
+                    .attr("fill", ts_colour)
                     .attr('width', ts_scaled)
                     .attr('height', 100)
                     .attr('y', ts_y) 
                     .attr('x', ts_x)
+
+            var lower_text_x = 0
+            if (lower_scaled >= 250){
+                lower_text_x = lower_x + lower_scaled - 220
+            }
+            else{lower_text_x = lower_x + lower_scaled + 20}
 
             var ic_text_name = svg.selectAll('.ic_text_name')
                 .data([csv_data])
@@ -538,7 +544,7 @@
                         .append('text')
                         .attr('class', 'ic_text_name')
                 new_ic_text_name.merge(ic_text_name)
-                        .attr('x', lower_x + lower_scaled - 220)
+                        .attr('x', lower_text_x)
                         .attr('y', lower_y + 22)
                         .text('Intermediate consumption:')
                         .attr("font-family", "serif")
@@ -585,6 +591,7 @@
                         .attr("fill", "white");
 
             }
+
 
 
 
@@ -688,24 +695,75 @@
                 .data([csv_data])
             coe_text_name.exit().remove()
 
+            var coe_text_x = 0
+            var coe_text_fill = ""
+            if(coe_scaled >= 200){
+                coe_text_x = coe_x + coe_scaled - 90 
+                coe_text_fill = "white"
+            }
+            else{
+                coe_text_x = coe_text_x - 100
+                coe_text_fill = coe_colour
+            }
+
+            var gos_text_x = 0
+            var gos_name_y = 0
+            var gos_text_fill = ""
+            if(gos_scaled >= 200){
+                gos_text_x = gos_x + gos_scaled - 90
+                gos_name_y = gos_y + 22
+                gos_text_fill = "white"
+            }
+            else if (gos_real < 0 || coe_scaled == 0){
+                gos_text_x = gos_x - 90
+                gos_name_y = gos_y + 42
+                gos_text_fill = gos_colour
+            }
+            else if (gos_real >= 0){
+                gos_text_x = gos_x - 90
+                gos_name_y = gos_y - 22
+                gos_text_fill = gos_colour
+            }
+
+            var ts_text_x = 0
+            var ts_name_y = 0
+            var ts_text_fill = ""
+            if(ts_scaled >= 200){
+                ts_text_x = ts_x + ts_scaled - 90
+                ts_name_y = ts_y + 22
+                ts_text_fill = "white"
+            }
+            else if (ts_real < 0 || coe_scaled == 0){
+                ts_text_x = ts_x - 90
+                ts_name_y = ts_y + 22
+                ts_text_fill = ts_colour
+            }
+            else if (ts_real >= 0){
+                ts_text_x = ts_x - 90
+                ts_name_y = ts_y - 22
+                ts_text_fill = ts_colour
+            }
+
+
+
 
             var new_coe_text_name = coe_text_name
                     .enter()
                     .append('text')
                     .attr('class', 'coe_text_name')
             new_coe_text_name.merge(coe_text_name)
-                    .attr('x', coe_x + coe_scaled - 90)
+                    .attr('x', coe_text_x)
                     .attr('y', coe_y + 22)
                     .text('COE:')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
-                    .attr("fill", "white");                
+                    .attr("fill", coe_text_fill);                
             var new_coe_text_label = coe_text_label
                     .enter()
                     .append('text')
                     .attr('class', 'coe_text_label')
             new_coe_text_label.merge(coe_text_label)
-                    .attr('x', coe_x + coe_scaled - 90)
+                    .attr('x', coe_text_x)
                     .attr('y', coe_y + 42)
                     .text('£' + coe + 'm')
                     .attr("font-family", "serif")
@@ -726,24 +784,24 @@
                         .append('text')
                         .attr('class', 'gos_text_name')
             new_gos_text_name.merge(gos_text_name)
-                        .attr('x', gos_x + gos_scaled - 90)
-                        .attr('y', gos_y + 22)
+                        .attr('x', gos_text_x)
+                        .attr('y', gos_name_y)
                         .text('GOS:')
                         .attr("font-family", "serif")
                         .attr("font-size", "20px")
-                        .attr("fill", "white");
+                        .attr("fill", gos_text_fill);
 
             var new_gos_text_label = gos_text_label
                         .enter()
                         .append('text')
                         .attr('class', 'gos_text_label')
             new_gos_text_label.merge(gos_text_label)
-                        .attr('x', gos_x + gos_scaled - 90)
-                        .attr('y', gos_y + 42)
+                        .attr('x', gos_text_x)
+                        .attr('y', gos_name_y + 22)
                         .text('£' + gos + 'm')
                         .attr("font-family", "serif")
                         .attr("font-size", "20px")
-                        .attr("fill", "white");
+                        .attr("fill", gos_text_fill);
             
 
             var ts_text_name = svg.selectAll('.ts_text_name')
@@ -759,30 +817,23 @@
                     .append('text')
                     .attr('class', 'ts_text_name')
             new_ts_text_name.merge(ts_text_name)
-                    .attr('x', ts_x + ts_scaled - 90)
-                    .attr('y', ts_y + 22)
+                    .attr('x', ts_text_x)
+                    .attr('y', ts_name_y)
                     .text('Net taxes (D.29):')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
-                    .attr("fill", "white");
+                    .attr("fill", ts_text_fill);
             var new_ts_text_label = ts_text_label
                     .enter()
                     .append('text')
                     .attr('class', 'ts_text_label')
             new_ts_text_label.merge(ts_text_label)
-                    .attr('x', ts_x + ts_scaled - 90)
-                    .attr('y', ts_y + 42)
+                    .attr('x', ts_text_x)
+                    .attr('y', ts_name_y + 22)
                     .text('£' + ts + 'm')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
-                    .attr("fill", "white");
-            if(ts_scaled < 200){
-                new_ts_text_name.exit().remove()
-                new_ts_text_label.exit().remove()
-                ts_text_name.exit().remove()
-                ts_text_label.exit().remove()
-
-            }
+                    .attr("fill", ts_text_fill);
 
             })
     }
