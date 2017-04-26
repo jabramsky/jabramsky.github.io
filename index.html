@@ -321,6 +321,12 @@
                 .attr("font-family", "Georgia")
                 .attr("font-size", "30px")
                 .attr("fill", "black");
+
+            var liney2 = 0
+            if(positive_sum == 0 || negative_sum == 0){
+                liney2 = 590
+            }
+            else{liney2 = 740}
                 
             var line1 = svg.selectAll('.line1')
             .data([csv_data])
@@ -353,6 +359,7 @@
                 .enter()
                 .append('line')
                 .attr('class', 'line2')
+
 
             newline2.merge(line2)  
                 .attr('x1', (width - 2))
@@ -697,7 +704,7 @@
 
             var coe_text_x = 0
             var coe_text_fill = ""
-            if(coe_scaled >= 200){
+            if(coe_scaled >= 100){
                 coe_text_x = coe_x + coe_scaled - 90 
                 coe_text_fill = "white"
             }
@@ -720,8 +727,8 @@
                 gos_text_fill = gos_colour
             }
             else if (gos_real >= 0){
-                gos_text_x = gos_x - 90
-                gos_name_y = gos_y - 22
+                gos_text_x = gos_x - 50
+                gos_name_y = gos_y - 24
                 gos_text_fill = gos_colour
             }
 
@@ -734,12 +741,12 @@
                 ts_text_fill = "white"
             }
             else if (ts_real < 0 & gos_real >= 0){
-                ts_text_x = ts_x - 200
+                ts_text_x = ts_x - 160
                 ts_name_y = ts_y + 22
                 ts_text_fill = ts_colour
             }
             else if ((ts_real < 0 & gos_real < 0) || ts_real >= 0){
-                ts_text_x = ts_x - 200
+                ts_text_x = ts_x - 160
                 ts_name_y = ts_y + 122
                 ts_text_fill = ts_colour
             }
@@ -770,7 +777,7 @@
                     .text('£' + coe + 'm')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
-                    .attr("fill", "white");
+                    .attr("fill", "coe_colour");
 
             var gos_text_name = svg.selectAll('.gos_text_name')
                 .data([csv_data])
