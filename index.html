@@ -709,7 +709,7 @@
                 coe_text_fill = "white"
             }
             else{
-                coe_text_x = coe_x - 200
+                coe_text_x = coe_x - 50
                 coe_text_fill = coe_colour
             }
 
@@ -777,7 +777,7 @@
                     .text('£' + coe + 'm')
                     .attr("font-family", "serif")
                     .attr("font-size", "20px")
-                    .attr("fill", "coe_colour");
+                    .attr("fill", coe_text_fill);
 
             var gos_text_name = svg.selectAll('.gos_text_name')
                 .data([csv_data])
