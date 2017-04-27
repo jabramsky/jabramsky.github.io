@@ -2,25 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>dummy2</title>
+    <title>dummy3</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.7.3/d3.min.js"></script>
     <style>
     html, body, #vis {
         height: 100%;
         margin: 0;
         background-color: #d6d6c2
-    }
-
-    .tooltip {
-        position: absolute;
-    }
-
-    .tooltip p {
-        background-color: white;
-        border: #eee 1px solid;
-        padding: 2px;
-        font-family: sans-serif;
-        font-size: 11px;
     }
 </style>
 </head>
@@ -47,9 +35,6 @@
         .append('g')
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-    var tooltip = d3.select('body')
-        .append('div')
-        .attr('class', 'tooltip');
 
     width = width - margin.left - margin.right;
     height = height - margin.top - margin.bottom;
@@ -154,7 +139,7 @@
                     .attr('x', 20)
                     .attr('y', 30)
                     .text('This industry had no UK activity this year.')
-                    .attr("font-family", "serif")
+                    .attr("font-family", "Georgia")
                     .attr("font-size", "20px")
                     .attr("fill", "black");
 
@@ -558,7 +543,7 @@
                         .attr('x', lower_text_x)
                         .attr('y', lower_y + 22)
                         .text('Intermediate consumption:')
-                        .attr("font-family", "serif")
+                        .attr("font-family", "Georgia")
                         .attr("font-size", "20px")
                         .attr("fill", "white");
                 var new_ic_text_label = ic_text_label
@@ -569,7 +554,7 @@
                         .attr('x', lower_scaled - 220)
                         .attr('y', lower_y + 42)
                         .text(ic_label_text)
-                        .attr("font-family", "serif")
+                        .attr("font-family", "Georgia")
                         .attr("font-size", "20px")
                         .attr("fill", "white");
 
@@ -586,7 +571,7 @@
                         .attr('x', higher_x + higher_scaled - 220)
                         .attr('y', higher_y + 22)
                         .text('Intermediate consumption:')
-                        .attr("font-family", "serif")
+                        .attr("font-family", "Georgia")
                         .attr("font-size", "20px")
                         .attr("fill", "white");
                 var new_ic_text_label = ic_text_label
@@ -597,7 +582,7 @@
                         .attr('x', higher_scaled - 220)
                         .attr('y', higher_y + 42)
                         .text(ic_label_text)
-                        .attr("font-family", "serif")
+                        .attr("font-family", "Georgia")
                         .attr("font-size", "20px")
                         .attr("fill", "white");
 
@@ -624,7 +609,7 @@
                         .attr('x', lower_x + lower_scaled - 220)
                         .attr('y', lower_y + 22)
                         .text('Output:')
-                        .attr("font-family", "serif")
+                        .attr("font-family", "Georgia")
                         .attr("font-size", "20px")
                         .attr("fill", "white");
                 var new_output_text_label = output_text_label
@@ -635,7 +620,7 @@
                         .attr('x', lower_scaled - 220)
                         .attr('y', lower_y + 42)
                         .text(output_label_text)
-                        .attr("font-family", "serif")
+                        .attr("font-family", "Georgia")
                         .attr("font-size", "20px")
                         .attr("fill", "white");
                 }
@@ -661,7 +646,7 @@
                         .attr('x', higher_scaled - 220)
                         .attr('y', higher_y + 42)
                         .text(output_label_text)
-                        .attr("font-family", "serif")
+                        .attr("font-family", "Georgia")
                         .attr("font-size", "20px")
                         .attr("fill", "white");
             }
@@ -687,7 +672,7 @@
                     .attr('x', width - 90)
                     .attr('y', 462)
                     .text('GVA:')
-                    .attr("font-family", "serif")
+                    .attr("font-family", "Georgia")
                     .attr("font-size", "20px")
                     .attr("fill", "white");
 
@@ -699,7 +684,7 @@
                     .attr('x', width - 90)
                     .attr('y', 482)
                     .text(gva_label_text)
-                    .attr("font-family", "serif")
+                    .attr("font-family", "Georgia")
                     .attr("font-size", "20px")
                     .attr("fill", "white");
 
@@ -776,7 +761,7 @@
                     .attr('x', coe_text_x)
                     .attr('y', coe_y + 22)
                     .text('COE:')
-                    .attr("font-family", "serif")
+                    .attr("font-family", "Georgia")
                     .attr("font-size", "20px")
                     .attr("fill", coe_text_fill);                
             var new_coe_text_label = coe_text_label
@@ -787,7 +772,7 @@
                     .attr('x', coe_text_x)
                     .attr('y', coe_y + 42)
                     .text('£' + coe + 'm')
-                    .attr("font-family", "serif")
+                    .attr("font-family", "Georgia")
                     .attr("font-size", "20px")
                     .attr("fill", coe_text_fill);
 
@@ -814,7 +799,7 @@
                         .attr('x', gos_text_x)
                         .attr('y', gos_name_y)
                         .text('GOS:')
-                        .attr("font-family", "serif")
+                        .attr("font-family", "Georgia")
                         .attr("font-size", "20px")
                         .attr("fill", gos_text_fill);
 
@@ -826,7 +811,7 @@
                         .attr('x', gos_text_x)
                         .attr('y', gos_name_y + 22)
                         .text('£' + gos + 'm')
-                        .attr("font-family", "serif")
+                        .attr("font-family", "Georgia")
                         .attr("font-size", "20px")
                         .attr("fill", gos_text_fill);
             
@@ -853,7 +838,7 @@
                     .attr('x', ts_text_x)
                     .attr('y', ts_name_y)
                     .text('Net taxes (D.29-D39):')
-                    .attr("font-family", "serif")
+                    .attr("font-family", "Georgia")
                     .attr("font-size", "20px")
                     .attr("fill", ts_text_fill);
             var new_ts_text_label = ts_text_label
@@ -864,7 +849,7 @@
                     .attr('x', ts_text_x)
                     .attr('y', ts_name_y + 22)
                     .text('£' + ts + 'm')
-                    .attr("font-family", "serif")
+                    .attr("font-family", "Georgia")
                     .attr("font-size", "20px")
                     .attr("fill", ts_text_fill);
 
