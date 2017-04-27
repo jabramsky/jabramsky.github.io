@@ -780,7 +780,7 @@
             if(gos >= 1000 & gos_real >= 0){gos_label_text = '£' + gos/1000 + 'bn'}
             else if(gos < 1000 & gos_real >= 0){gos_label_text = gos_label_text = '£' + gos + 'm'}
             else if(gos >= 1000 & gos_real < 0){gos_label_text = '-£' + gos/1000 + 'bn'}
-            else if(gos < 1000 & gos_real >= 0){gos_label_text = '-£' + gos + 'm'}
+            else if(gos < 1000 & gos_real < 0){gos_label_text = '-£' + gos + 'm'}
 
             var gos_text_name = svg.selectAll('.gos_text_name')
                 .data([csv_data])
@@ -827,7 +827,7 @@
             if(ts >= 1000 & ts_real >= 0){ts_label_text = '£' + ts/1000 + 'bn'}
             else if(ts < 1000 & ts_real >= 0){ts_label_text = ts_label_text = '£' + ts + 'm'}
             else if(ts >= 1000 & ts_real < 0){ts_label_text = '-£' + ts/1000 + 'bn'}
-            else if(ts < 1000 & ts_real >= 0){ts_label_text = '-£' + ts + 'm'}
+            else if(ts < 1000 & ts_real < 0){ts_label_text = '-£' + ts + 'm'}
 
             
             var new_ts_text_name = ts_text_name
