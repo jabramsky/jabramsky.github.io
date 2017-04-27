@@ -133,6 +133,18 @@
 
     }
 
+    d3.select("body")
+        .on("keydown", function(){
+            key = d3.event.keyCode
+            if(key == 38){
+                refyear = Math.min(refyear + 1, 2014)
+                update()
+            }
+            else if(key == 40){
+                refyear = Math.max(refyear - 1, 1997)
+                update()
+            }
+
     update();
     </script>
 
