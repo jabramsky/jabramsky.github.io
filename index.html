@@ -128,6 +128,23 @@
           .text("Wage Share");
 
 
+        var title = svg.selectAll('.title')
+            .data([csv_data])
+            title.exit().remove()
+
+        var newtitle = title
+            .enter()
+            .append('text')
+            .attr('class', 'title')
+        newtitle.merge(title)
+            .attr('x', 40)
+            .attr('y', 40)
+            .text("Wage shares by industry, " + refyear)
+            .attr("font-family", "Georgia")
+            .attr("font-size", "30px")
+            .attr("fill", "black");
+
+
 
         });
 
