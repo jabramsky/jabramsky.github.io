@@ -516,10 +516,22 @@
                     .attr('x', ts_x)
 
             var lower_text_x = 0
-            if (lower_scaled >= 250){
+            if (lower_scaled >= 300){
                 lower_text_x = lower_x + lower_scaled - 270
             }
-            else{lower_text_x = lower_x + lower_scaled + 20}
+            else{
+                lower_text_x = lower_x + lower_scaled + 20
+            }
+            var lower_text_colour = ""
+            if(lower_scaled >= 300){
+                lower_text_colour = "white"
+            }
+            else if(lower_scaled < 300 & edgecase_2 == 0){
+                lower_text_colour = "red"
+            }
+            else if(lower_scaled < 300 & edgecase_2 == 1){
+                lower_text_colour = "green" 
+            }
 
             var ic_text_name = svg.selectAll('.ic_text_name')
                 .data([csv_data])
@@ -545,7 +557,7 @@
                         .text('Intermediate consumption:')
                         .attr("font-family", "Georgia")
                         .attr("font-size", "20px")
-                        .attr("fill", "white");
+                        .attr("fill", lower_text_colour);
                 var new_ic_text_label = ic_text_label
                         .enter()
                         .append('text')
@@ -622,7 +634,7 @@
                         .text(output_label_text)
                         .attr("font-family", "Georgia")
                         .attr("font-size", "20px")
-                        .attr("fill", "white");
+                        .attr("fill", lower_text_colour);
                 }
 
             if (edgecase_2 == 0){
@@ -733,13 +745,13 @@
             var ts_text_x = 0
             var ts_name_y = 0
             var ts_text_fill = ""
-            if(ts_scaled >= 200){
-                ts_text_x = ts_x + ts_scaled - 90
+            if(ts_scaled >= 220){
+                ts_text_x = ts_x + ts_scaled - 200
                 ts_name_y = ts_y + 22
                 ts_text_fill = "white"
             }
             else if (ts_real < 0 & gos_real >= 0){
-                ts_text_x = ts_x - 200
+                ts_text_x = ts_x - 210
                 ts_name_y = ts_y + 22
                 ts_text_fill = ts_colour
             }
