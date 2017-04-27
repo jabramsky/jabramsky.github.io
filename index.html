@@ -725,7 +725,7 @@
                 gos_text_fill = gos_colour
             }
             else if (gos_real >= 0){
-                gos_text_x = gos_x - 50
+                gos_text_x = gos_x - 80
                 gos_name_y = gos_y - 30
                 gos_text_fill = gos_colour
             }
@@ -810,7 +810,7 @@
             new_gos_text_label.merge(gos_text_label)
                         .attr('x', gos_text_x)
                         .attr('y', gos_name_y + 22)
-                        .text('£' + gos + 'm')
+                        .text(gos_label_text)
                         .attr("font-family", "Georgia")
                         .attr("font-size", "20px")
                         .attr("fill", gos_text_fill);
@@ -837,7 +837,7 @@
             new_ts_text_name.merge(ts_text_name)
                     .attr('x', ts_text_x)
                     .attr('y', ts_name_y)
-                    .text('Net taxes (D.29-D39):')
+                    .text('Net taxes (D.29-D.39):')
                     .attr("font-family", "Georgia")
                     .attr("font-size", "20px")
                     .attr("fill", ts_text_fill);
@@ -848,7 +848,7 @@
             new_ts_text_label.merge(ts_text_label)
                     .attr('x', ts_text_x)
                     .attr('y', ts_name_y + 22)
-                    .text('£' + ts + 'm')
+                    .text(ts_label_text)
                     .attr("font-family", "Georgia")
                     .attr("font-size", "20px")
                     .attr("fill", ts_text_fill);
