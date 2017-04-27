@@ -68,7 +68,7 @@
         refyear = 1997
 
         function update(){
-        d3.csv('timeseries_manuf_nototals', function(full_data){
+        d3.csv('timeseries_manuf_nototals.csv', function(full_data){
 
             data = full_data.filter(function(d){return +d.DATE === refyear})
 
