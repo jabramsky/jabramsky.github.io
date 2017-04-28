@@ -12,6 +12,18 @@
             font-family: sans-serif;
         }
 
+        .tooltip {
+        position: absolute;
+        }
+
+        .tooltip p {
+            background-color: white;
+            border: #eee 1px solid;
+            padding: 2px;
+            font-family: sans-serif;
+            font-size: 11px;
+        }
+
     </style>
 </head>
 <body>
@@ -108,41 +120,71 @@
                     var area = area_scale(+d.GVA);
                     var radius = Math.sqrt(area / Math.PI);
                     return radius;
-                });
+                })
+                .on('mouseover', mouseOver)
+                .on('mousemove', mouseMove)
+                .on('mouseout', mouseOut);
+
+            function mouseOver(d){
+
+                    d3.select(this)
+                        .transition()
+                        .style('opacity', 1)
+
+                    tooltip
+                        .style('display', null)
+                        .html('<p>Industry: ' + d.INDUSTRY_NAME + '<br>UWage Share: ' + d.WAGESHARE + '%</p>');
+                };
+
+            function mouseMove(d){
+                    tooltip
+                        .style('top', (d3.event.pageY - 20) + "px")
+                        .style('left', (d3.event.pageX + 20) + "px");
+                };
+
+            function mouseOut(d){
+                    d3.select(this)
+                        .transition()
+                        .style('opacity', 0)
+
+                    tooltip
+                        .style('display', 'none');
+                };
+            }
 
 
-        d3.select('.x.axis')
-            .call(x_axis);
+            d3.select('.x.axis')
+                .call(x_axis);
 
-        d3.select('.y.axis')
-            .call(y_axis);
+            d3.select('.y.axis')
+                .call(y_axis);
 
-        svg.append("text")
-              .attr("transform", "translate(" + width/2 +  "," + (height + margin.bottom/2) + ")")
-              .style("text-anchor", "end")
-              .text("Industry");
+            svg.append("text")
+                  .attr("transform", "translate(" + width/2 +  "," + (height + margin.bottom/2) + ")")
+                  .style("text-anchor", "end")
+                  .text("Industry");
 
-        svg.append("text")
-          .attr("transform", "translate(-60," + height/2 + ")rotate(-90)")
-          .style("text-anchor", "middle")
-          .text("Wage Share");
+            svg.append("text")
+              .attr("transform", "translate(-60," + height/2 + ")rotate(-90)")
+              .style("text-anchor", "middle")
+              .text("Wage Share");
 
 
-        var title = svg.selectAll('.title')
-            .data([data])
-            title.exit().remove()
+            var title = svg.selectAll('.title')
+                .data([data])
+                title.exit().remove()
 
-        var newtitle = title
-            .enter()
-            .append('text')
-            .attr('class', 'title')
-        newtitle.merge(title)
-            .attr('x', 10)
-            .attr('y', 10)
-            .text("Wage shares by industry, " + refyear)
-            .attr("font-family", "Georgia")
-            .attr("font-size", "20px")
-            .attr("fill", "black");
+            var newtitle = title
+                .enter()
+                .append('text')
+                .attr('class', 'title')
+            newtitle.merge(title)
+                .attr('x', 10)
+                .attr('y', 10)
+                .text("Wage shares by industry, " + refyear)
+                .attr("font-family", "Georgia")
+                .attr("font-size", "20px")
+                .attr("fill", "black");
 
 
 
