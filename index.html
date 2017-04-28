@@ -47,6 +47,10 @@
                     .append('g')
                         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
+         var tooltip = d3.select('body')
+            .append('div')
+            .attr('class', 'tooltip');
+
         width = width - margin.left - margin.right;
         height = height - margin.top - margin.bottom;
 
@@ -143,10 +147,6 @@
                 };
 
             function mouseOut(d){
-                    d3.select(this)
-                        .transition()
-                        .style('opacity', 0)
-
                     tooltip
                         .style('display', 'none');
                 };
