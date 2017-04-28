@@ -59,6 +59,7 @@
 
         var y_scale = d3.scaleLinear()
                     .rangeRound([height, 0])
+                    .domain([0,1]);
 
         var colour_scale_ran = d3.scaleQuantile()
                     .range(colorbrewer.Reds[9]);
@@ -83,13 +84,14 @@
         refyear = 1997
 
         function update(){
-        d3.csv('timeseries_manuf_nototals.csv', function(data){
+        d3.csv('timeseries_manuf_nototals.csv', function(full_data){
 
-            x_scale.domain(d3.extent(data, function(d){ return +d.PRODUCT; }));
-            y_scale.domain(d3.extent(data, function(d){ return +d.ABSPCHANGE; }))
-            area_scale.domain(d3.extent(data, function(d){ return +d.START; }));
+            data = full_data.filter(function(d){return +d.DATE === refyear})
 
-            var ps_colour = "black"
+            x_scale.domain(d3.extent(data, function(d){ return +d.INDUSTRY; }));
+            area_scale.domain(d3.extent(data, function(d){ return +d.GVA; }));
+
+            var manuf_colour = "black"
             var other_colour = "white"
             var dots = svg.selectAll('.dot')
                             .data(data);
@@ -109,21 +111,23 @@
 
             //update
             new_dots.merge(dots)
-                .attr('cx', function(d){ return x_scale(+d.PRODUCT); })
-                .attr('cy', function(d){ return y_scale(+d.ABSPCHANGE); })
+                .attr('cx', function(d){ return x_scale(+d.INDUSTRY); })
+                .attr('cy', function(d){ return y_scale(+d.WAGESHARE); })
                 .attr('fill', function(d){
-                    if(+d.WITHPS === 1) {
-                        return ps_colour;
+                    if(+d.MANUFACTURING === 1) {
+                        return manuf_colour;
                     } else {
                         return other_colour;
                     }
                  })
                 .attr('r', function(d){
-                    var area = area_scale(+d.START);
+                    var area = area_scale(+d.GVA);
                     var radius = Math.sqrt(area / Math.PI);
                     return radius;
                 })
-            
+                .on('mouseover', mouseOver)
+                .on('mousemove', mouseMove)
+                .on('mouseout', mouseOut);
 
             function mouseOver(d){
 
@@ -133,7 +137,7 @@
 
                     tooltip
                         .style('display', null)
-                        .html('<p>Product: ' + d.PRODUCT + '<br>Wage Share: ' + d.ABSPCHANGE + '%</p>');
+                        .html('<p>Industry: ' + d.NAME + '<br>Wage Share: ' + d.WAGESHARE + '%</p>');
                 };
 
             function mouseMove(d){
@@ -177,7 +181,7 @@
             newtitle.merge(title)
                 .attr('x', 10)
                 .attr('y', 10)
-                .text("Absolute percentage changes in IC share by product with and without Purchases Survey")
+                .text("Wage shares by industry, " + refyear)
                 .attr("font-family", "Georgia")
                 .attr("font-size", "20px")
                 .attr("fill", "black");
@@ -189,6 +193,19 @@
         });
 
     }
+
+    d3.select("body")
+        .on("keydown", function(){
+            key = d3.event.keyCode
+            if(key == 38){
+                refyear = Math.min(refyear + 1, 2014)
+                update()
+            }
+            else if(key == 40){
+                refyear = Math.max(refyear - 1, 1997)
+                update()
+            }
+        })
 
     update();
     </script>
