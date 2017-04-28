@@ -83,7 +83,7 @@
         refyear = 1997
 
         function update(){
-        d3.csv('timeseries_manuf_nototals.csv', function(data){
+        d3.csv('ICshare.csv', function(data){
 
             x_scale.domain(d3.extent(data, function(d){ return +d.PRODUCT; }));
             y_scale.domain(d3.extent(data, function(d){ return +d.ABSPCHANGE; }))
