@@ -123,6 +123,10 @@
                     var radius = Math.sqrt(area / Math.PI);
                     return radius;
                 })
+                .on('mouseover', mouseOver)
+                .on('mousemove', mouseMove)
+                .on('mouseout', mouseOut);
+
             
 
             function mouseOver(d){
@@ -133,7 +137,7 @@
 
                     tooltip
                         .style('display', null)
-                        .html('<p>Product: ' + d.PRODUCT + '<br>Wage Share: ' + d.ABSPCHANGE + '%</p>');
+                        .html('<p>Product: ' + d.PRODUCT + '<br>Absolute % Change: ' + d.ABSPCHANGE + '%</p>');
                 };
 
             function mouseMove(d){
