@@ -1031,19 +1031,19 @@
         d3.select("body")
                 .on("keydown", function(){
                     key = d3.event.keyCode
-                    if(key == 38){
+                    if(key == 68){
                         refyear = Math.min(refyear + 1, 2014)
                         update()
                     }
-                    else if(key == 40){
+                    else if(key == 65){
                         refyear = Math.max(refyear - 1, 1997)
                         update()
                     }
-                    else if(key == 39){
+                    else if(key == 87){
                         refind = Math.min(refind + 1, 105)
                         update()
                     }
-                    else if(key == 37){
+                    else if(key == 83){
                         refind = Math.max(refind - 1, 1)
                         update()
                 }
