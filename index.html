@@ -1059,7 +1059,7 @@
             right: 50
         };
 
-        var svg = d3.select('#vis2')
+        var svg2 = d3.select('#vis2')
                     .append('svg')
                         .attr('height', height2)
                         .attr('width', width2)
@@ -1087,10 +1087,10 @@
 
         var x_axis2 = d3.axisBottom(x_scale2);
 
-        svg.append("g")
+        svg2.append("g")
           .attr("class", "y axis");
 
-        svg.append("g")
+        svg2.append("g")
           .attr("class", "x axis")
           .attr("transform", "translate(0," + height2 + ")");
 
@@ -1106,7 +1106,7 @@
 
             var manuf_colour = "black"
             var other_colour2 = "white"
-            var dots = svg.selectAll('.dot')
+            var dots = svg2.selectAll('.dot')
                             .data(data);
 
             //exit
@@ -1172,18 +1172,18 @@
             d3.select('.y.axis')
                 .call(y_axis2);
 
-            svg.append("text")
+            svg2.append("text")
                   .attr("transform", "translate(" + width2/2 +  "," + (height + margin.bottom/2) + ")")
                   .style("text-anchor", "end")
                   .text("Industry");
 
-            svg.append("text")
+            svg2.append("text")
               .attr("transform", "translate(-60," + height2/2 + ")rotate(-90)")
               .style("text-anchor", "middle")
               .text("Wage Share");
 
 
-            var title2 = svg.selectAll('.title2')
+            var title2 = svg2.selectAll('.title2')
                 .data([data])
                 title2.exit().remove()
 
