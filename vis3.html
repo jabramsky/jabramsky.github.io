@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Week 7 Lab</title>
+    <script src="//d3js.org/d3.v4.min.js"></script>
+    <script src="//d3js.org/colorbrewer.v1.js"></script>
+    <style>
+        html, body, #vis {
+            margin: 0;
+            height: 100%;
+            font-family: sans-serif;
+        }
+
+        .tooltip {
+        position: absolute;
+        }
+
+        .tooltip p {
+            background-color: white;
+            border: #eee 1px solid;
+            padding: 2px;
+            font-family: sans-serif;
+            font-size: 11px;
+        }
+
+    </style>
+</head>
+<body>
+    <div id="vis"></div>
+    <script>
+
+        var width = document.getElementById("vis").clientWidth;
+        var height = document.getElementById("vis").clientHeight;
+
+        var margin = {
+            top: 50,
+            bottom: 100,
+            left: 100,
+            right: 50
+        };
+
+        var svg = d3.select('#vis')
+                    .append('svg')
+                        .attr('height', height)
+                        .attr('width', width)
+                    .append('g')
+                        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+         var tooltip = d3.select('body')
+            .append('div')
+            .attr('class', 'tooltip');
+
+        width = width - margin.left - margin.right;
+        height = height - margin.top - margin.bottom;
+
+        var x_scale = d3.scaleLinear()
+                    .rangeRound([0, width]);
+
+        var y_scale = d3.scaleLinear()
+                    .rangeRound([height, 0])
+
+        var colour_scale_ran = d3.scaleQuantile()
+                    .range(colorbrewer.Reds[9]);
+
+        var colour_scale_noran = d3.scaleQuantile()
+                    .range(colorbrewer.Blues[9]);
+
+        var area_scale = d3.scaleLinear()
+                    .range([0, 400]);
+
+        var y_axis = d3.axisLeft(y_scale);
+
+        var x_axis = d3.axisBottom(x_scale);
+
+        svg.append("g")
+          .attr("class", "y axis");
+
+        svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")");
+
+        refyear = 1997
+
+        function update(){
+        d3.csv('ICshare.csv', function(data){
+
+            x_scale.domain(d3.extent(data, function(d){ return +d.PRODUCT; }));
+            y_scale.domain(d3.extent(data, function(d){ return +d.ABSPCHANGE; }))
+            area_scale.domain(d3.extent(data, function(d){ return +d.START; }));
+
+            var ps_colour = "black"
+            var other_colour = "white"
+            var dots = svg.selectAll('.dot')
+                            .data(data);
+
+            //exit
+            dots
+                .exit()
+                .remove();
+
+            // enter
+            var new_dots = dots
+                .enter()
+                .append('circle')
+                .attr('class', 'dot')
+                .attr('stroke', 'black')
+                .attr('stroke-width', '0.5px')
+
+            //update
+            new_dots.merge(dots)
+                .attr('cx', function(d){ return x_scale(+d.PRODUCT); })
+                .attr('cy', function(d){ return y_scale(+d.ABSPCHANGE); })
+                .attr('fill', function(d){
+                    if(+d.WITHPS === 1) {
+                        return ps_colour;
+                    } else {
+                        return other_colour;
+                    }
+                 })
+                .attr('r', function(d){
+                    var area = area_scale(+d.START);
+                    var radius = Math.sqrt(area / Math.PI);
+                    return radius;
+                })
+                .on('mouseover', mouseOver)
+                .on('mousemove', mouseMove)
+                .on('mouseout', mouseOut);
+
+            
+
+            function mouseOver(d){
+
+                    d3.select(this)
+                        .transition()
+                        .style('opacity', 1)
+
+                    tooltip
+                        .style('display', null)
+                        .html('<p>Product: ' + d.NAME + '<br>Absolute % Change: ' + d.ABSPCHANGE + '%</p>');
+                };
+
+            function mouseMove(d){
+                    tooltip
+                        .style('top', (d3.event.pageY - 20) + "px")
+                        .style('left', (d3.event.pageX + 20) + "px");
+                };
+
+            function mouseOut(d){
+                    tooltip
+                        .style('display', 'none');
+                };
+            
+
+
+            d3.select('.x.axis')
+                .call(x_axis);
+
+            d3.select('.y.axis')
+                .call(y_axis);
+
+            svg.append("text")
+                  .attr("transform", "translate(" + width/2 +  "," + (height + margin.bottom/2) + ")")
+                  .style("text-anchor", "end")
+                  .text("Industry");
+
+            svg.append("text")
+              .attr("transform", "translate(-60," + height/2 + ")rotate(-90)")
+              .style("text-anchor", "middle")
+              .text("Wage Share");
+
+
+            var title = svg.selectAll('.title')
+                .data([data])
+                title.exit().remove()
+
+            var newtitle = title
+                .enter()
+                .append('text')
+                .attr('class', 'title')
+            newtitle.merge(title)
+                .attr('x', 10)
+                .attr('y', 10)
+                .text("Absolute percentage changes in IC share by product with and without Purchases Survey")
+                .attr("font-family", "Georgia")
+                .attr("font-size", "20px")
+                .attr("fill", "black");
+
+
+
+
+
+        });
+
+    }
+
+    update();
+    </script>
+
+</body>
+</html>
