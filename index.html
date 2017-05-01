@@ -144,12 +144,22 @@
     <p>These restrictions suggest a particular variable to analyse: wage share. Wage share is defined in Schneider (2009) as compensation of employees divided by GVA. It is, therefore, a ratio. Moreover, it relates to the shape of the function defined by the right-hand side of the production function equation (Equation (3) in the Appendix), so it deals with the production function without involving intermediate consumption. Moreover, an industrial analysis is possible. It is reasonable to assume that manufacturing and non-manufacturing industries have different technologies, and the economics literature on the wage share includes industrial studies. We follow de Serres et al (2002) who argue that over 1975-1995, in several developed countries, industrial change contributed to the wage share change – specifically, a decline in manufacturing led to a decline in whole-economy wage share because manufacturing industries had higher wage shares. Although the SUTs do not have the data to replicate their analysis, we can investigate whether the basis of this claim holds in the period 1997-2014 – that is, whether manufacturing industries have higher wage shares than non-manufacturing industries.</p>
     <p>Limitation 3 also suggests a further area of possible analysis. The last reference year in the dataset is 2014; 10 years before that, the last PS used in these SUTs was collected. To assess the effects of this on the 2014 dataset, it may make sense to analyse intermediate consumption product detail for two reference years while the PS was still being collected. This is of interest because it provides a look behind the sparse metadata for the SUTs at a major quality issue with a key economic dataset.</p>
     <ol>
-        <li>    The wage share is defined as follows (Schneider 2009): for industry i in period t, the wage share WS is given by
-〖WS〗_(i,t)=  〖COE〗_(i,t)⁄〖GVA〗_(i,t) 
-</li>
-        <li>United States</li>
-        <li>Canada</li>
-  </ol>   
+        <li>The wage share is defined as follows (Schneider 2009): for industry i in period t, the wage share WS is given by WS(i,t) = COE(i,t)⁄GVA(i,t)</li>
+        <li>As mentioned above, WS has no units because both the numerator and denominator of the LHS of the equation in 1 are in £ of the year t, so they cancel. It can therefore be analysed over time.</li>
+        <li>The wage share for the whole economy is shown in the (non-interactive) visualisation at the end of this list.</li>
+        <li>The whole-economy wage share timeseries is remarkably flat, which confirms the general empirical observation Schneider (2009) refers to as “Bowley’s Law.”</li>
+        <li>The wage shares for each year, by manufacturing/non-manufacturing industries, are shown in the following visualisation. Following de Serres et al (2002), we classify mining industries as “manufacturing.”</li>
+        <li>The scaled dots in the visualisation are for interest only: in the actual analysis we don’t scale for industry size, as we are not trying to explain whole-economy trends but to look for the effect of being manufacturing.</li>
+        <li>The mean for the manufacturing industries looks generally higher than the mean for the other industries (except in 1997). There is a clear outlier year in 1998 where this is marked, but in all subsequent years, a mild effect looks visible.</li>
+        <li>In the visualisation, also note the large non-manufacturing industry with WS = 0 for all years. This is imputed activity of owner-occupiers – additional GVA (and output) representing the accommodation services provided by home-owning households to themselves. For obvious reasons, this always has zero employment and therefore a wage share of zero.</li>
+        <li>Another industry of interest is oil, gas and metals extraction (the larger black dot in the bottom left segment). This has a low WS, presumably because of the profitability of the oil industry. It may therefore decrease any effect measured by the analysis.</li>
+        <li>Finally, note the construction industry (near the middle of the chart). This also has a fairly low WS, which highlights an issue with the analysis: we do not adjust COE to include mixed income (in the UK, the profits of self-employed small traders), which in the SUTs is part of GOS. Most economics do make this adjustment (Schneider 2009), including de Serres et al (2002). This potential error has the opposite effect to that in the previous bullet point.</li>
+        <li>Also note a few outliers with wage “shares” higher than 1; this occurs when COE is higher than GVA, because of negative GOS and/or net taxes.</li>
+        <li>There are a few cases of negative wage shares, where GVA is negative. These do not have economic meaning and have been cleaned from the regression below.</li>
+        <li>We test whether this is statistically significant using the simple linear regression on a single dummy variable set to 1 for manufacturing industries in the python file (see python file wageshare_manuf_regression_cleaned). This is equivalent to a t-test except that it gives the intercept and slope (interpretable in this case as the expected wage share difference between a manufacturing and non-manufacturing industry).</li>
+        <li>The p-values for all years except 1998 are well above 0.05, indicating that there is no statistically significant difference between the wage share of manufacturing and non-manufacturing industries.</li>
+        <li>We can conclude that there is no evidence that the production functions of manufacturing and non-manufacturing industries are different with regard to the use of labour – a surprising result.</li>
+    </ol>   
 
 
     </div>
