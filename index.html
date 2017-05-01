@@ -1046,6 +1046,133 @@
     </script>
 
     <script>
+    var width = document.getElementById('vis').clientWidth;
+    var height = document.getElementById('vis').clientHeight;
+
+    var margin = {
+        top: 10,
+        bottom: 100,
+        left: 100,
+        right: 120
+    };
+
+    var svg = d3.select('#vis2')
+        .append('svg')
+            .attr('width', width)
+            .attr('height', height)
+        .append('g')
+            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+    var tooltip = d3.select('body')
+        .append('div')
+        .attr('class', 'tooltip');
+
+    width = width - margin.left - margin.right;
+    height = height - margin.top - margin.bottom;
+
+    var dateParse = d3.timeParse('%Y');
+    var tooltipFormat = d3.timeFormat('%Y');
+
+    var x_scale = d3.scaleTime()
+        .range([0, width]);
+
+    var y_scale = d3.scaleLinear()
+        .range([height, 0]);
+
+    var line = d3.line()
+        .x(function(d){
+            return x_scale(dateParse(d.date));
+        })
+        .y(function(d){
+            return y_scale(+d.WAGESHARE);
+        });
+
+    var x_axis = d3.axisBottom()
+        .scale(x_scale);
+
+    var y_axis = d3.axisLeft()
+        .scale(y_scale);
+
+    d3.csv('timeseries.csv', function(csv_data){
+        console.log(csv_data);
+
+        x_scale.domain(d3.extent(csv_data, function(d){
+            return dateParse(d.date);
+        }))
+
+        y_scale.domain([0, 1]);
+
+        var lines = svg.selectAll('.line')
+            .data([csv_data]);
+
+        lines
+            .enter()
+            .append('path')
+            .attr('class', 'line')
+            .attr('fill', 'none')
+            .attr('stroke', 'black')
+            .attr('d', line);
+
+        var points = svg.selectAll('.point')
+            .data(csv_data);
+
+        points
+            .enter()
+            .append('circle')
+            .attr('class', 'point')
+            .attr('r', 10)
+            .attr('cx', function(d){
+                return x_scale(dateParse(d.date));
+            })
+            .attr('cy', function(d){
+                return y_scale(+d.WAGESHARE);
+            })
+            .attr('fill', 'black')
+            .attr('opacity', 0)
+            .on('mouseover', mouseOver)
+            .on('mousemove', mouseMove)
+            .on('mouseout', mouseOut);
+
+        svg.append('g')
+            .attr('transform', 'translate(0, ' + height + ')')
+            .call(x_axis);
+
+        svg.append('g')
+            .call(y_axis);
+
+        function mouseOver(d){
+            console.log(d);
+            var date = dateParse(d.date);
+            var displayDate = tooltipFormat(date);
+
+            d3.select(this)
+                .transition()
+                .style('opacity', 1)
+
+            tooltip
+                .style('display', null)
+                .html('<p>Date: ' + displayDate + '<br>Wage share: ' + d.WAGESHARE + '%</p>');
+        };
+
+        function mouseMove(d){
+            tooltip
+                .style('top', (d3.event.pageY - 20) + "px")
+                .style('left', (d3.event.pageX + 20) + "px");
+        };
+
+        function mouseOut(d){
+            d3.select(this)
+                .transition()
+                .style('opacity', 0)
+
+            tooltip
+                .style('display', 'none');
+        };
+    })
+
+    </script>
+
+    <script>
 
         var width = document.getElementById("vis").clientWidth;
         var height = document.getElementById("vis").clientHeight;
@@ -1057,7 +1184,7 @@
             right: 50
         };
 
-        var svg = d3.select('#vis')
+        var svg = d3.select('#vis3')
                     .append('svg')
                         .attr('height', height)
                         .attr('width', width)
