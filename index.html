@@ -1031,7 +1031,7 @@
     update()
 
     d3.select("body")
-        .on("keydown", function(){
+        .on("keypress", function(){
             key = d3.event.keyCode
             if (key == 83){
                 refind = Math.max(refind - 1, 1)
