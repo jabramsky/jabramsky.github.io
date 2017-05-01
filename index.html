@@ -1028,8 +1028,8 @@
             })
     }
 
-        d3.select("#vis1")
-                .on("keypress", function(){
+        d3.select("body")
+                .on("keydown", function(){
                     key = d3.event.keyCode
                     if(key == 38){
                         refyear = Math.min(refyear + 1, 2014)
