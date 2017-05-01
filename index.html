@@ -25,6 +25,9 @@
     <p>That said, from the perspective of much econometrics (and statistics in general), the data has important limitations which make it vital to understand exactly what the data is saying and how it can legitimately be used if any analysis is to be valid.</p>
     <p>Below, we first take a brief look at the structure and purpose of the SUTs (what data is included, and how this data is linked) and illustrate this using a simple visualisation. We then describe some of the limitations inherent in this structure and some of the practical issues involved in populating it with estimates. This theoretical analysis indicates some quite restrictive limits on what can be “legitimately” analysed, which allows us to select analyses on the basis of this theoretical discussion rather than try many different ones until we find statistical significance. This is interesting in its own right, and allows us to avoid the undesirable practice of “p-hacking" (Aschwanden 2015, Nuzzo 2014).</p>
     <p>Based on this theoretical discussion, we select two pairs of sub-datasets of the SUTs, subject them to simple statistical evaluations, and describe the results verbally and with further visualisations.</p>
+
+    <p>The SUTs contain the following economic variables, broken down by “industry” and/or “product” as shown:</p>
+
     </div>
 
     <div>
@@ -82,9 +85,51 @@
             <td>No</td>
             <td>Yes</td>
           </tr>
-
+          <tr>
+            <th>Gross fixed capital formation</th>
+            <td>No</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <th>Change in inventories</th>
+            <td>No</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <th>Change in stock of valuables</th>
+            <td>No</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <th>Exports</th>
+            <td>No</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <th>Imports</th>
+            <td>No</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <th>Exports</th>
+            <td>No</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <th>Taxes (net of subsidies) on products</th>
+            <td>No</td>
+            <td>Yes</td>
+          </tr>
         </tbody>
   </table>
+  <p>This may seem like a random assortment of economic variables, but in fact these variables are closely linked. Definitions of the terms above, the rationale for assembling them in one place, and the economic reasons why they are linked are explained in detail in the Appendix. Here, we can summarise the conclusions reached there as follows:</p>
+   <ul>
+    <li>The variables broken down by industry show how firms (and firm-like units) in each industry produce UK GDP (output, intermediate consumption), and how this production is distributed (COE, GOS).</li>
+    <li>These industry variables are of interest partly because they make up the terms in the production function, a basic concept in economics which informs much empirical work in the field.</li>
+    <li>The variables broken down by product show how each product used in the UK is supplied (output, imports) and used (all other variables broken down by products).</li>
+    <li>These product variables are of interest partly because they allow more accurate deflation of these nominal values to produce constant-price or real GDP and GDP components. </li>
+
+
     </div>
 
 
