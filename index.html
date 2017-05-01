@@ -167,1004 +167,1004 @@
 
     <script>
 
-    var width = 1500;
-    var height = 2500;
+            var width = 1500;
+            var height = 2500;
 
-    var margin = {
-        top: 10,
-        bottom: 0,
-        left: 100,
-        right: 120
-    };
+            var margin = {
+                top: 10,
+                bottom: 0,
+                left: 100,
+                right: 120
+            };
 
-    var svg = d3.select('#vis1')
-        .append('svg')
-            .attr('width', width)
-            .attr('height', height)
-        .append('g')
-            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
-
-
-    width = width - margin.left - margin.right;
-    height = height - margin.top - margin.bottom;
-
-    var refyear = 1997
-    var refind = 1
-
-    
-    function update(){
-        d3.csv('industry_gva_and_supply.csv', function(full_data){
-            console.log(full_data);
-
-            year_data = full_data.filter(function(d){return +d.DATE == refyear})
-            csv_data = year_data.filter(function(d){return +d.INDUSTRY == refind})
-
-            var output = d3.max(csv_data, function(d){
-                return (+d.OUTPUT);
-            })
-
-            var x_axis = d3.axisBottom()
-                .scale(x_scale);
-
-            var ic = d3.max(csv_data, function(d){
-                return (+d.IC);
-            })
-            var gva_real = d3.max(csv_data, function(d){
-                return (+d.GVA);
-            })
-            var gva = Math.abs(gva_real)
-            var coe = d3.max(csv_data, function(d){
-                return (+d.COE);
-            })
-            var gos_real = d3.max(csv_data, function(d){
-                return (+d.GOS);
-            })
-            var gos = Math.abs(gos_real)
-            var ts_real = d3.max(csv_data, function(d){
-                return (+d.T_S);
-            })
-            var ts = Math.abs(ts_real)
-            
-            
-
-            var positive_sum = 0
-            var negative_sum = 0
-            if(gos_real >= 0 & ts_real >= 0){
-                positive_sum = coe + gos + ts
-            }
-            else if(gos_real >= 0 & ts_real < 0){
-                positive_sum = coe + gos
-                negative_sum = ts
-            }
-            else{
-                positive_sum = coe
-                negative_sum = gos + ts
-            }
-            
-
-            var edgecase_1 = 0
-            var edgecase_2 = 0
-            var edgecase_3 = 0
-            var edgecase_4 = 0
-
-            if(output == 0){
-                edgecase_1 = 1
-            }
-            if(edgecase_1 == 0 & gva_real < 0){
-                edgecase_2 = 1
-            }
-            if (edgecase_1 == 0 & edgecase_2 == 0 & positive_sum > output){
-                edgecase_3 = 1
-            }
-            if (edgecase_1 == 0 & edgecase_2 == 1 & negative_sum > ic){
-                edgecase_4 = 1
-            }
+            var svg = d3.select('#vis1')
+                .append('svg')
+                    .attr('width', width)
+                    .attr('height', height)
+                .append('g')
+                    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
 
+            width = width - margin.left - margin.right;
+            height = height - margin.top - margin.bottom;
 
-            if(edgecase_1 == 1){
-                var no_activity_box = svg.selectAll('.ts_nab')
-                   .data([csv_data])
-
-                no_activity_box
-                   .enter()
-                   .append('rect')
-                   .attr('class', '.ts_nab')
-                   .attr('width', 400)
-                   .attr('height', 60)
-                   .attr('x', 10)
-                   .attr('y', 10)
-                   .attr('stroke', "black")
-                   .attr('stroke-width', 2)
-                   .attr('fill', "white");
-
-                var no_activity_text = svg.selectAll('.ts_nat')
-                   .data([csv_data])
-
-                no_activity_text
-                    .enter()
-                    .append('text')
-                    .attr('class', '.ts_nat')
-                    .attr('x', 20)
-                    .attr('y', 30)
-                    .text('This industry had no UK activity this year.')
-                    .attr("font-family", "Georgia")
-                    .attr("font-size", "20px")
-                    .attr("fill", "black");
-
-            }
-
-            else{
+            var refyear = 1997
+            var refind = 1
 
             
-            var higher = output
-            var lower = ic
+            function update(){
+                d3.csv('industry_gva_and_supply.csv', function(full_data){
+                    console.log(full_data);
 
-            if(edgecase_2 == 1){
-                higher = ic
-                lower = output
-            }
+                    year_data = full_data.filter(function(d){return +d.DATE == refyear})
+                    csv_data = year_data.filter(function(d){return +d.INDUSTRY == refind})
 
-            
-            var x_scale = d3.scaleLinear()
-            .range([0, width]);
-            if (edgecase_3 == 0 & edgecase_4 == 0){
-                x_scale.domain([0, higher])
-            }
-            else if(edgecase_3 == 1){
-                x_scale.domain([0, positive_sum])
-            }
-            else if(edgecase_4 == 1){
-                x_scale.domain([0, negative_sum])
-            }
+                    var output = d3.max(csv_data, function(d){
+                        return (+d.OUTPUT);
+                    })
 
-            
-            var higher_scaled = width
-            if(edgecase_3 == 1 || edgecase_4 == 1){
-                higher_scaled = x_scale(higher)
-            }
-            var lower_scaled = x_scale(lower)
-            var gva_scaled = x_scale(gva)
-            var coe_scaled = x_scale(coe)
-            var gos_scaled = x_scale(gos)
-            var ts_scaled = x_scale(ts)
+                    var x_axis = d3.axisBottom()
+                        .scale(x_scale);
 
-            indname = ""
-            if(refind == 1){indname = "Agriculture"}
-            if(refind == 2){indname = "Forestry"}
-            if(refind == 3){indname = "Fishing"}
-            if(refind == 4){indname = "Coal mining"}
-            if(refind == 5){indname = "Oil, gas and metals extraction"}
-            if(refind == 6){indname = "Other mining"}
-            if(refind == 7){indname = "Oil and gas support services"}
-            if(refind == 8){indname = "Manufacturing - meat processing"}
-            if(refind == 9){indname = "Manufacturing - fish, vegetables and fruit processing"}
-            if(refind == 10){indname = "Manufacturing - food oils and fats"}
-            if(refind == 11){indname = "Manufacturing - dairy"}
-            if(refind == 12){indname = "Manufacturing - grain and starch"}
-            if(refind == 13){indname = "Manufacturing - bakery and farinaceous"}
-            if(refind == 14){indname = "Manufacturing - other foods"}
-            if(refind == 15){indname = "Manufacturing - animal feeds"}
-            if(refind == 16){indname = "Manufacturing - alcohol and tobacco"}
-            if(refind == 17){indname = "Manufacturing - bottled non-alcoholic drinks"}
-            if(refind == 18){indname = "Manufacturing - textiles"}
-            if(refind == 19){indname = "Manufacturing - clothes"}
-            if(refind == 20){indname = "Manufacturing - leather"}
-            if(refind == 21){indname = "Manufacturing - wood, cork and straw exc. furniture"}
-            if(refind == 22){indname = "Manufacturing - paper"}
-            if(refind == 23){indname = "Manufacturing - books and recordings"}
-            if(refind == 24){indname = "Manufacturing - coke and refined petroleum"}
-            if(refind == 25){indname = "Manufacturing - paints, varnishes, inks and mastics"}
-            if(refind == 26){indname = "Manufacturing - cleaning products"}
-            if(refind == 27){indname = "Manufacturing - chemicals not elsewhere classified"}
-            if(refind == 28){indname = "Manufacturing - inorganic chemicals"}
-            if(refind == 29){indname = "Manufacturing - petrochemicals"}
-            if(refind == 30){indname = "Manufacturing - dyestuffs and agro-chemicals"}
-            if(refind == 31){indname = "Manufacturing - pharmaceuticals"}
-            if(refind == 32){indname = "Manufacturing - rubber and plastic"}
-            if(refind == 33){indname = "Manufacturing - cement, lime, plaster and concrete"}
-            if(refind == 34){indname = "Manufacturing - glass, stone and earthenware"}
-            if(refind == 35){indname = "Manufacturing - iron and steel (non-fabricated)"}
-            if(refind == 36){indname = "Manufacturing - other metals (non-fabricated)"}
-            if(refind == 37){indname = "Manufacturing - arms"}
-            if(refind == 38){indname = "Manufacturing - other metal fabricated products"}
-            if(refind == 39){indname = "Manufacturing - computers, electronics and optical"}
-            if(refind == 40){indname = "Manufacturing - electricals"}
-            if(refind == 41){indname = "Manufacturing - other machinery and equipment"}
-            if(refind == 42){indname = "Manufacturing - motor vehicles"}
-            if(refind == 43){indname = "Manufacturing - ships and boats"}
-            if(refind == 44){indname = "Manufacturing - aircraft and spacecraft"}
-            if(refind == 45){indname = "Manufacturing - other transport equipment"}
-            if(refind == 46){indname = "Manufacturing - furniture"}
-            if(refind == 47){indname = "Manufacturing - other"}
-            if(refind == 48){indname = "Repair - ships and boats"}
-            if(refind == 49){indname = "Repair - aircraft and spacecraft"}
-            if(refind == 50){indname = "Other repair and installation"}
-            if(refind == 51){indname = "Electricity"}
-            if(refind == 52){indname = "Natural gas, steam and air-con supply"}
-            if(refind == 53){indname = "Water"}
-            if(refind == 54){indname = "Sewerage"}
-            if(refind == 55){indname = "Waste collection and recycling"}
-            if(refind == 56){indname = "Waste management"}
-            if(refind == 57){indname = "Construction"}
-            if(refind == 58){indname = "Motor vehicles - wholesale, retail and repair"}
-            if(refind == 59){indname = "Wholesale trade exc. motor vehicles"}
-            if(refind == 60){indname = "Retail trade exc. motor vehicles"}
-            if(refind == 61){indname = "Rail"}
-            if(refind == 62){indname = "Land transport exc. rail"}
-            if(refind == 63){indname = "Water transport"}
-            if(refind == 64){indname = "Air transport"}
-            if(refind == 65){indname = "Warehousing and transport support"}
-            if(refind == 66){indname = "Postal and courier"}
-            if(refind == 67){indname = "Accommodation"}
-            if(refind == 68){indname = "Pubs and restaurants"}
-            if(refind == 69){indname = "Book publishing"}
-            if(refind == 70){indname = "Other media publishing, broadcast and production"}
-            if(refind == 71){indname = "Telecommunications"}
-            if(refind == 72){indname = "Computer programming and related consultancy"}
-            if(refind == 73){indname = "Information services"}
-            if(refind == 74){indname = "Financial services exc. insurance"}
-            if(refind == 75){indname = "Insurance"}
-            if(refind == 76){indname = "Financial auxiliary services"}
-            if(refind == 77){indname = "Real estate purchase, letting and sale exc. estate agency"}
-            if(refind == 78){indname = "Imputed activity of owner-occupiers"}
-            if(refind == 79){indname = "Estate agency activities"}
-            if(refind == 80){indname = "Law"}
-            if(refind == 81){indname = "Accountancy and tax consultancy"}
-            if(refind == 82){indname = "Head offices and management consultancy"}
-            if(refind == 83){indname = "Architecture"}
-            if(refind == 84){indname = "Research and development"}
-            if(refind == 85){indname = "Advertising and market research"}
-            if(refind == 86){indname = "Other professional, scientific and technical activities"}
-            if(refind == 87){indname = "Veterinary activities"}
-            if(refind == 88){indname = "Rental and leasing exc. real estate"}
-            if(refind == 89){indname = "Employment agency activities"}
-            if(refind == 90){indname = "Travel agency activities"}
-            if(refind == 91){indname = "Security and investigation"}
-            if(refind == 92){indname = "Building maintenance and landscaping"}
-            if(refind == 93){indname = "Business and admin support"}
-            if(refind == 94){indname = "Public administration and defence"}
-            if(refind == 95){indname = "Education"}
-            if(refind == 96){indname = "Health"}
-            if(refind == 97){indname = "Residential care and social work"}
-            if(refind == 98){indname = "Creative and entertainment activities"}
-            if(refind == 99){indname = "Libraries and museums"}
-            if(refind == 100){indname = "Gambling"}
-            if(refind == 101){indname = "Sports and recreation activities"}
-            if(refind == 102){indname = "Membership organisations"}
-            if(refind == 103){indname = "Repair of computers and household goods"}
-            if(refind == 104){indname = "Other personal services"}
-            if(refind == 105){indname = "Direct employment of domestic staff"}
-           
+                    var ic = d3.max(csv_data, function(d){
+                        return (+d.IC);
+                    })
+                    var gva_real = d3.max(csv_data, function(d){
+                        return (+d.GVA);
+                    })
+                    var gva = Math.abs(gva_real)
+                    var coe = d3.max(csv_data, function(d){
+                        return (+d.COE);
+                    })
+                    var gos_real = d3.max(csv_data, function(d){
+                        return (+d.GOS);
+                    })
+                    var gos = Math.abs(gos_real)
+                    var ts_real = d3.max(csv_data, function(d){
+                        return (+d.T_S);
+                    })
+                    var ts = Math.abs(ts_real)
+                    
+                    
 
-                
+                    var positive_sum = 0
+                    var negative_sum = 0
+                    if(gos_real >= 0 & ts_real >= 0){
+                        positive_sum = coe + gos + ts
+                    }
+                    else if(gos_real >= 0 & ts_real < 0){
+                        positive_sum = coe + gos
+                        negative_sum = ts
+                    }
+                    else{
+                        positive_sum = coe
+                        negative_sum = gos + ts
+                    }
+                    
 
+                    var edgecase_1 = 0
+                    var edgecase_2 = 0
+                    var edgecase_3 = 0
+                    var edgecase_4 = 0
 
-            var title = svg.selectAll('.title')
-            .data([csv_data])
-            title.exit().remove()
-
-            var newtitle = title
-                .enter()
-                .append('text')
-                .attr('class', 'title')
-            newtitle.merge(title)
-                .attr('x', 40)
-                .attr('y', 40)
-                .text(indname + ', ' + refyear)
-                .attr("font-family", "Georgia")
-                .attr("font-size", "30px")
-                .attr("fill", "black");
-
-            var liney2 = 0
-            if(positive_sum == 0 || negative_sum == 0){
-                liney2 = 450
-            }
-            else{liney2 = 550}
-                
-            var line1 = svg.selectAll('.line1')
-            .data([csv_data])
-
-            line1.exit().remove()
-
-
-            var newline1 = line1
-                .enter()
-                .append('line')
-                .attr('class', 'line1')
-
-            newline1.merge(line1)  
-                .attr('x1', lower_scaled)
-                .attr('y1', (110))
-                .attr('x2', lower_scaled)
-                .attr('y2', liney2)
-                .attr("stroke-width", 2)
-                .attr("stroke", "black");
+                    if(output == 0){
+                        edgecase_1 = 1
+                    }
+                    if(edgecase_1 == 0 & gva_real < 0){
+                        edgecase_2 = 1
+                    }
+                    if (edgecase_1 == 0 & edgecase_2 == 0 & positive_sum > output){
+                        edgecase_3 = 1
+                    }
+                    if (edgecase_1 == 0 & edgecase_2 == 1 & negative_sum > ic){
+                        edgecase_4 = 1
+                    }
 
 
 
-            var line2 = svg.selectAll('.line2')
-            .data([csv_data])
+                    if(edgecase_1 == 1){
+                        var no_activity_box = svg.selectAll('.ts_nab')
+                           .data([csv_data])
 
-            line2.exit().remove()
+                        no_activity_box
+                           .enter()
+                           .append('rect')
+                           .attr('class', '.ts_nab')
+                           .attr('width', 400)
+                           .attr('height', 60)
+                           .attr('x', 10)
+                           .attr('y', 10)
+                           .attr('stroke', "black")
+                           .attr('stroke-width', 2)
+                           .attr('fill', "white");
+
+                        var no_activity_text = svg.selectAll('.ts_nat')
+                           .data([csv_data])
+
+                        no_activity_text
+                            .enter()
+                            .append('text')
+                            .attr('class', '.ts_nat')
+                            .attr('x', 20)
+                            .attr('y', 30)
+                            .text('This industry had no UK activity this year.')
+                            .attr("font-family", "Georgia")
+                            .attr("font-size", "20px")
+                            .attr("fill", "black");
+
+                    }
+
+                    else{
+
+                    
+                    var higher = output
+                    var lower = ic
+
+                    if(edgecase_2 == 1){
+                        higher = ic
+                        lower = output
+                    }
+
+                    
+                    var x_scale = d3.scaleLinear()
+                    .range([0, width]);
+                    if (edgecase_3 == 0 & edgecase_4 == 0){
+                        x_scale.domain([0, higher])
+                    }
+                    else if(edgecase_3 == 1){
+                        x_scale.domain([0, positive_sum])
+                    }
+                    else if(edgecase_4 == 1){
+                        x_scale.domain([0, negative_sum])
+                    }
+
+                    
+                    var higher_scaled = width
+                    if(edgecase_3 == 1 || edgecase_4 == 1){
+                        higher_scaled = x_scale(higher)
+                    }
+                    var lower_scaled = x_scale(lower)
+                    var gva_scaled = x_scale(gva)
+                    var coe_scaled = x_scale(coe)
+                    var gos_scaled = x_scale(gos)
+                    var ts_scaled = x_scale(ts)
+
+                    indname = ""
+                    if(refind == 1){indname = "Agriculture"}
+                    if(refind == 2){indname = "Forestry"}
+                    if(refind == 3){indname = "Fishing"}
+                    if(refind == 4){indname = "Coal mining"}
+                    if(refind == 5){indname = "Oil, gas and metals extraction"}
+                    if(refind == 6){indname = "Other mining"}
+                    if(refind == 7){indname = "Oil and gas support services"}
+                    if(refind == 8){indname = "Manufacturing - meat processing"}
+                    if(refind == 9){indname = "Manufacturing - fish, vegetables and fruit processing"}
+                    if(refind == 10){indname = "Manufacturing - food oils and fats"}
+                    if(refind == 11){indname = "Manufacturing - dairy"}
+                    if(refind == 12){indname = "Manufacturing - grain and starch"}
+                    if(refind == 13){indname = "Manufacturing - bakery and farinaceous"}
+                    if(refind == 14){indname = "Manufacturing - other foods"}
+                    if(refind == 15){indname = "Manufacturing - animal feeds"}
+                    if(refind == 16){indname = "Manufacturing - alcohol and tobacco"}
+                    if(refind == 17){indname = "Manufacturing - bottled non-alcoholic drinks"}
+                    if(refind == 18){indname = "Manufacturing - textiles"}
+                    if(refind == 19){indname = "Manufacturing - clothes"}
+                    if(refind == 20){indname = "Manufacturing - leather"}
+                    if(refind == 21){indname = "Manufacturing - wood, cork and straw exc. furniture"}
+                    if(refind == 22){indname = "Manufacturing - paper"}
+                    if(refind == 23){indname = "Manufacturing - books and recordings"}
+                    if(refind == 24){indname = "Manufacturing - coke and refined petroleum"}
+                    if(refind == 25){indname = "Manufacturing - paints, varnishes, inks and mastics"}
+                    if(refind == 26){indname = "Manufacturing - cleaning products"}
+                    if(refind == 27){indname = "Manufacturing - chemicals not elsewhere classified"}
+                    if(refind == 28){indname = "Manufacturing - inorganic chemicals"}
+                    if(refind == 29){indname = "Manufacturing - petrochemicals"}
+                    if(refind == 30){indname = "Manufacturing - dyestuffs and agro-chemicals"}
+                    if(refind == 31){indname = "Manufacturing - pharmaceuticals"}
+                    if(refind == 32){indname = "Manufacturing - rubber and plastic"}
+                    if(refind == 33){indname = "Manufacturing - cement, lime, plaster and concrete"}
+                    if(refind == 34){indname = "Manufacturing - glass, stone and earthenware"}
+                    if(refind == 35){indname = "Manufacturing - iron and steel (non-fabricated)"}
+                    if(refind == 36){indname = "Manufacturing - other metals (non-fabricated)"}
+                    if(refind == 37){indname = "Manufacturing - arms"}
+                    if(refind == 38){indname = "Manufacturing - other metal fabricated products"}
+                    if(refind == 39){indname = "Manufacturing - computers, electronics and optical"}
+                    if(refind == 40){indname = "Manufacturing - electricals"}
+                    if(refind == 41){indname = "Manufacturing - other machinery and equipment"}
+                    if(refind == 42){indname = "Manufacturing - motor vehicles"}
+                    if(refind == 43){indname = "Manufacturing - ships and boats"}
+                    if(refind == 44){indname = "Manufacturing - aircraft and spacecraft"}
+                    if(refind == 45){indname = "Manufacturing - other transport equipment"}
+                    if(refind == 46){indname = "Manufacturing - furniture"}
+                    if(refind == 47){indname = "Manufacturing - other"}
+                    if(refind == 48){indname = "Repair - ships and boats"}
+                    if(refind == 49){indname = "Repair - aircraft and spacecraft"}
+                    if(refind == 50){indname = "Other repair and installation"}
+                    if(refind == 51){indname = "Electricity"}
+                    if(refind == 52){indname = "Natural gas, steam and air-con supply"}
+                    if(refind == 53){indname = "Water"}
+                    if(refind == 54){indname = "Sewerage"}
+                    if(refind == 55){indname = "Waste collection and recycling"}
+                    if(refind == 56){indname = "Waste management"}
+                    if(refind == 57){indname = "Construction"}
+                    if(refind == 58){indname = "Motor vehicles - wholesale, retail and repair"}
+                    if(refind == 59){indname = "Wholesale trade exc. motor vehicles"}
+                    if(refind == 60){indname = "Retail trade exc. motor vehicles"}
+                    if(refind == 61){indname = "Rail"}
+                    if(refind == 62){indname = "Land transport exc. rail"}
+                    if(refind == 63){indname = "Water transport"}
+                    if(refind == 64){indname = "Air transport"}
+                    if(refind == 65){indname = "Warehousing and transport support"}
+                    if(refind == 66){indname = "Postal and courier"}
+                    if(refind == 67){indname = "Accommodation"}
+                    if(refind == 68){indname = "Pubs and restaurants"}
+                    if(refind == 69){indname = "Book publishing"}
+                    if(refind == 70){indname = "Other media publishing, broadcast and production"}
+                    if(refind == 71){indname = "Telecommunications"}
+                    if(refind == 72){indname = "Computer programming and related consultancy"}
+                    if(refind == 73){indname = "Information services"}
+                    if(refind == 74){indname = "Financial services exc. insurance"}
+                    if(refind == 75){indname = "Insurance"}
+                    if(refind == 76){indname = "Financial auxiliary services"}
+                    if(refind == 77){indname = "Real estate purchase, letting and sale exc. estate agency"}
+                    if(refind == 78){indname = "Imputed activity of owner-occupiers"}
+                    if(refind == 79){indname = "Estate agency activities"}
+                    if(refind == 80){indname = "Law"}
+                    if(refind == 81){indname = "Accountancy and tax consultancy"}
+                    if(refind == 82){indname = "Head offices and management consultancy"}
+                    if(refind == 83){indname = "Architecture"}
+                    if(refind == 84){indname = "Research and development"}
+                    if(refind == 85){indname = "Advertising and market research"}
+                    if(refind == 86){indname = "Other professional, scientific and technical activities"}
+                    if(refind == 87){indname = "Veterinary activities"}
+                    if(refind == 88){indname = "Rental and leasing exc. real estate"}
+                    if(refind == 89){indname = "Employment agency activities"}
+                    if(refind == 90){indname = "Travel agency activities"}
+                    if(refind == 91){indname = "Security and investigation"}
+                    if(refind == 92){indname = "Building maintenance and landscaping"}
+                    if(refind == 93){indname = "Business and admin support"}
+                    if(refind == 94){indname = "Public administration and defence"}
+                    if(refind == 95){indname = "Education"}
+                    if(refind == 96){indname = "Health"}
+                    if(refind == 97){indname = "Residential care and social work"}
+                    if(refind == 98){indname = "Creative and entertainment activities"}
+                    if(refind == 99){indname = "Libraries and museums"}
+                    if(refind == 100){indname = "Gambling"}
+                    if(refind == 101){indname = "Sports and recreation activities"}
+                    if(refind == 102){indname = "Membership organisations"}
+                    if(refind == 103){indname = "Repair of computers and household goods"}
+                    if(refind == 104){indname = "Other personal services"}
+                    if(refind == 105){indname = "Direct employment of domestic staff"}
+                   
+
+                        
 
 
-            var newline2 = line2
-                .enter()
-                .append('line')
-                .attr('class', 'line2')
+                    var title = svg.selectAll('.title')
+                    .data([csv_data])
+                    title.exit().remove()
 
-
-            newline2.merge(line2)  
-                .attr('x1', (width - 2))
-                .attr('y1', (110))
-                .attr('x2', (width - 2))
-                .attr('y2', liney2)
-                .attr("stroke-width", 2)
-                .attr("stroke", "black");
-
-            var lower_y = 190
-            var higher_y = 50
-
-            var higher_x = 0
-            if(edgecase_3 == 1 || edgecase_4 == 1){
-                higher_x = width - higher_scaled
-            }
-            var lower_x = higher_x
-
-            var lower_rect = svg.selectAll('.lower_rect')
-                .data([csv_data]);
-            lower_rect.exit().remove()
-            var new_lower_rect = lower_rect
-                    .enter()
-                    .append('rect')
-                    .attr('class','lower_rect')
-            new_lower_rect.merge(lower_rect)
-                    .attr("fill", "#e60000")
-                    .attr('width', lower_scaled)
-                    .attr('height', 60)
-                    .attr('y', lower_y) 
-                    .attr('x', lower_x)
-
-            var gvap_rect = svg.selectAll('.gvap_rect')
-                .data([csv_data]);
-            gvap_rect.exit().remove()
-            var new_gvap_rect = gvap_rect
-                    .enter()
-                    .append('rect')
-                    .attr('class','gvap_rect')
-            new_gvap_rect.merge(gvap_rect)                    
-                    .attr("fill", "black")
-                    .attr('width', gva_scaled)
-                    .attr('height', 60)
-                    .attr('y', 280) 
-                    .attr('x', lower_scaled + lower_x)
-
-
-            var higher_rect = svg.selectAll('.higher_rect')
-                .data([csv_data]);
-            higher_rect.exit().remove()
-            var new_higher_rect = higher_rect
-                    .enter()
-                    .append('rect')
-                    .attr('class','higher_rect')
-            new_higher_rect.merge(higher_rect)                
-                    .attr("fill", "#269900")
-                    .attr('width', higher_scaled)
-                    .attr('height', 60)
-                    .attr('y', higher_y) 
-                    .attr('x', higher_x)
-
-            var coe_y = 0
-            var gos_y = 0
-            var ts_y = 0
-            if(edgecase_2 == 1 || (gos_real >= 0 & ts_real >= 0)){
-                coe_y = 390
-            }
-            else{
-                coe_y = 490
-            }
-            if((edgecase_2 == 0 & ((gos_real >= 0 & ts_real >= 0) || gos_real <= 0) || (edgecase_2 == 1 & gos_real >= 0))){
-                gos_y = 390
-            }
-            else{
-                gos_y = 490
-            }
-            if((edgecase_2 == 0 & ((gos_real >= 0 & ts_real >= 0) || ts_real <= 0) || (edgecase_2 == 1 & ts_real >= 0))){
-                ts_y = 390
-            }
-            else{
-                ts_y = 490
-            }
-
-
-            var coe_x = 0
-            var gos_x = 0
-            var ts_x = 0
-            if(edgecase_4 == 0 & (gos_real < 0 & ts_real < 0)){
-                coe_x = width - coe_scaled
-            }
-            else if (edgecase_2 == 1 & gos_real < 0 & ts_real < 0){
-                coe_x = width - gos_scaled - ts_scaled
-            }
-            else if(edgecase_2 == 1 & gos_real < 0 & ts_real >= 0){
-                coe_x = width - gos_scaled
-            }
-            else if(edgecase_2 == 1 & gos_real >= 0 & ts_real >= 0){
-                coe_x = width - ts_scaled
-            }
-            else if(gos_real >= 0 & ts_real < 0){
-                coe_x = width - coe_scaled - gos_scaled
-            }
-            else if(gos_real >= 0 & ts_real >= 0){
-                coe_x = width - coe_scaled - gos_scaled - ts_scaled
-            }
-            else if (gos_real < 0 & ts_real >= 0){
-                coe_x = width - coe_scaled - ts_scaled
-            }
-
-            if(gos_real >= 0){
-                gos_x = coe_x + coe_scaled
-            }
-            else{
-                gos_x = coe_x
-            }
-            if((ts_real >= 0 & gos_real >= 0) || (ts_real < 0 & gos_real < 0)){
-                ts_x = gos_x + gos_scaled
-            }
-            else if (ts_real >= 0){
-                ts_x = coe_x + coe_scaled
-            }
-            else{
-                ts_x = coe_x
-            }
-
-            var coe_colour = "#000099"
-            var coe_rect = svg.selectAll('.coe_rect')
-                .data([csv_data]);
-            coe_rect.exit().remove()
-            var new_coe_rect = coe_rect
-                    .enter()
-                    .append('rect')
-                    .attr('class','coe_rect')
-            new_coe_rect.merge(coe_rect)
-                    .attr("fill", coe_colour)
-                    .attr('width', coe_scaled)
-                    .attr('height', 60)
-                    .attr('y', coe_y) 
-                    .attr('x', coe_x)
-
-            var gos_colour = "#996600"
-            var gos_rect = svg.selectAll('.gos_rect')
-                .data([csv_data]);
-            gos_rect.exit().remove()
-            var new_gos_rect = gos_rect
-                    .enter()
-                    .append('rect')
-                    .attr('class','gos_rect')
-            new_gos_rect.merge(gos_rect)
-                    .attr("fill", gos_colour)
-                    .attr('width', gos_scaled)
-                    .attr('height', 60)
-                    .attr('y', gos_y) 
-                    .attr('x', gos_x)
-
-            var ts_colour = "#e60073"
-            var ts_rect = svg.selectAll('.ts_rect')
-                .data([csv_data])
-            ts_rect.exit().remove()
-            var new_ts_rect = ts_rect
-                    .enter()
-                    .append('rect')
-                    .attr('class','ts_rect')
-            new_ts_rect.merge(ts_rect)
-                    .attr("fill", ts_colour)
-                    .attr('width', ts_scaled)
-                    .attr('height', 60)
-                    .attr('y', ts_y) 
-                    .attr('x', ts_x)
-
-            var lower_text_x = 0
-            if (lower_scaled >= 300){
-                lower_text_x = lower_x + lower_scaled - 270
-            }
-            else{
-                lower_text_x = lower_x + lower_scaled + 20
-            }
-            var lower_text_colour = ""
-            if(lower_scaled >= 300){
-                lower_text_colour = "white"
-            }
-            else if(lower_scaled < 300 & edgecase_2 == 0){
-                lower_text_colour = "red"
-            }
-            else if(lower_scaled < 300 & edgecase_2 == 1){
-                lower_text_colour = "green" 
-            }
-
-            var ic_text_name = svg.selectAll('.ic_text_name')
-                .data([csv_data])
-            ic_text_name.exit().remove()
-
-            var ic_text_label = svg.selectAll('.ic_text_label')
-                .data([csv_data])
-            ic_text_label.exit().remove()
-
-            var ic_label_text = ""
-            if(ic >= 1000){ic_label_text = '£' + ic/1000 + 'bn'}
-            else{ic_label_text = '£' + ic + 'm'}
-
-            if (edgecase_2 == 0){
-                
-                var new_ic_text_name = ic_text_name
+                    var newtitle = title
                         .enter()
                         .append('text')
-                        .attr('class', 'ic_text_name')
-                new_ic_text_name.merge(ic_text_name)
-                        .attr('x', lower_text_x)
-                        .attr('y', lower_y + 22)
-                        .text('Intermediate consumption:')
+                        .attr('class', 'title')
+                    newtitle.merge(title)
+                        .attr('x', 40)
+                        .attr('y', 40)
+                        .text(indname + ', ' + refyear)
                         .attr("font-family", "Georgia")
-                        .attr("font-size", "20px")
-                        .attr("fill", lower_text_colour);
-                var new_ic_text_label = ic_text_label
+                        .attr("font-size", "30px")
+                        .attr("fill", "black");
+
+                    var liney2 = 0
+                    if(positive_sum == 0 || negative_sum == 0){
+                        liney2 = 450
+                    }
+                    else{liney2 = 550}
+                        
+                    var line1 = svg.selectAll('.line1')
+                    .data([csv_data])
+
+                    line1.exit().remove()
+
+
+                    var newline1 = line1
                         .enter()
-                        .append('text')
-                        .attr('class', 'ic_text_label')
-                new_ic_text_label.merge(ic_text_label)
-                        .attr('x', lower_scaled - 220)
-                        .attr('y', lower_y + 42)
-                        .text(ic_label_text)
-                        .attr("font-family", "Georgia")
-                        .attr("font-size", "20px")
-                        .attr("fill", "white");
+                        .append('line')
+                        .attr('class', 'line1')
 
-                }
+                    newline1.merge(line1)  
+                        .attr('x1', lower_scaled)
+                        .attr('y1', (110))
+                        .attr('x2', lower_scaled)
+                        .attr('y2', liney2)
+                        .attr("stroke-width", 2)
+                        .attr("stroke", "black");
 
 
-            if (edgecase_2 == 1){
-                
-                var new_ic_text_name = ic_text_name
+
+                    var line2 = svg.selectAll('.line2')
+                    .data([csv_data])
+
+                    line2.exit().remove()
+
+
+                    var newline2 = line2
                         .enter()
-                        .append('text')
-                        .attr('class', 'ic_text_name')
-                new_ic_text_name.merge(ic_text_name)
-                        .attr('x', higher_x + higher_scaled - 220)
-                        .attr('y', higher_y + 22)
-                        .text('Intermediate consumption:')
-                        .attr("font-family", "Georgia")
-                        .attr("font-size", "20px")
-                        .attr("fill", "white");
-                var new_ic_text_label = ic_text_label
-                        .enter()
-                        .append('text')
-                        .attr('class', 'ic_text_label')
-                new_ic_text_label.merge(ic_text_label)
-                        .attr('x', higher_scaled - 220)
-                        .attr('y', higher_y + 42)
-                        .text(ic_label_text)
-                        .attr("font-family", "Georgia")
-                        .attr("font-size", "20px")
-                        .attr("fill", "white");
+                        .append('line')
+                        .attr('class', 'line2')
 
+
+                    newline2.merge(line2)  
+                        .attr('x1', (width - 2))
+                        .attr('y1', (110))
+                        .attr('x2', (width - 2))
+                        .attr('y2', liney2)
+                        .attr("stroke-width", 2)
+                        .attr("stroke", "black");
+
+                    var lower_y = 190
+                    var higher_y = 50
+
+                    var higher_x = 0
+                    if(edgecase_3 == 1 || edgecase_4 == 1){
+                        higher_x = width - higher_scaled
+                    }
+                    var lower_x = higher_x
+
+                    var lower_rect = svg.selectAll('.lower_rect')
+                        .data([csv_data]);
+                    lower_rect.exit().remove()
+                    var new_lower_rect = lower_rect
+                            .enter()
+                            .append('rect')
+                            .attr('class','lower_rect')
+                    new_lower_rect.merge(lower_rect)
+                            .attr("fill", "#e60000")
+                            .attr('width', lower_scaled)
+                            .attr('height', 60)
+                            .attr('y', lower_y) 
+                            .attr('x', lower_x)
+
+                    var gvap_rect = svg.selectAll('.gvap_rect')
+                        .data([csv_data]);
+                    gvap_rect.exit().remove()
+                    var new_gvap_rect = gvap_rect
+                            .enter()
+                            .append('rect')
+                            .attr('class','gvap_rect')
+                    new_gvap_rect.merge(gvap_rect)                    
+                            .attr("fill", "black")
+                            .attr('width', gva_scaled)
+                            .attr('height', 60)
+                            .attr('y', 280) 
+                            .attr('x', lower_scaled + lower_x)
+
+
+                    var higher_rect = svg.selectAll('.higher_rect')
+                        .data([csv_data]);
+                    higher_rect.exit().remove()
+                    var new_higher_rect = higher_rect
+                            .enter()
+                            .append('rect')
+                            .attr('class','higher_rect')
+                    new_higher_rect.merge(higher_rect)                
+                            .attr("fill", "#269900")
+                            .attr('width', higher_scaled)
+                            .attr('height', 60)
+                            .attr('y', higher_y) 
+                            .attr('x', higher_x)
+
+                    var coe_y = 0
+                    var gos_y = 0
+                    var ts_y = 0
+                    if(edgecase_2 == 1 || (gos_real >= 0 & ts_real >= 0)){
+                        coe_y = 390
+                    }
+                    else{
+                        coe_y = 490
+                    }
+                    if((edgecase_2 == 0 & ((gos_real >= 0 & ts_real >= 0) || gos_real <= 0) || (edgecase_2 == 1 & gos_real >= 0))){
+                        gos_y = 390
+                    }
+                    else{
+                        gos_y = 490
+                    }
+                    if((edgecase_2 == 0 & ((gos_real >= 0 & ts_real >= 0) || ts_real <= 0) || (edgecase_2 == 1 & ts_real >= 0))){
+                        ts_y = 390
+                    }
+                    else{
+                        ts_y = 490
+                    }
+
+
+                    var coe_x = 0
+                    var gos_x = 0
+                    var ts_x = 0
+                    if(edgecase_4 == 0 & (gos_real < 0 & ts_real < 0)){
+                        coe_x = width - coe_scaled
+                    }
+                    else if (edgecase_2 == 1 & gos_real < 0 & ts_real < 0){
+                        coe_x = width - gos_scaled - ts_scaled
+                    }
+                    else if(edgecase_2 == 1 & gos_real < 0 & ts_real >= 0){
+                        coe_x = width - gos_scaled
+                    }
+                    else if(edgecase_2 == 1 & gos_real >= 0 & ts_real >= 0){
+                        coe_x = width - ts_scaled
+                    }
+                    else if(gos_real >= 0 & ts_real < 0){
+                        coe_x = width - coe_scaled - gos_scaled
+                    }
+                    else if(gos_real >= 0 & ts_real >= 0){
+                        coe_x = width - coe_scaled - gos_scaled - ts_scaled
+                    }
+                    else if (gos_real < 0 & ts_real >= 0){
+                        coe_x = width - coe_scaled - ts_scaled
+                    }
+
+                    if(gos_real >= 0){
+                        gos_x = coe_x + coe_scaled
+                    }
+                    else{
+                        gos_x = coe_x
+                    }
+                    if((ts_real >= 0 & gos_real >= 0) || (ts_real < 0 & gos_real < 0)){
+                        ts_x = gos_x + gos_scaled
+                    }
+                    else if (ts_real >= 0){
+                        ts_x = coe_x + coe_scaled
+                    }
+                    else{
+                        ts_x = coe_x
+                    }
+
+                    var coe_colour = "#000099"
+                    var coe_rect = svg.selectAll('.coe_rect')
+                        .data([csv_data]);
+                    coe_rect.exit().remove()
+                    var new_coe_rect = coe_rect
+                            .enter()
+                            .append('rect')
+                            .attr('class','coe_rect')
+                    new_coe_rect.merge(coe_rect)
+                            .attr("fill", coe_colour)
+                            .attr('width', coe_scaled)
+                            .attr('height', 60)
+                            .attr('y', coe_y) 
+                            .attr('x', coe_x)
+
+                    var gos_colour = "#996600"
+                    var gos_rect = svg.selectAll('.gos_rect')
+                        .data([csv_data]);
+                    gos_rect.exit().remove()
+                    var new_gos_rect = gos_rect
+                            .enter()
+                            .append('rect')
+                            .attr('class','gos_rect')
+                    new_gos_rect.merge(gos_rect)
+                            .attr("fill", gos_colour)
+                            .attr('width', gos_scaled)
+                            .attr('height', 60)
+                            .attr('y', gos_y) 
+                            .attr('x', gos_x)
+
+                    var ts_colour = "#e60073"
+                    var ts_rect = svg.selectAll('.ts_rect')
+                        .data([csv_data])
+                    ts_rect.exit().remove()
+                    var new_ts_rect = ts_rect
+                            .enter()
+                            .append('rect')
+                            .attr('class','ts_rect')
+                    new_ts_rect.merge(ts_rect)
+                            .attr("fill", ts_colour)
+                            .attr('width', ts_scaled)
+                            .attr('height', 60)
+                            .attr('y', ts_y) 
+                            .attr('x', ts_x)
+
+                    var lower_text_x = 0
+                    if (lower_scaled >= 300){
+                        lower_text_x = lower_x + lower_scaled - 270
+                    }
+                    else{
+                        lower_text_x = lower_x + lower_scaled + 20
+                    }
+                    var lower_text_colour = ""
+                    if(lower_scaled >= 300){
+                        lower_text_colour = "white"
+                    }
+                    else if(lower_scaled < 300 & edgecase_2 == 0){
+                        lower_text_colour = "red"
+                    }
+                    else if(lower_scaled < 300 & edgecase_2 == 1){
+                        lower_text_colour = "green" 
+                    }
+
+                    var ic_text_name = svg.selectAll('.ic_text_name')
+                        .data([csv_data])
+                    ic_text_name.exit().remove()
+
+                    var ic_text_label = svg.selectAll('.ic_text_label')
+                        .data([csv_data])
+                    ic_text_label.exit().remove()
+
+                    var ic_label_text = ""
+                    if(ic >= 1000){ic_label_text = '£' + ic/1000 + 'bn'}
+                    else{ic_label_text = '£' + ic + 'm'}
+
+                    if (edgecase_2 == 0){
+                        
+                        var new_ic_text_name = ic_text_name
+                                .enter()
+                                .append('text')
+                                .attr('class', 'ic_text_name')
+                        new_ic_text_name.merge(ic_text_name)
+                                .attr('x', lower_text_x)
+                                .attr('y', lower_y + 22)
+                                .text('Intermediate consumption:')
+                                .attr("font-family", "Georgia")
+                                .attr("font-size", "20px")
+                                .attr("fill", lower_text_colour);
+                        var new_ic_text_label = ic_text_label
+                                .enter()
+                                .append('text')
+                                .attr('class', 'ic_text_label')
+                        new_ic_text_label.merge(ic_text_label)
+                                .attr('x', lower_scaled - 220)
+                                .attr('y', lower_y + 42)
+                                .text(ic_label_text)
+                                .attr("font-family", "Georgia")
+                                .attr("font-size", "20px")
+                                .attr("fill", "white");
+
+                        }
+
+
+                    if (edgecase_2 == 1){
+                        
+                        var new_ic_text_name = ic_text_name
+                                .enter()
+                                .append('text')
+                                .attr('class', 'ic_text_name')
+                        new_ic_text_name.merge(ic_text_name)
+                                .attr('x', higher_x + higher_scaled - 220)
+                                .attr('y', higher_y + 22)
+                                .text('Intermediate consumption:')
+                                .attr("font-family", "Georgia")
+                                .attr("font-size", "20px")
+                                .attr("fill", "white");
+                        var new_ic_text_label = ic_text_label
+                                .enter()
+                                .append('text')
+                                .attr('class', 'ic_text_label')
+                        new_ic_text_label.merge(ic_text_label)
+                                .attr('x', higher_scaled - 220)
+                                .attr('y', higher_y + 42)
+                                .text(ic_label_text)
+                                .attr("font-family", "Georgia")
+                                .attr("font-size", "20px")
+                                .attr("fill", "white");
+
+                    }
+
+                    var output_label_text = ""
+                    if(output >= 1000){output_label_text = '£' + output/1000 + 'bn'}
+                    else{output_label_text = '£' + output + 'm'}
+
+                    var output_text_name = svg.selectAll('.output_text_name')
+                        .data([csv_data])
+                    output_text_name.exit().remove()
+                    var output_text_label = svg.selectAll('.output_text_label')
+                        .data([csv_data])
+                    output_text_label.exit().remove()
+
+                    if (edgecase_2 == 1){
+
+                        var new_output_text_name = output_text_name
+                                .enter()
+                                .append('text')
+                                .attr('class', 'output_text_name')
+                        new_output_text_name.merge(output_text_name)
+                                .attr('x', lower_x + lower_scaled - 220)
+                                .attr('y', lower_y + 22)
+                                .text('Output:')
+                                .attr("font-family", "Georgia")
+                                .attr("font-size", "20px")
+                                .attr("fill", "white");
+                        var new_output_text_label = output_text_label
+                                .enter()
+                                .append('text')
+                                .attr('class', 'output_text_label')
+                        new_output_text_label.merge(output_text_label)
+                                .attr('x', lower_scaled - 220)
+                                .attr('y', lower_y + 42)
+                                .text(output_label_text)
+                                .attr("font-family", "Georgia")
+                                .attr("font-size", "20px")
+                                .attr("fill", lower_text_colour);
+                        }
+
+                    if (edgecase_2 == 0){
+                        var new_output_text_name = output_text_name
+                                .enter()
+                                .append('text')
+                                .attr('class', 'output_text_name')
+                        new_output_text_name.merge(output_text_name)
+                                .attr('x', higher_x + higher_scaled - 220)
+                                .attr('y', higher_y + 22)
+                                .text('Output:')
+                                .attr("font-family", "Georgia")
+                                .attr("font-size", "20px")
+                                .attr("fill", "white");
+                        var new_output_text_label = output_text_label
+                                .enter()
+                                .append('text')
+                                .attr('class', 'output_text_label')
+                        new_output_text_label.merge(output_text_label)
+                                .attr('x', higher_scaled - 220)
+                                .attr('y', higher_y + 42)
+                                .text(output_label_text)
+                                .attr("font-family", "Georgia")
+                                .attr("font-size", "20px")
+                                .attr("fill", "white");
+                    }
+
+                    var gva_label_text = ""
+                    if(gva >= 1000 & gva_real >= 0){gva_label_text = '£' + gva/1000 + 'bn'}
+                    else if(gva < 1000 & gva_real >= 0){gva_label_text = gva_label_text = '£' + gva + 'm'}
+                    else if(gva >= 1000 & gva_real < 0){gva_label_text = '-£' + gva/1000 + 'bn'}
+                    else if(gva < 1000 & gva_real >= 0){gva_label_text = '-£' + gva + 'm'}
+
+                    var gvap_text_name = svg.selectAll('.gvap_text_name')
+                        .data([csv_data])
+                    gvap_text_name.exit().remove()
+                    var gvap_text_label = svg.selectAll('.gvap_text_label')
+                        .data([csv_data])
+                    gvap_text_name.exit().remove()
+
+                    var new_gvap_text_name = gvap_text_name
+                            .enter()
+                            .append('text')
+                            .attr('class', 'gvap_text_name')
+                    new_gvap_text_name.merge(gvap_text_name)
+                            .attr('x', width - 90)
+                            .attr('y', 302)
+                            .text('GVA:')
+                            .attr("font-family", "Georgia")
+                            .attr("font-size", "20px")
+                            .attr("fill", "white");
+
+                    var new_gvap_text_label = gvap_text_label
+                            .enter()
+                            .append('text')
+                            .attr('class', 'gvap_text_label')
+                    new_gvap_text_label.merge(gvap_text_label)
+                            .attr('x', width - 90)
+                            .attr('y', 322)
+                            .text(gva_label_text)
+                            .attr("font-family", "Georgia")
+                            .attr("font-size", "20px")
+                            .attr("fill", "white");
+
+                    }
+
+
+                    var coe_text_name = svg.selectAll('.coe_text_name')
+                        .data([csv_data])
+                    coe_text_name.exit().remove()    
+                    var coe_text_label = svg.selectAll('.coe_text_label')
+                        .data([csv_data])
+                    coe_text_name.exit().remove()
+
+
+
+                    var coe_text_x = 0
+                    var coe_text_fill = ""
+                    if(coe_scaled >= 100){
+                        coe_text_x = coe_x + coe_scaled - 90 
+                        coe_text_fill = "white"
+                    }
+                    else{
+                        coe_text_x = coe_x - 80
+                        coe_text_fill = coe_colour
+                    }
+
+                    var gos_text_x = 0
+                    var gos_name_y = 0
+                    var gos_text_fill = ""
+                    if(gos_scaled >= 100){
+                        gos_text_x = gos_x + gos_scaled - 100
+                        gos_name_y = gos_y + 22
+                        gos_text_fill = "white"
+                    }
+                    else if (gos_real < 0 || coe_scaled == 0){
+                        gos_text_x = gos_x - 50
+                        gos_name_y = gos_y + 22
+                        gos_text_fill = gos_colour
+                    }
+                    else if (gos_real >= 0){
+                        gos_text_x = gos_x - 80
+                        gos_name_y = gos_y - 30
+                        gos_text_fill = gos_colour
+                    }
+
+                    var ts_text_x = 0
+                    var ts_name_y = 0
+                    var ts_text_fill = ""
+                    if(ts_scaled >= 220){
+                        ts_text_x = ts_x + ts_scaled - 200
+                        ts_name_y = ts_y + 22
+                        ts_text_fill = "white"
+                    }
+                    else if (ts_real < 0 & gos_real >= 0){
+                        ts_text_x = ts_x - 210
+                        ts_name_y = ts_y + 22
+                        ts_text_fill = ts_colour
+                    }
+                    else if ((ts_real < 0 & gos_real < 0) || ts_real >= 0){
+                        ts_text_x = ts_x - 180
+                        ts_name_y = ts_y + 122
+                        ts_text_fill = ts_colour
+                    }
+
+                    var coe_label_text = ""
+                    if(coe >= 1000){coe_label_text = '£' + coe/1000 + 'bn'}
+                    else{coe_label_text = '£' + coe + 'm'}
+
+                    var new_coe_text_name = coe_text_name
+                            .enter()
+                            .append('text')
+                            .attr('class', 'coe_text_name')
+                    new_coe_text_name.merge(coe_text_name)
+                            .attr('x', coe_text_x)
+                            .attr('y', coe_y + 22)
+                            .text('COE:')
+                            .attr("font-family", "Georgia")
+                            .attr("font-size", "20px")
+                            .attr("fill", coe_text_fill);                
+                    var new_coe_text_label = coe_text_label
+                            .enter()
+                            .append('text')
+                            .attr('class', 'coe_text_label')
+                    new_coe_text_label.merge(coe_text_label)
+                            .attr('x', coe_text_x)
+                            .attr('y', coe_y + 42)
+                            .text(coe_label_text)
+                            .attr("font-family", "Georgia")
+                            .attr("font-size", "20px")
+                            .attr("fill", coe_text_fill);
+
+                    var gos_label_text = ""
+                    if(gos >= 1000 & gos_real >= 0){gos_label_text = '£' + gos/1000 + 'bn'}
+                    else if(gos < 1000 & gos_real >= 0){gos_label_text = gos_label_text = '£' + gos + 'm'}
+                    else if(gos >= 1000 & gos_real < 0){gos_label_text = '-£' + gos/1000 + 'bn'}
+                    else if(gos < 1000 & gos_real < 0){gos_label_text = '-£' + gos + 'm'}
+
+                    var gos_text_name = svg.selectAll('.gos_text_name')
+                        .data([csv_data])
+                    gos_text_name.exit().remove()
+
+                    var gos_text_label = svg.selectAll('.gos_text_label')
+                        .data([csv_data])
+                    gos_text_name.exit().remove()
+
+                    
+                    var new_gos_text_name = gos_text_name
+                                .enter()
+                                .append('text')
+                                .attr('class', 'gos_text_name')
+                    new_gos_text_name.merge(gos_text_name)
+                                .attr('x', gos_text_x)
+                                .attr('y', gos_name_y)
+                                .text('GOS:')
+                                .attr("font-family", "Georgia")
+                                .attr("font-size", "20px")
+                                .attr("fill", gos_text_fill);
+
+                    var new_gos_text_label = gos_text_label
+                                .enter()
+                                .append('text')
+                                .attr('class', 'gos_text_label')
+                    new_gos_text_label.merge(gos_text_label)
+                                .attr('x', gos_text_x)
+                                .attr('y', gos_name_y + 22)
+                                .text(gos_label_text)
+                                .attr("font-family", "Georgia")
+                                .attr("font-size", "20px")
+                                .attr("fill", gos_text_fill);
+                    
+
+                    var ts_text_name = svg.selectAll('.ts_text_name')
+                        .data([csv_data])
+                    ts_text_name.exit().remove()
+                    var ts_text_label = svg.selectAll('.ts_text_label')
+                        .data([csv_data])
+                    ts_text_label.exit().remove()
+
+                    var ts_label_text = ""
+                    if(ts >= 1000 & ts_real >= 0){ts_label_text = '£' + ts/1000 + 'bn'}
+                    else if(ts < 1000 & ts_real >= 0){ts_label_text = ts_label_text = '£' + ts + 'm'}
+                    else if(ts >= 1000 & ts_real < 0){ts_label_text = '-£' + ts/1000 + 'bn'}
+                    else if(ts < 1000 & ts_real < 0){ts_label_text = '-£' + ts + 'm'}
+
+                    
+                    var new_ts_text_name = ts_text_name
+                            .enter()
+                            .append('text')
+                            .attr('class', 'ts_text_name')
+                    new_ts_text_name.merge(ts_text_name)
+                            .attr('x', ts_text_x)
+                            .attr('y', ts_name_y)
+                            .text('Net taxes (D.29-D.39):')
+                            .attr("font-family", "Georgia")
+                            .attr("font-size", "20px")
+                            .attr("fill", ts_text_fill);
+                    var new_ts_text_label = ts_text_label
+                            .enter()
+                            .append('text')
+                            .attr('class', 'ts_text_label')
+                    new_ts_text_label.merge(ts_text_label)
+                            .attr('x', ts_text_x)
+                            .attr('y', ts_name_y + 22)
+                            .text(ts_label_text)
+                            .attr("font-family", "Georgia")
+                            .attr("font-size", "20px")
+                            .attr("fill", ts_text_fill);
+
+                    })
             }
 
-            var output_label_text = ""
-            if(output >= 1000){output_label_text = '£' + output/1000 + 'bn'}
-            else{output_label_text = '£' + output + 'm'}
+            update()
 
-            var output_text_name = svg.selectAll('.output_text_name')
-                .data([csv_data])
-            output_text_name.exit().remove()
-            var output_text_label = svg.selectAll('.output_text_label')
-                .data([csv_data])
-            output_text_label.exit().remove()
-
-            if (edgecase_2 == 1){
-
-                var new_output_text_name = output_text_name
-                        .enter()
-                        .append('text')
-                        .attr('class', 'output_text_name')
-                new_output_text_name.merge(output_text_name)
-                        .attr('x', lower_x + lower_scaled - 220)
-                        .attr('y', lower_y + 22)
-                        .text('Output:')
-                        .attr("font-family", "Georgia")
-                        .attr("font-size", "20px")
-                        .attr("fill", "white");
-                var new_output_text_label = output_text_label
-                        .enter()
-                        .append('text')
-                        .attr('class', 'output_text_label')
-                new_output_text_label.merge(output_text_label)
-                        .attr('x', lower_scaled - 220)
-                        .attr('y', lower_y + 42)
-                        .text(output_label_text)
-                        .attr("font-family", "Georgia")
-                        .attr("font-size", "20px")
-                        .attr("fill", lower_text_colour);
-                }
-
-            if (edgecase_2 == 0){
-                var new_output_text_name = output_text_name
-                        .enter()
-                        .append('text')
-                        .attr('class', 'output_text_name')
-                new_output_text_name.merge(output_text_name)
-                        .attr('x', higher_x + higher_scaled - 220)
-                        .attr('y', higher_y + 22)
-                        .text('Output:')
-                        .attr("font-family", "Georgia")
-                        .attr("font-size", "20px")
-                        .attr("fill", "white");
-                var new_output_text_label = output_text_label
-                        .enter()
-                        .append('text')
-                        .attr('class', 'output_text_label')
-                new_output_text_label.merge(output_text_label)
-                        .attr('x', higher_scaled - 220)
-                        .attr('y', higher_y + 42)
-                        .text(output_label_text)
-                        .attr("font-family", "Georgia")
-                        .attr("font-size", "20px")
-                        .attr("fill", "white");
-            }
-
-            var gva_label_text = ""
-            if(gva >= 1000 & gva_real >= 0){gva_label_text = '£' + gva/1000 + 'bn'}
-            else if(gva < 1000 & gva_real >= 0){gva_label_text = gva_label_text = '£' + gva + 'm'}
-            else if(gva >= 1000 & gva_real < 0){gva_label_text = '-£' + gva/1000 + 'bn'}
-            else if(gva < 1000 & gva_real >= 0){gva_label_text = '-£' + gva + 'm'}
-
-            var gvap_text_name = svg.selectAll('.gvap_text_name')
-                .data([csv_data])
-            gvap_text_name.exit().remove()
-            var gvap_text_label = svg.selectAll('.gvap_text_label')
-                .data([csv_data])
-            gvap_text_name.exit().remove()
-
-            var new_gvap_text_name = gvap_text_name
-                    .enter()
-                    .append('text')
-                    .attr('class', 'gvap_text_name')
-            new_gvap_text_name.merge(gvap_text_name)
-                    .attr('x', width - 90)
-                    .attr('y', 302)
-                    .text('GVA:')
-                    .attr("font-family", "Georgia")
-                    .attr("font-size", "20px")
-                    .attr("fill", "white");
-
-            var new_gvap_text_label = gvap_text_label
-                    .enter()
-                    .append('text')
-                    .attr('class', 'gvap_text_label')
-            new_gvap_text_label.merge(gvap_text_label)
-                    .attr('x', width - 90)
-                    .attr('y', 322)
-                    .text(gva_label_text)
-                    .attr("font-family", "Georgia")
-                    .attr("font-size", "20px")
-                    .attr("fill", "white");
-
-            }
-
-
-            var coe_text_name = svg.selectAll('.coe_text_name')
-                .data([csv_data])
-            coe_text_name.exit().remove()    
-            var coe_text_label = svg.selectAll('.coe_text_label')
-                .data([csv_data])
-            coe_text_name.exit().remove()
-
-
-
-            var coe_text_x = 0
-            var coe_text_fill = ""
-            if(coe_scaled >= 100){
-                coe_text_x = coe_x + coe_scaled - 90 
-                coe_text_fill = "white"
-            }
-            else{
-                coe_text_x = coe_x - 80
-                coe_text_fill = coe_colour
-            }
-
-            var gos_text_x = 0
-            var gos_name_y = 0
-            var gos_text_fill = ""
-            if(gos_scaled >= 100){
-                gos_text_x = gos_x + gos_scaled - 100
-                gos_name_y = gos_y + 22
-                gos_text_fill = "white"
-            }
-            else if (gos_real < 0 || coe_scaled == 0){
-                gos_text_x = gos_x - 50
-                gos_name_y = gos_y + 22
-                gos_text_fill = gos_colour
-            }
-            else if (gos_real >= 0){
-                gos_text_x = gos_x - 80
-                gos_name_y = gos_y - 30
-                gos_text_fill = gos_colour
-            }
-
-            var ts_text_x = 0
-            var ts_name_y = 0
-            var ts_text_fill = ""
-            if(ts_scaled >= 220){
-                ts_text_x = ts_x + ts_scaled - 200
-                ts_name_y = ts_y + 22
-                ts_text_fill = "white"
-            }
-            else if (ts_real < 0 & gos_real >= 0){
-                ts_text_x = ts_x - 210
-                ts_name_y = ts_y + 22
-                ts_text_fill = ts_colour
-            }
-            else if ((ts_real < 0 & gos_real < 0) || ts_real >= 0){
-                ts_text_x = ts_x - 180
-                ts_name_y = ts_y + 122
-                ts_text_fill = ts_colour
-            }
-
-            var coe_label_text = ""
-            if(coe >= 1000){coe_label_text = '£' + coe/1000 + 'bn'}
-            else{coe_label_text = '£' + coe + 'm'}
-
-            var new_coe_text_name = coe_text_name
-                    .enter()
-                    .append('text')
-                    .attr('class', 'coe_text_name')
-            new_coe_text_name.merge(coe_text_name)
-                    .attr('x', coe_text_x)
-                    .attr('y', coe_y + 22)
-                    .text('COE:')
-                    .attr("font-family", "Georgia")
-                    .attr("font-size", "20px")
-                    .attr("fill", coe_text_fill);                
-            var new_coe_text_label = coe_text_label
-                    .enter()
-                    .append('text')
-                    .attr('class', 'coe_text_label')
-            new_coe_text_label.merge(coe_text_label)
-                    .attr('x', coe_text_x)
-                    .attr('y', coe_y + 42)
-                    .text(coe_label_text)
-                    .attr("font-family", "Georgia")
-                    .attr("font-size", "20px")
-                    .attr("fill", coe_text_fill);
-
-            var gos_label_text = ""
-            if(gos >= 1000 & gos_real >= 0){gos_label_text = '£' + gos/1000 + 'bn'}
-            else if(gos < 1000 & gos_real >= 0){gos_label_text = gos_label_text = '£' + gos + 'm'}
-            else if(gos >= 1000 & gos_real < 0){gos_label_text = '-£' + gos/1000 + 'bn'}
-            else if(gos < 1000 & gos_real < 0){gos_label_text = '-£' + gos + 'm'}
-
-            var gos_text_name = svg.selectAll('.gos_text_name')
-                .data([csv_data])
-            gos_text_name.exit().remove()
-
-            var gos_text_label = svg.selectAll('.gos_text_label')
-                .data([csv_data])
-            gos_text_name.exit().remove()
-
-            
-            var new_gos_text_name = gos_text_name
-                        .enter()
-                        .append('text')
-                        .attr('class', 'gos_text_name')
-            new_gos_text_name.merge(gos_text_name)
-                        .attr('x', gos_text_x)
-                        .attr('y', gos_name_y)
-                        .text('GOS:')
-                        .attr("font-family", "Georgia")
-                        .attr("font-size", "20px")
-                        .attr("fill", gos_text_fill);
-
-            var new_gos_text_label = gos_text_label
-                        .enter()
-                        .append('text')
-                        .attr('class', 'gos_text_label')
-            new_gos_text_label.merge(gos_text_label)
-                        .attr('x', gos_text_x)
-                        .attr('y', gos_name_y + 22)
-                        .text(gos_label_text)
-                        .attr("font-family", "Georgia")
-                        .attr("font-size", "20px")
-                        .attr("fill", gos_text_fill);
-            
-
-            var ts_text_name = svg.selectAll('.ts_text_name')
-                .data([csv_data])
-            ts_text_name.exit().remove()
-            var ts_text_label = svg.selectAll('.ts_text_label')
-                .data([csv_data])
-            ts_text_label.exit().remove()
-
-            var ts_label_text = ""
-            if(ts >= 1000 & ts_real >= 0){ts_label_text = '£' + ts/1000 + 'bn'}
-            else if(ts < 1000 & ts_real >= 0){ts_label_text = ts_label_text = '£' + ts + 'm'}
-            else if(ts >= 1000 & ts_real < 0){ts_label_text = '-£' + ts/1000 + 'bn'}
-            else if(ts < 1000 & ts_real < 0){ts_label_text = '-£' + ts + 'm'}
-
-            
-            var new_ts_text_name = ts_text_name
-                    .enter()
-                    .append('text')
-                    .attr('class', 'ts_text_name')
-            new_ts_text_name.merge(ts_text_name)
-                    .attr('x', ts_text_x)
-                    .attr('y', ts_name_y)
-                    .text('Net taxes (D.29-D.39):')
-                    .attr("font-family", "Georgia")
-                    .attr("font-size", "20px")
-                    .attr("fill", ts_text_fill);
-            var new_ts_text_label = ts_text_label
-                    .enter()
-                    .append('text')
-                    .attr('class', 'ts_text_label')
-            new_ts_text_label.merge(ts_text_label)
-                    .attr('x', ts_text_x)
-                    .attr('y', ts_name_y + 22)
-                    .text(ts_label_text)
-                    .attr("font-family", "Georgia")
-                    .attr("font-size", "20px")
-                    .attr("fill", ts_text_fill);
-
-            })
-    }
-
-    update()
-
-    d3.select("body")
-        .on("keydown", function(){
-            key = d3.event.keyCode
-            if (key == 37){
-                refind = Math.max(refind - 1, 1)
-                update()
-            }
-            else if(key == 39){
-                refind = Math.min(refind + 1, 105)
-                update()
-            }
-            else if(key == 38){
-                refyear = Math.min(refyear + 1, 2014)
-                update()
-            }
-            else if(key == 40){
-                refyear = Math.max(refyear - 1, 1997)
-                update()
-            }
-        })
+            d3.select("body")
+                .on("keydown", function(){
+                    key = d3.event.keyCode
+                    if (key == 37){
+                        refind = Math.max(refind - 1, 1)
+                        update()
+                    }
+                    else if(key == 39){
+                        refind = Math.min(refind + 1, 105)
+                        update()
+                    }
+                    else if(key == 38){
+                        refyear = Math.min(refyear + 1, 2014)
+                        update()
+                    }
+                    else if(key == 40){
+                        refyear = Math.max(refyear - 1, 1997)
+                        update()
+                    }
+                })
 
     </script>
 
     <script>
-    var width = document.getElementById('vis2').clientWidth;
-    var height = document.getElementById('vis2').clientHeight;
+        var width = document.getElementById('vis2').clientWidth;
+        var height = document.getElementById('vis2').clientHeight;
 
-    var margin = {
-        top: 10,
-        bottom: 100,
-        left: 100,
-        right: 120
-    };
+        var margin = {
+            top: 10,
+            bottom: 100,
+            left: 100,
+            right: 120
+        };
 
-    var svg = d3.select('#vis2')
-        .append('svg')
-            .attr('width', width)
-            .attr('height', height)
-        .append('g')
-            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+        var svg = d3.select('#vis2')
+            .append('svg')
+                .attr('width', width)
+                .attr('height', height)
+            .append('g')
+                .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-    var tooltip = d3.select('body')
-        .append('div')
-        .attr('class', 'tooltip');
+        var tooltip = d3.select('body')
+            .append('div')
+            .attr('class', 'tooltip');
 
-    width = width - margin.left - margin.right;
-    height = height - margin.top - margin.bottom;
+        width = width - margin.left - margin.right;
+        height = height - margin.top - margin.bottom;
 
-    var dateParse = d3.timeParse('%Y');
-    var tooltipFormat = d3.timeFormat('%Y');
+        var dateParse = d3.timeParse('%Y');
+        var tooltipFormat = d3.timeFormat('%Y');
 
-    var x_scale = d3.scaleTime()
-        .range([0, width]);
+        var x_scale = d3.scaleTime()
+            .range([0, width]);
 
-    var y_scale = d3.scaleLinear()
-        .range([height, 0]);
+        var y_scale = d3.scaleLinear()
+            .range([height, 0]);
 
-    var line = d3.line()
-        .x(function(d){
-            return x_scale(dateParse(d.date));
-        })
-        .y(function(d){
-            return y_scale(+d.WAGESHARE);
-        });
-
-    var x_axis = d3.axisBottom()
-        .scale(x_scale);
-
-    var y_axis = d3.axisLeft()
-        .scale(y_scale);
-
-    d3.csv('timeseries.csv', function(csv_data){
-        console.log(csv_data);
-
-        x_scale.domain(d3.extent(csv_data, function(d){
-            return dateParse(d.date);
-        }))
-
-        y_scale.domain([0, 1]);
-
-        var lines = svg.selectAll('.line')
-            .data([csv_data]);
-
-        lines
-            .enter()
-            .append('path')
-            .attr('class', 'line')
-            .attr('fill', 'none')
-            .attr('stroke', 'black')
-            .attr('d', line);
-
-        var points = svg.selectAll('.point')
-            .data(csv_data);
-
-        points
-            .enter()
-            .append('circle')
-            .attr('class', 'point')
-            .attr('r', 10)
-            .attr('cx', function(d){
+        var line = d3.line()
+            .x(function(d){
                 return x_scale(dateParse(d.date));
             })
-            .attr('cy', function(d){
+            .y(function(d){
                 return y_scale(+d.WAGESHARE);
-            })
-            .attr('fill', 'black')
-            .attr('opacity', 0)
-            .on('mouseover', mouseOver)
-            .on('mousemove', mouseMove)
-            .on('mouseout', mouseOut);
+            });
 
-        svg.append('g')
-            .attr('transform', 'translate(0, ' + height + ')')
-            .call(x_axis);
+        var x_axis = d3.axisBottom()
+            .scale(x_scale);
 
-        svg.append('g')
-            .call(y_axis);
+        var y_axis = d3.axisLeft()
+            .scale(y_scale);
 
-        function mouseOver(d){
-            console.log(d);
-            var date = dateParse(d.date);
-            var displayDate = tooltipFormat(date);
+        d3.csv('timeseries.csv', function(csv_data){
+            console.log(csv_data);
 
-            d3.select(this)
-                .transition()
-                .style('opacity', 1)
+            x_scale.domain(d3.extent(csv_data, function(d){
+                return dateParse(d.date);
+            }))
 
-            tooltip
-                .style('display', null)
-                .html('<p>Date: ' + displayDate + '<br>Wage share: ' + d.WAGESHARE + '%</p>');
-        };
+            y_scale.domain([0, 1]);
 
-        function mouseMove(d){
-            tooltip
-                .style('top', (d3.event.pageY - 20) + "px")
-                .style('left', (d3.event.pageX + 20) + "px");
-        };
+            var lines = svg.selectAll('.line')
+                .data([csv_data]);
 
-        function mouseOut(d){
-            d3.select(this)
-                .transition()
-                .style('opacity', 0)
+            lines
+                .enter()
+                .append('path')
+                .attr('class', 'line')
+                .attr('fill', 'none')
+                .attr('stroke', 'black')
+                .attr('d', line);
 
-            tooltip
-                .style('display', 'none');
-        };
-    })
+            var points = svg.selectAll('.point')
+                .data(csv_data);
+
+            points
+                .enter()
+                .append('circle')
+                .attr('class', 'point')
+                .attr('r', 10)
+                .attr('cx', function(d){
+                    return x_scale(dateParse(d.date));
+                })
+                .attr('cy', function(d){
+                    return y_scale(+d.WAGESHARE);
+                })
+                .attr('fill', 'black')
+                .attr('opacity', 0)
+                .on('mouseover', mouseOver)
+                .on('mousemove', mouseMove)
+                .on('mouseout', mouseOut);
+
+            svg.append('g')
+                .attr('transform', 'translate(0, ' + height + ')')
+                .call(x_axis);
+
+            svg.append('g')
+                .call(y_axis);
+
+            function mouseOver(d){
+                console.log(d);
+                var date = dateParse(d.date);
+                var displayDate = tooltipFormat(date);
+
+                d3.select(this)
+                    .transition()
+                    .style('opacity', 1)
+
+                tooltip
+                    .style('display', null)
+                    .html('<p>Date: ' + displayDate + '<br>Wage share: ' + d.WAGESHARE + '%</p>');
+            };
+
+            function mouseMove(d){
+                tooltip
+                    .style('top', (d3.event.pageY - 20) + "px")
+                    .style('left', (d3.event.pageX + 20) + "px");
+            };
+
+            function mouseOut(d){
+                d3.select(this)
+                    .transition()
+                    .style('opacity', 0)
+
+                tooltip
+                    .style('display', 'none');
+            };
+        })
 
     </script>
 
