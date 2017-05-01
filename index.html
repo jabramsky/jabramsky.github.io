@@ -5,7 +5,7 @@
     <title>dummy3</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.7.3/d3.min.js"></script>
     <style>
-    html, body, #vis1{
+    html, body, #vis1, #vis2{
         height: 100%;
         margin: 0;
         background-color: "white";
@@ -14,6 +14,19 @@
     table, th, td {
         border: 1px solid black;
     }
+
+    .tooltip {
+        position: absolute;
+        }
+
+    .tooltip p {
+        background-color: white;
+        border: #eee 1px solid;
+        padding: 2px;
+        font-family: sans-serif;
+        font-size: 11px;
+    }
+
 </style>
 </head>
 <body>
@@ -1034,8 +1047,184 @@
             }
         })
 
+      var width2 = 1500
+        var height2 = 1800
+
+        var margin = {
+            top: 50,
+            bottom: 100,
+            left: 100,
+            right: 50
+        };
+
+        var svg = d3.select('#vis2')
+                    .append('svg')
+                        .attr('height', height2)
+                        .attr('width', width2)
+                    .append('g')
+                        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+         var tooltip = d3.select('body')
+            .append('div')
+            .attr('class', 'tooltip');
+
+        width2 = width2 - margin.left - margin.right;
+        height2 = height2 - margin.top - margin.bottom;
+
+        var x_scale2 = d3.scaleLinear()
+                    .rangeRound([0, width2]);
+
+        var y_scale2 = d3.scaleLinear()
+                    .rangeRound([height, 0])
+                    .domain([0,1]);
+
+        var colour_scale_ran = d3.scaleQuantile()
+                    .range(colorbrewer.Reds[9]);
+
+        var colour_scale_noran = d3.scaleQuantile()
+                    .range(colorbrewer.Blues[9]);
+
+        var area_scale = d3.scaleLinear()
+                    .range([0, 400]);
+
+        var y_axis2 = d3.axisLeft(y_scale2);
+
+        var x_axis2 = d3.axisBottom(x_scale2);
+
+        svg.append("g")
+          .attr("class", "y axis");
+
+        svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height2 + ")");
+
+        refyear2 = 1997
+
+        function update2(){
+        d3.csv('timeseries_manuf_nototals.csv', function(full_data){
+
+            data = full_data.filter(function(d){return +d.DATE === refyear2})
+
+            x_scale2.domain(d3.extent(data, function(d){ return +d.INDUSTRY; }));
+            area_scale.domain(d3.extent(data, function(d){ return +d.GVA; }));
+
+            var manuf_colour = "black"
+            var other_colour2 = "white"
+            var dots = svg.selectAll('.dot')
+                            .data(data);
+
+            //exit
+            dots
+                .exit()
+                .remove();
+
+            // enter
+            var new_dots = dots
+                .enter()
+                .append('circle')
+                .attr('class', 'dot')
+                .attr('stroke', 'black')
+                .attr('stroke-width', '0.5px')
+
+            //update
+            new_dots.merge(dots)
+                .attr('cx', function(d){ return x_scale2(+d.INDUSTRY); })
+                .attr('cy', function(d){ return y_scale2(+d.WAGESHARE); })
+                .attr('fill', function(d){
+                    if(+d.MANUFACTURING === 1) {
+                        return manuf_colour;
+                    } else {
+                        return other_colour2;
+                    }
+                 })
+                .attr('r', function(d){
+                    var area = area_scale(+d.GVA);
+                    var radius = Math.sqrt(area / Math.PI);
+                    return radius;
+                })
+                .on('mouseover', mouseOver)
+                .on('mousemove', mouseMove)
+                .on('mouseout', mouseOut);
+
+            function mouseOver(d){
+
+                    d3.select(this)
+                        .transition()
+                        .style('opacity', 1)
+
+                    tooltip
+                        .style('display', null)
+                        .html('<p>Industry: ' + d.NAME + '<br>Wage Share: ' + d.WAGESHARE + '%</p>');
+                };
+
+            function mouseMove(d){
+                    tooltip
+                        .style('top', (d3.event.pageY - 20) + "px")
+                        .style('left', (d3.event.pageX + 20) + "px");
+                };
+
+            function mouseOut(d){
+                    tooltip
+                        .style('display', 'none');
+                };
+            
 
 
+            d3.select('.x.axis')
+                .call(x_axis2);
+
+            d3.select('.y.axis')
+                .call(y_axis2);
+
+            svg.append("text")
+                  .attr("transform", "translate(" + width2/2 +  "," + (height + margin.bottom/2) + ")")
+                  .style("text-anchor", "end")
+                  .text("Industry");
+
+            svg.append("text")
+              .attr("transform", "translate(-60," + height2/2 + ")rotate(-90)")
+              .style("text-anchor", "middle")
+              .text("Wage Share");
+
+
+            var title2 = svg.selectAll('.title2')
+                .data([data])
+                title2.exit().remove()
+
+            var newtitle2 = title2
+                .enter()
+                .append('text')
+                .attr('class', 'title2')
+            newtitle2.merge(title2)
+                .attr('x', 10)
+                .attr('y', 10)
+                .text("Wage shares by industry, " + refyear2)
+                .attr("font-family", "Georgia")
+                .attr("font-size", "20px")
+                .attr("fill", "black");
+
+
+
+
+
+        });
+
+    }
+
+    d3.select("body")
+        .on("keydown", function(){
+            key2 = d3.event.keyCode
+            if(key2 == 38){
+                refyear2 = Math.min(refyear2 + 1, 2014)
+                update2()
+            }
+            else if(key2 == 40){
+                refyear2 = Math.max(refyear2 - 1, 1997)
+                update2()
+            }
+        })
+
+    update2();
 
     </script>
 
