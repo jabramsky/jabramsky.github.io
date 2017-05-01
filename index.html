@@ -1193,13 +1193,7 @@
 
         var y_scale = d3.scaleLinear()
                     .rangeRound([height3, 0])
-
-        var colour_scale_ran = d3.scaleQuantile()
-                    .range(colorbrewer.Reds[9]);
-
-        var colour_scale_noran = d3.scaleQuantile()
-                    .range(colorbrewer.Blues[9]);
-
+                    
         var area_scale = d3.scaleLinear()
                     .range([0, 400]);
 
