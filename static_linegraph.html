@@ -24,68 +24,68 @@
 </style>
 </head>
 <body>
-    <div id="vis">
+    <div id="vis1.5">
 
     </div>
     <script>
-    var width = document.getElementById('vis').clientWidth;
-    var height = document.getElementById('vis').clientHeight;
+    var width1 = 1500;
+    var height1 = 1800;
 
-    var margin = {
+    var margin1 = {
         top: 10,
         bottom: 100,
         left: 100,
         right: 120
     };
 
-    var svg = d3.select('#vis')
+    var svg1 = d3.select('#vis1.5')
         .append('svg')
-            .attr('width', width)
-            .attr('height', height)
+            .attr('width', width1)
+            .attr('height', height1)
         .append('g')
-            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+            .attr('transform', 'translate(' + margin1.left + ',' + margin1.top + ')');
 
     var tooltip = d3.select('body')
         .append('div')
         .attr('class', 'tooltip');
 
-    width = width - margin.left - margin.right;
-    height = height - margin.top - margin.bottom;
+    width1 = width1 - margin1.left - margin1.right;
+    height1 = height1 - margin1.top - margin1.bottom;
 
     var dateParse = d3.timeParse('%Y');
     var tooltipFormat = d3.timeFormat('%Y');
 
-    var x_scale = d3.scaleTime()
-        .range([0, width]);
+    var x_scale1 = d3.scaleTime()
+        .range([0, width1]);
 
-    var y_scale = d3.scaleLinear()
-        .range([height, 0]);
+    var y_scale1 = d3.scaleLinear()
+        .range([height1, 0]);
 
     var line = d3.line()
         .x(function(d){
-            return x_scale(dateParse(d.date));
+            return x_scale1(dateParse(d.date));
         })
         .y(function(d){
-            return y_scale(+d.WAGESHARE);
+            return y_scale1(+d.WAGESHARE);
         });
 
-    var x_axis = d3.axisBottom()
-        .scale(x_scale);
+    var x_axis1 = d3.axisBottom()
+        .scale(x_scale1);
 
-    var y_axis = d3.axisLeft()
-        .scale(y_scale);
+    var y_axis1 = d3.axisLeft()
+        .scale(y_scale1);
 
-    d3.csv('timeseries.csv', function(csv_data){
-        console.log(csv_data);
+    d3.csv('timeseries.csv', function(csv_data1){
+        console.log(csv_data1);
 
-        x_scale.domain(d3.extent(csv_data, function(d){
+        x_scale1.domain(d3.extent(csv_data1, function(d){
             return dateParse(d.date);
         }))
 
-        y_scale.domain([0, 1]);
+        y_scale1.domain([0, 1]);
 
-        var lines = svg.selectAll('.line')
-            .data([csv_data]);
+        var lines = svg1.selectAll('.line')
+            .data([csv_data1]);
 
         lines
             .enter()
@@ -95,8 +95,8 @@
             .attr('stroke', 'black')
             .attr('d', line);
 
-        var points = svg.selectAll('.point')
-            .data(csv_data);
+        var points = svg1.selectAll('.point')
+            .data(csv_data1);
 
         points
             .enter()
@@ -104,10 +104,10 @@
             .attr('class', 'point')
             .attr('r', 10)
             .attr('cx', function(d){
-                return x_scale(dateParse(d.date));
+                return x_scale1(dateParse(d.date));
             })
             .attr('cy', function(d){
-                return y_scale(+d.WAGESHARE);
+                return y_scale1(+d.WAGESHARE);
             })
             .attr('fill', 'black')
             .attr('opacity', 0)
@@ -115,12 +115,12 @@
             .on('mousemove', mouseMove)
             .on('mouseout', mouseOut);
 
-        svg.append('g')
-            .attr('transform', 'translate(0, ' + height + ')')
-            .call(x_axis);
+        svg1.append('g')
+            .attr('transform', 'translate(0, ' + height1 + ')')
+            .call(x_axis1);
 
-        svg.append('g')
-            .call(y_axis);
+        svg1.append('g')
+            .call(y_axis1);
 
         function mouseOver(d){
             console.log(d);
