@@ -30,8 +30,8 @@
     <div id="vis"></div>
     <script>
 
-        var width = document.getElementById("vis").clientWidth;
-        var height = document.getElementById("vis").clientHeight;
+        var width = 1000;
+        var height = 1200;
 
         var margin = {
             top: 50,
@@ -40,8 +40,8 @@
             right: 50
         };
 
-        var svg = d3.select('#vis')
-                    .append('svg')
+        var svg3 = d3.select('#vis')
+                    .append('svg3')
                         .attr('height', height)
                         .attr('width', width)
                     .append('g')
@@ -73,10 +73,10 @@
 
         var x_axis = d3.axisBottom(x_scale);
 
-        svg.append("g")
+        svg3.append("g")
           .attr("class", "y axis");
 
-        svg.append("g")
+        svg3.append("g")
           .attr("class", "x axis")
           .attr("transform", "translate(0," + height + ")");
 
@@ -91,7 +91,7 @@
 
             var ps_colour = "black"
             var other_colour = "white"
-            var dots = svg.selectAll('.dot')
+            var dots = svg3.selectAll('.dot')
                             .data(data);
 
             //exit
@@ -159,18 +159,18 @@
             d3.select('.y.axis')
                 .call(y_axis);
 
-            svg.append("text")
+            svg3.append("text")
                   .attr("transform", "translate(" + width/2 +  "," + (height + margin.bottom/2) + ")")
                   .style("text-anchor", "end")
                   .text("Industry");
 
-            svg.append("text")
+            svg3.append("text")
               .attr("transform", "translate(-60," + height/2 + ")rotate(-90)")
               .style("text-anchor", "middle")
               .text("Wage Share");
 
 
-            var title = svg.selectAll('.title')
+            var title = svg3.selectAll('.title')
                 .data([data])
                 title.exit().remove()
 
@@ -185,7 +185,6 @@
                 .attr("font-family", "Georgia")
                 .attr("font-size", "20px")
                 .attr("fill", "black");
-
 
 
 
