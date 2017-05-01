@@ -8,7 +8,8 @@
     html, body, #vis, #testtext {
         height: 100%;
         margin: 0;
-        background-color: #d6d6c2
+        background-color: "white";
+        font-family: "Georgia"
     }
 </style>
 </head>
@@ -18,6 +19,10 @@
     <p>Link to Data:</p>
     <p>https://www.ons.gov.uk/economy/nationalaccounts/supplyandusetables/datasets/inputoutputsupplyandusetables</p>
     <p>The linked data represent the UK supply and use tables (SUTs) for the years 1997 to 2014. The data in these tables underpins the annual GDP estimates for the UK, illustrates the process used to compile those estimates, and provides a more detailed picture of the economy than GDP alone. Moreover, study of the SUTs can reveal potential problems in compiling this extremely ambitious dataset.</p>
+    <p>That said, from the perspective of much econometrics (and statistics in general), the data has important limitations which make it vital to understand exactly what the data is saying and how it can legitimately be used if any analysis is to be valid.</p>
+    <p>Below, we first take a brief look at the structure and purpose of the SUTs (what data is included, and how this data is linked) and illustrate this using a simple visualisation. We then describe some of the limitations inherent in this structure and some of the practical issues involved in populating it with estimates. This theoretical analysis indicates some quite restrictive limits on what can be “legitimately” analysed, which allows us to select analyses on the basis of this theoretical discussion rather than try many different ones until we find statistical significance. This is interesting in its own right, and allows us to avoid the undesirable practice of “p-hacking" (Aschwanden 2015, Nuzzo 2014).</p>
+    <p>Based on this theoretical discussion, we select two pairs of sub-datasets of the SUTs, subject them to simple statistical evaluations, and describe the results verbally and with further visualisations.</p>
+
     </div>
 
 
