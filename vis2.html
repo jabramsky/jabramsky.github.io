@@ -30,8 +30,8 @@
     <div id="vis"></div>
     <script>
 
-        var width = document.getElementById("vis").clientWidth;
-        var height = document.getElementById("vis").clientHeight;
+        var width2 = 1500
+        var height2 = 1800
 
         var margin = {
             top: 50,
@@ -42,8 +42,8 @@
 
         var svg = d3.select('#vis')
                     .append('svg')
-                        .attr('height', height)
-                        .attr('width', width)
+                        .attr('height', height2)
+                        .attr('width', width2)
                     .append('g')
                         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
@@ -51,13 +51,13 @@
             .append('div')
             .attr('class', 'tooltip');
 
-        width = width - margin.left - margin.right;
-        height = height - margin.top - margin.bottom;
+        width2 = width2 - margin.left - margin.right;
+        height2 = height2 - margin.top - margin.bottom;
 
-        var x_scale = d3.scaleLinear()
-                    .rangeRound([0, width]);
+        var x_scale2 = d3.scaleLinear()
+                    .rangeRound([0, width2]);
 
-        var y_scale = d3.scaleLinear()
+        var y_scale2 = d3.scaleLinear()
                     .rangeRound([height, 0])
                     .domain([0,1]);
 
@@ -70,29 +70,29 @@
         var area_scale = d3.scaleLinear()
                     .range([0, 400]);
 
-        var y_axis = d3.axisLeft(y_scale);
+        var y_axis2 = d3.axisLeft(y_scale2);
 
-        var x_axis = d3.axisBottom(x_scale);
+        var x_axis2 = d3.axisBottom(x_scale2);
 
         svg.append("g")
           .attr("class", "y axis");
 
         svg.append("g")
           .attr("class", "x axis")
-          .attr("transform", "translate(0," + height + ")");
+          .attr("transform", "translate(0," + height2 + ")");
 
-        refyear = 1997
+        refyear2 = 1997
 
-        function update(){
+        function update2(){
         d3.csv('timeseries_manuf_nototals.csv', function(full_data){
 
-            data = full_data.filter(function(d){return +d.DATE === refyear})
+            data = full_data.filter(function(d){return +d.DATE === refyear2})
 
-            x_scale.domain(d3.extent(data, function(d){ return +d.INDUSTRY; }));
+            x_scale2.domain(d3.extent(data, function(d){ return +d.INDUSTRY; }));
             area_scale.domain(d3.extent(data, function(d){ return +d.GVA; }));
 
             var manuf_colour = "black"
-            var other_colour = "white"
+            var other_colour2 = "white"
             var dots = svg.selectAll('.dot')
                             .data(data);
 
@@ -111,13 +111,13 @@
 
             //update
             new_dots.merge(dots)
-                .attr('cx', function(d){ return x_scale(+d.INDUSTRY); })
-                .attr('cy', function(d){ return y_scale(+d.WAGESHARE); })
+                .attr('cx', function(d){ return x_scale2(+d.INDUSTRY); })
+                .attr('cy', function(d){ return y_scale2(+d.WAGESHARE); })
                 .attr('fill', function(d){
                     if(+d.MANUFACTURING === 1) {
                         return manuf_colour;
                     } else {
-                        return other_colour;
+                        return other_colour2;
                     }
                  })
                 .attr('r', function(d){
@@ -154,18 +154,18 @@
 
 
             d3.select('.x.axis')
-                .call(x_axis);
+                .call(x_axis2);
 
             d3.select('.y.axis')
-                .call(y_axis);
+                .call(y_axis2);
 
             svg.append("text")
-                  .attr("transform", "translate(" + width/2 +  "," + (height + margin.bottom/2) + ")")
+                  .attr("transform", "translate(" + width2/2 +  "," + (height + margin.bottom/2) + ")")
                   .style("text-anchor", "end")
                   .text("Industry");
 
             svg.append("text")
-              .attr("transform", "translate(-60," + height/2 + ")rotate(-90)")
+              .attr("transform", "translate(-60," + height2/2 + ")rotate(-90)")
               .style("text-anchor", "middle")
               .text("Wage Share");
 
@@ -181,7 +181,7 @@
             newtitle.merge(title)
                 .attr('x', 10)
                 .attr('y', 10)
-                .text("Wage shares by industry, " + refyear)
+                .text("Wage shares by industry, " + refyear2)
                 .attr("font-family", "Georgia")
                 .attr("font-size", "20px")
                 .attr("fill", "black");
@@ -196,18 +196,18 @@
 
     d3.select("body")
         .on("keydown", function(){
-            key = d3.event.keyCode
+            key2 = d3.event.keyCode
             if(key == 38){
-                refyear = Math.min(refyear + 1, 2014)
-                update()
+                refyear2 = Math.min(refyear2 + 1, 2014)
+                update2()
             }
-            else if(key == 40){
-                refyear = Math.max(refyear - 1, 1997)
-                update()
+            else if(key2 == 40){
+                refyear2 = Math.max(refyear2 - 1, 1997)
+                update2()
             }
         })
 
-    update();
+    update2();
     </script>
 
 </body>
