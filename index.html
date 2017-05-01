@@ -503,7 +503,7 @@
                     .append('rect')
                     .attr('class','lower_rect')
             new_lower_rect.merge(lower_rect)
-                    .attr("fill", "red")
+                    .attr("fill", "e60000")
                     .attr('width', lower_scaled)
                     .attr('height', 100)
                     .attr('y', lower_y) 
@@ -532,7 +532,7 @@
                     .append('rect')
                     .attr('class','higher_rect')
             new_higher_rect.merge(higher_rect)                
-                    .attr("fill", "green")
+                    .attr("fill", "#269900")
                     .attr('width', higher_scaled)
                     .attr('height', 100)
                     .attr('y', higher_y) 
@@ -602,7 +602,7 @@
                 ts_x = coe_x
             }
 
-            var coe_colour = "blue"
+            var coe_colour = "000099"
             var coe_rect = svg.selectAll('.coe_rect')
                 .data([csv_data]);
             coe_rect.exit().remove()
@@ -617,7 +617,7 @@
                     .attr('y', coe_y) 
                     .attr('x', coe_x)
 
-            var gos_colour = "black"
+            var gos_colour = "#996600"
             var gos_rect = svg.selectAll('.gos_rect')
                 .data([csv_data]);
             gos_rect.exit().remove()
@@ -632,7 +632,7 @@
                     .attr('y', gos_y) 
                     .attr('x', gos_x)
 
-            var ts_colour = "red"
+            var ts_colour = "e60073"
             var ts_rect = svg.selectAll('.ts_rect')
                 .data([csv_data])
             ts_rect.exit().remove()
