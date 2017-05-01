@@ -201,9 +201,6 @@
                 return (+d.OUTPUT);
             })
 
-            var x_axis = d3.axisBottom()
-                .scale(x_scale);
-
             var ic = d3.max(csv_data, function(d){
                 return (+d.IC);
             })
@@ -269,7 +266,7 @@
                    .append('rect')
                    .attr('class', '.ts_nab')
                    .attr('width', 400)
-                   .attr('height', 100)
+                   .attr('height', 60)
                    .attr('x', 10)
                    .attr('y', 10)
                    .attr('stroke', "black")
@@ -456,9 +453,9 @@
 
             var liney2 = 0
             if(positive_sum == 0 || negative_sum == 0){
-                liney2 = 590
+                liney2 = 450
             }
-            else{liney2 = 740}
+            else{liney2 = 550}
                 
             var line1 = svg.selectAll('.line1')
             .data([csv_data])
@@ -473,7 +470,7 @@
 
             newline1.merge(line1)  
                 .attr('x1', lower_scaled)
-                .attr('y1', (240))
+                .attr('y1', (110))
                 .attr('x2', lower_scaled)
                 .attr('y2', liney2)
                 .attr("stroke-width", 2)
@@ -495,14 +492,14 @@
 
             newline2.merge(line2)  
                 .attr('x1', (width - 2))
-                .attr('y1', (240))
+                .attr('y1', (110))
                 .attr('x2', (width - 2))
                 .attr('y2', liney2)
                 .attr("stroke-width", 2)
                 .attr("stroke", "black");
 
-            var lower_y = 290
-            var higher_y = 140
+            var lower_y = 190
+            var higher_y = 50
 
             var higher_x = 0
             if(edgecase_3 == 1 || edgecase_4 == 1){
@@ -518,9 +515,9 @@
                     .append('rect')
                     .attr('class','lower_rect')
             new_lower_rect.merge(lower_rect)
-                    .attr("fill", "red")
+                    .attr("fill", "#e60000")
                     .attr('width', lower_scaled)
-                    .attr('height', 100)
+                    .attr('height', 60)
                     .attr('y', lower_y) 
                     .attr('x', lower_x)
 
@@ -534,8 +531,8 @@
             new_gvap_rect.merge(gvap_rect)                    
                     .attr("fill", "black")
                     .attr('width', gva_scaled)
-                    .attr('height', 100)
-                    .attr('y', 440) 
+                    .attr('height', 60)
+                    .attr('y', 280) 
                     .attr('x', lower_scaled + lower_x)
 
 
@@ -547,9 +544,9 @@
                     .append('rect')
                     .attr('class','higher_rect')
             new_higher_rect.merge(higher_rect)                
-                    .attr("fill", "green")
+                    .attr("fill", "#269900")
                     .attr('width', higher_scaled)
-                    .attr('height', 100)
+                    .attr('height', 60)
                     .attr('y', higher_y) 
                     .attr('x', higher_x)
 
@@ -557,22 +554,22 @@
             var gos_y = 0
             var ts_y = 0
             if(edgecase_2 == 1 || (gos_real >= 0 & ts_real >= 0)){
-                coe_y = 590
+                coe_y = 390
             }
             else{
-                coe_y = 740
+                coe_y = 490
             }
             if((edgecase_2 == 0 & ((gos_real >= 0 & ts_real >= 0) || gos_real <= 0) || (edgecase_2 == 1 & gos_real >= 0))){
-                gos_y = 590
+                gos_y = 390
             }
             else{
-                gos_y = 740
+                gos_y = 490
             }
             if((edgecase_2 == 0 & ((gos_real >= 0 & ts_real >= 0) || ts_real <= 0) || (edgecase_2 == 1 & ts_real >= 0))){
-                ts_y = 590
+                ts_y = 390
             }
             else{
-                ts_y = 740
+                ts_y = 490
             }
 
 
@@ -617,7 +614,7 @@
                 ts_x = coe_x
             }
 
-            var coe_colour = "blue"
+            var coe_colour = "#000099"
             var coe_rect = svg.selectAll('.coe_rect')
                 .data([csv_data]);
             coe_rect.exit().remove()
@@ -628,11 +625,11 @@
             new_coe_rect.merge(coe_rect)
                     .attr("fill", coe_colour)
                     .attr('width', coe_scaled)
-                    .attr('height', 100)
+                    .attr('height', 60)
                     .attr('y', coe_y) 
                     .attr('x', coe_x)
 
-            var gos_colour = "black"
+            var gos_colour = "#996600"
             var gos_rect = svg.selectAll('.gos_rect')
                 .data([csv_data]);
             gos_rect.exit().remove()
@@ -643,11 +640,11 @@
             new_gos_rect.merge(gos_rect)
                     .attr("fill", gos_colour)
                     .attr('width', gos_scaled)
-                    .attr('height', 100)
+                    .attr('height', 60)
                     .attr('y', gos_y) 
                     .attr('x', gos_x)
 
-            var ts_colour = "red"
+            var ts_colour = "#e60073"
             var ts_rect = svg.selectAll('.ts_rect')
                 .data([csv_data])
             ts_rect.exit().remove()
@@ -658,7 +655,7 @@
             new_ts_rect.merge(ts_rect)
                     .attr("fill", ts_colour)
                     .attr('width', ts_scaled)
-                    .attr('height', 100)
+                    .attr('height', 60)
                     .attr('y', ts_y) 
                     .attr('x', ts_x)
 
@@ -795,8 +792,7 @@
                         .text('Output:')
                         .attr("font-family", "Georgia")
                         .attr("font-size", "20px")
-                        .attr("fill", "white")
-                        .attr("font-weight", "bold");
+                        .attr("fill", "white");
                 var new_output_text_label = output_text_label
                         .enter()
                         .append('text')
@@ -829,7 +825,7 @@
                     .attr('class', 'gvap_text_name')
             new_gvap_text_name.merge(gvap_text_name)
                     .attr('x', width - 90)
-                    .attr('y', 462)
+                    .attr('y', 302)
                     .text('GVA:')
                     .attr("font-family", "Georgia")
                     .attr("font-size", "20px")
@@ -841,7 +837,7 @@
                     .attr('class', 'gvap_text_label')
             new_gvap_text_label.merge(gvap_text_label)
                     .attr('x', width - 90)
-                    .attr('y', 482)
+                    .attr('y', 322)
                     .text(gva_label_text)
                     .attr("font-family", "Georgia")
                     .attr("font-size", "20px")
