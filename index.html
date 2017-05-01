@@ -1029,7 +1029,7 @@
     }
 
         d3.select("body")
-                .on("keydown", function(){
+                .on("keypress", function(){
                     key = d3.event.keyCode
                     if(key == 38){
                         refyear = Math.min(refyear + 1, 2014)
