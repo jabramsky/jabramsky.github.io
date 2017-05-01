@@ -5,7 +5,7 @@
     <title>dummy3</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.7.3/d3.min.js"></script>
     <style>
-    html, body, #vis1{
+    html, body, #vis1, #vis2, #vis3{
         height: 100%;
         margin: 0;
         background-color: "white";
@@ -161,12 +161,15 @@
         <li>We can conclude that there is no evidence that the production functions of manufacturing and non-manufacturing industries are different with regard to the use of labour – a surprising result.</li>
     </ol>
     </div> 
-   
+    <div id="vis2">
+    </div>
+    <div id="vis3">
+    </div>
 
     <script>
 
-        var width = 1500;
-    var height = 1800;
+    var width = 1200;
+    var height = 800;
 
     var margin = {
         top: 10,
@@ -200,9 +203,6 @@
             var output = d3.max(csv_data, function(d){
                 return (+d.OUTPUT);
             })
-
-            var x_axis = d3.axisBottom()
-                .scale(x_scale);
 
             var ic = d3.max(csv_data, function(d){
                 return (+d.IC);
@@ -269,7 +269,7 @@
                    .append('rect')
                    .attr('class', '.ts_nab')
                    .attr('width', 400)
-                   .attr('height', 100)
+                   .attr('height', 60)
                    .attr('x', 10)
                    .attr('y', 10)
                    .attr('stroke', "black")
@@ -456,9 +456,9 @@
 
             var liney2 = 0
             if(positive_sum == 0 || negative_sum == 0){
-                liney2 = 590
+                liney2 = 450
             }
-            else{liney2 = 740}
+            else{liney2 = 550}
                 
             var line1 = svg.selectAll('.line1')
             .data([csv_data])
@@ -473,7 +473,7 @@
 
             newline1.merge(line1)  
                 .attr('x1', lower_scaled)
-                .attr('y1', (240))
+                .attr('y1', (110))
                 .attr('x2', lower_scaled)
                 .attr('y2', liney2)
                 .attr("stroke-width", 2)
@@ -495,14 +495,14 @@
 
             newline2.merge(line2)  
                 .attr('x1', (width - 2))
-                .attr('y1', (240))
+                .attr('y1', (110))
                 .attr('x2', (width - 2))
                 .attr('y2', liney2)
                 .attr("stroke-width", 2)
                 .attr("stroke", "black");
 
-            var lower_y = 290
-            var higher_y = 140
+            var lower_y = 190
+            var higher_y = 50
 
             var higher_x = 0
             if(edgecase_3 == 1 || edgecase_4 == 1){
@@ -518,9 +518,9 @@
                     .append('rect')
                     .attr('class','lower_rect')
             new_lower_rect.merge(lower_rect)
-                    .attr("fill", "red")
+                    .attr("fill", "#e60000")
                     .attr('width', lower_scaled)
-                    .attr('height', 100)
+                    .attr('height', 60)
                     .attr('y', lower_y) 
                     .attr('x', lower_x)
 
@@ -534,8 +534,8 @@
             new_gvap_rect.merge(gvap_rect)                    
                     .attr("fill", "black")
                     .attr('width', gva_scaled)
-                    .attr('height', 100)
-                    .attr('y', 440) 
+                    .attr('height', 60)
+                    .attr('y', 280) 
                     .attr('x', lower_scaled + lower_x)
 
 
@@ -547,9 +547,9 @@
                     .append('rect')
                     .attr('class','higher_rect')
             new_higher_rect.merge(higher_rect)                
-                    .attr("fill", "green")
+                    .attr("fill", "#269900")
                     .attr('width', higher_scaled)
-                    .attr('height', 100)
+                    .attr('height', 60)
                     .attr('y', higher_y) 
                     .attr('x', higher_x)
 
@@ -557,22 +557,22 @@
             var gos_y = 0
             var ts_y = 0
             if(edgecase_2 == 1 || (gos_real >= 0 & ts_real >= 0)){
-                coe_y = 590
+                coe_y = 390
             }
             else{
-                coe_y = 740
+                coe_y = 490
             }
             if((edgecase_2 == 0 & ((gos_real >= 0 & ts_real >= 0) || gos_real <= 0) || (edgecase_2 == 1 & gos_real >= 0))){
-                gos_y = 590
+                gos_y = 390
             }
             else{
-                gos_y = 740
+                gos_y = 490
             }
             if((edgecase_2 == 0 & ((gos_real >= 0 & ts_real >= 0) || ts_real <= 0) || (edgecase_2 == 1 & ts_real >= 0))){
-                ts_y = 590
+                ts_y = 390
             }
             else{
-                ts_y = 740
+                ts_y = 490
             }
 
 
@@ -617,7 +617,7 @@
                 ts_x = coe_x
             }
 
-            var coe_colour = "blue"
+            var coe_colour = "#000099"
             var coe_rect = svg.selectAll('.coe_rect')
                 .data([csv_data]);
             coe_rect.exit().remove()
@@ -628,11 +628,11 @@
             new_coe_rect.merge(coe_rect)
                     .attr("fill", coe_colour)
                     .attr('width', coe_scaled)
-                    .attr('height', 100)
+                    .attr('height', 60)
                     .attr('y', coe_y) 
                     .attr('x', coe_x)
 
-            var gos_colour = "black"
+            var gos_colour = "#996600"
             var gos_rect = svg.selectAll('.gos_rect')
                 .data([csv_data]);
             gos_rect.exit().remove()
@@ -643,11 +643,11 @@
             new_gos_rect.merge(gos_rect)
                     .attr("fill", gos_colour)
                     .attr('width', gos_scaled)
-                    .attr('height', 100)
+                    .attr('height', 60)
                     .attr('y', gos_y) 
                     .attr('x', gos_x)
 
-            var ts_colour = "red"
+            var ts_colour = "#e60073"
             var ts_rect = svg.selectAll('.ts_rect')
                 .data([csv_data])
             ts_rect.exit().remove()
@@ -658,7 +658,7 @@
             new_ts_rect.merge(ts_rect)
                     .attr("fill", ts_colour)
                     .attr('width', ts_scaled)
-                    .attr('height', 100)
+                    .attr('height', 60)
                     .attr('y', ts_y) 
                     .attr('x', ts_x)
 
@@ -795,8 +795,7 @@
                         .text('Output:')
                         .attr("font-family", "Georgia")
                         .attr("font-size", "20px")
-                        .attr("fill", "white")
-                        .attr("font-weight", "bold");
+                        .attr("fill", "white");
                 var new_output_text_label = output_text_label
                         .enter()
                         .append('text')
@@ -829,7 +828,7 @@
                     .attr('class', 'gvap_text_name')
             new_gvap_text_name.merge(gvap_text_name)
                     .attr('x', width - 90)
-                    .attr('y', 462)
+                    .attr('y', 302)
                     .text('GVA:')
                     .attr("font-family", "Georgia")
                     .attr("font-size", "20px")
@@ -841,7 +840,7 @@
                     .attr('class', 'gvap_text_label')
             new_gvap_text_label.merge(gvap_text_label)
                     .attr('x', width - 90)
-                    .attr('y', 482)
+                    .attr('y', 322)
                     .text(gva_label_text)
                     .attr("font-family", "Georgia")
                     .attr("font-size", "20px")
@@ -1038,7 +1037,284 @@
             }
         })
 
+    var width2 = 1200;
+    var height2 = 800;
 
+    var margin2 = {
+        top: 10,
+        bottom: 100,
+        left: 100,
+        right: 120
+    };
+
+    var svg2 = d3.select('#vis2')
+        .append('svg')
+            .attr('width', width2)
+            .attr('height', height2)
+        .append('g')
+            .attr('transform', 'translate(' + margin2.left + ',' + margin2.top + ')');
+
+    var tooltip = d3.select('body')
+        .append('div')
+        .attr('class', 'tooltip');
+
+    width2 = width2 - margin.left - margin.right;
+    height2 = height2 - margin.top - margin.bottom;
+
+    var dateParse = d3.timeParse('%Y');
+    var tooltipFormat = d3.timeFormat('%Y');
+
+    var x_scale = d3.scaleTime()
+        .range([0, width2]);
+
+    var y_scale = d3.scaleLinear()
+        .range([height2, 0]);
+
+    var line = d3.line()
+        .x(function(d){
+            return x_scale(dateParse(d.date));
+        })
+        .y(function(d){
+            return y_scale(+d.WAGESHARE);
+        });
+
+    var x_axis = d3.axisBottom()
+        .scale(x_scale);
+
+    var y_axis = d3.axisLeft()
+        .scale(y_scale);
+
+    d3.csv('timeseries.csv', function(csv_data2){
+        console.log(csv_data2);
+
+        x_scale.domain(d3.extent(csv_data2, function(d){
+            return dateParse(d.date);
+        }))
+
+        y_scale.domain([0, 1]);
+
+        var lines = svg2.selectAll('.line')
+            .data([csv_data2]);
+
+        lines
+            .enter()
+            .append('path')
+            .attr('class', 'line')
+            .attr('fill', 'none')
+            .attr('stroke', 'black')
+            .attr('d', line);
+
+        var points = svg2.selectAll('.point')
+            .data(csv_data2);
+
+        points
+            .enter()
+            .append('circle')
+            .attr('class', 'point')
+            .attr('r', 10)
+            .attr('cx', function(d){
+                return x_scale(dateParse(d.date));
+            })
+            .attr('cy', function(d){
+                return y_scale(+d.WAGESHARE);
+            })
+            .attr('fill', 'black')
+            .attr('opacity', 0)
+            .on('mouseover', mouseOver)
+            .on('mousemove', mouseMove)
+            .on('mouseout', mouseOut);
+
+        svg2.append('g')
+            .attr('transform', 'translate(0, ' + height2 + ')')
+            .call(x_axis);
+
+        svg2.append('g')
+            .call(y_axis);
+
+        function mouseOver(d){
+            console.log(d);
+            var date = dateParse(d.date);
+            var displayDate = tooltipFormat(date);
+
+            d3.select(this)
+                .transition()
+                .style('opacity', 1)
+
+            tooltip
+                .style('display', null)
+                .html('<p>Date: ' + displayDate + '<br>Wage share: ' + d.WAGESHARE + '%</p>');
+        };
+
+        function mouseMove(d){
+            tooltip
+                .style('top', (d3.event.pageY - 20) + "px")
+                .style('left', (d3.event.pageX + 20) + "px");
+        };
+
+        function mouseOut(d){
+            d3.select(this)
+                .transition()
+                .style('opacity', 0)
+
+            tooltip
+                .style('display', 'none');
+        };
+    })
+
+        var width3 = 1200;
+        var height3 = 800;
+
+        var margin = {
+            top: 50,
+            bottom: 100,
+            left: 100,
+            right: 50
+        };
+
+        var svg3 = d3.select('#vis3')
+                    .append('svg')
+                        .attr('height', height3)
+                        .attr('width', width3)
+                    .append('g')
+                        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+         var tooltip = d3.select('body')
+            .append('div')
+            .attr('class', 'tooltip');
+
+        width3 = width3 - margin.left - margin.right;
+        height3 = height3 - margin.top - margin.bottom;
+
+        var x_scale = d3.scaleLinear()
+                    .rangeRound([0, width3]);
+
+        var y_scale = d3.scaleLinear()
+                    .rangeRound([height3, 0])
+
+        var area_scale = d3.scaleLinear()
+                    .range([0, 400]);
+
+        var y_axis = d3.axisLeft(y_scale);
+
+        var x_axis = d3.axisBottom(x_scale);
+
+        svg3.append("g")
+          .attr("class", "y axis");
+
+        svg3.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height3 + ")");
+
+        refyear = 1997
+
+        function update(){
+        d3.csv('ICshare.csv', function(data){
+
+            x_scale.domain(d3.extent(data, function(d){ return +d.PRODUCT; }));
+            y_scale.domain(d3.extent(data, function(d){ return +d.ABSPCHANGE; }))
+            area_scale.domain(d3.extent(data, function(d){ return +d.START; }));
+
+            var ps_colour = "black"
+            var other_colour = "white"
+            var dots = svg3.selectAll('.dot')
+                            .data(data);
+
+            //exit
+            dots
+                .exit()
+                .remove();
+
+            // enter
+            var new_dots = dots
+                .enter()
+                .append('circle')
+                .attr('class', 'dot')
+                .attr('stroke', 'black')
+                .attr('stroke-width3', '0.5px')
+
+            //update
+            new_dots.merge(dots)
+                .attr('cx', function(d){ return x_scale(+d.PRODUCT); })
+                .attr('cy', function(d){ return y_scale(+d.ABSPCHANGE); })
+                .attr('fill', function(d){
+                    if(+d.WITHPS === 1) {
+                        return ps_colour;
+                    } else {
+                        return other_colour;
+                    }
+                 })
+                .attr('r', function(d){
+                    var area = area_scale(+d.START);
+                    var radius = Math.sqrt(area / Math.PI);
+                    return radius;
+                })
+                .on('mouseover', mouseOver)
+                .on('mousemove', mouseMove)
+                .on('mouseout', mouseOut);
+
+            
+
+            function mouseOver(d){
+
+                    d3.select(this)
+                        .transition()
+                        .style('opacity', 1)
+
+                    tooltip
+                        .style('display', null)
+                        .html('<p>Product: ' + d.NAME + '<br>Absolute % Change: ' + d.ABSPCHANGE + '%</p>');
+                };
+
+            function mouseMove(d){
+                    tooltip
+                        .style('top', (d3.event.pageY - 20) + "px")
+                        .style('left', (d3.event.pageX + 20) + "px");
+                };
+
+            function mouseOut(d){
+                    tooltip
+                        .style('display', 'none');
+                };
+            
+
+
+            d3.select('.x.axis')
+                .call(x_axis);
+
+            d3.select('.y.axis')
+                .call(y_axis);
+
+            svg3.append("text")
+                  .attr("transform", "translate(" + width3/2 +  "," + (height3 + margin.bottom/2) + ")")
+                  .style("text-anchor", "end")
+                  .text("Industry");
+
+            svg3.append("text")
+              .attr("transform", "translate(-60," + height3/2 + ")rotate(-90)")
+              .style("text-anchor", "middle")
+              .text("Wage Share");
+
+
+            var title = svg3.selectAll('.title')
+                .data([data])
+                title.exit().remove()
+
+            var newtitle = title
+                .enter()
+                .append('text')
+                .attr('class', 'title')
+            newtitle.merge(title)
+                .attr('x', 10)
+                .attr('y', 10)
+                .text("Absolute percentage changes in IC share by product with and without Purchases Survey")
+                .attr("font-family", "Georgia")
+                .attr("font-size", "20px")
+                .attr("fill", "black");
+
+
+        });
+
+    }
 
 
     </script>
