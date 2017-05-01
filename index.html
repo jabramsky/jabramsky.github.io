@@ -173,7 +173,9 @@
         <li>The p-values for all years except 1998 are well above 0.05, indicating that there is no statistically significant difference between the wage share of manufacturing and non-manufacturing industries.</li>
         <li>We can conclude that there is no evidence that the production functions of manufacturing and non-manufacturing industries are different with regard to the use of labour – a surprising result.</li>
     </ol>
-    </div> 
+    </div>
+    <div id='vis2'>
+    </div>
    
 
     <script>
@@ -1077,12 +1079,6 @@
         var y_scale2 = d3.scaleLinear()
                     .rangeRound([height, 0])
                     .domain([0,1]);
-
-        var colour_scale_ran = d3.scaleQuantile()
-                    .range(colorbrewer.Reds[9]);
-
-        var colour_scale_noran = d3.scaleQuantile()
-                    .range(colorbrewer.Blues[9]);
 
         var area_scale = d3.scaleLinear()
                     .range([0, 400]);
