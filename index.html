@@ -160,7 +160,9 @@
         <li>The p-values for all years except 1998 are well above 0.05, indicating that there is no statistically significant difference between the wage share of manufacturing and non-manufacturing industries.</li>
         <li>We can conclude that there is no evidence that the production functions of manufacturing and non-manufacturing industries are different with regard to the use of labour – a surprising result.</li>
     </ol>
-    </div>  
+    </div> 
+    <div id="vis2">
+    </div> 
 
     <script>
 
@@ -1035,6 +1037,130 @@
                 update()
             }
         })
+
+    var width2 = document.getElementById('vis2').clientwidth;
+    var height2 = document.getElementById('vis2').clientheight;
+
+    var margin2 = {
+        top: 10,
+        bottom: 100,
+        left: 100,
+        right: 120
+    };
+
+    var svg2 = d3.select('#vis2')
+        .append('svg')
+            .attr('width', width2)
+            .attr('height', height2)
+        .append('g')
+            .attr('transform', 'translate(' + margin2.left + ',' + margin2.top + ')');
+
+    var tooltip = d3.select('body')
+        .append('div')
+        .attr('class', 'tooltip');
+
+    width2 = width2 - margin.left - margin.right;
+    height2 = height2 - margin.top - margin.bottom;
+
+    var dateParse = d3.timeParse('%Y');
+    var tooltipFormat = d3.timeFormat('%Y');
+
+    var x_scale = d3.scaleTime()
+        .range([0, width2]);
+
+    var y_scale = d3.scaleLinear()
+        .range([height2, 0]);
+
+    var line = d3.line()
+        .x(function(d){
+            return x_scale(dateParse(d.date));
+        })
+        .y(function(d){
+            return y_scale(+d.WAGESHARE);
+        });
+
+    var x_axis = d3.axisBottom()
+        .scale(x_scale);
+
+    var y_axis = d3.axisLeft()
+        .scale(y_scale);
+
+    d3.csv('timeseries.csv', function(csv_data2){
+        console.log(csv_data2);
+
+        x_scale.domain(d3.extent(csv_data2, function(d){
+            return dateParse(d.date);
+        }))
+
+        y_scale.domain([0, 1]);
+
+        var lines = svg2.selectAll('.line')
+            .data([csv_data2]);
+
+        lines
+            .enter()
+            .append('path')
+            .attr('class', 'line')
+            .attr('fill', 'none')
+            .attr('stroke', 'black')
+            .attr('d', line);
+
+        var points = svg2.selectAll('.point')
+            .data(csv_data2);
+
+        points
+            .enter()
+            .append('circle')
+            .attr('class', 'point')
+            .attr('r', 10)
+            .attr('cx', function(d){
+                return x_scale(dateParse(d.date));
+            })
+            .attr('cy', function(d){
+                return y_scale(+d.WAGESHARE);
+            })
+            .attr('fill', 'black')
+            .attr('opacity', 0)
+            .on('mouseover', mouseOver)
+            .on('mousemove', mouseMove)
+            .on('mouseout', mouseOut);
+
+        svg2.append('g')
+            .attr('transform', 'translate(0, ' + height2 + ')')
+            .call(x_axis);
+
+        svg2.append('g')
+            .call(y_axis);
+
+        function mouseOver(d){
+            console.log(d);
+            var date = dateParse(d.date);
+            var displayDate = tooltipFormat(date);
+
+            d3.select(this)
+                .transition()
+                .style('opacity', 1)
+
+            tooltip
+                .style('display', null)
+                .html('<p>Date: ' + displayDate + '<br>Wage share: ' + d.WAGESHARE + '%</p>');
+        };
+
+        function mouseMove(d){
+            tooltip
+                .style('top', (d3.event.pageY - 20) + "px")
+                .style('left', (d3.event.pageX + 20) + "px");
+        };
+
+        function mouseOut(d){
+            d3.select(this)
+                .transition()
+                .style('opacity', 0)
+
+            tooltip
+                .style('display', 'none');
+        };
+    })
 
     </script>
 
