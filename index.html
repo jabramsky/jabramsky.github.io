@@ -1201,12 +1201,6 @@
                     .rangeRound([height, 0])
                     .domain([0,1]);
 
-        var colour_scale_ran = d3.scaleQuantile()
-                    .range(colorbrewer.Reds[9]);
-
-        var colour_scale_noran = d3.scaleQuantile()
-                    .range(colorbrewer.Blues[9]);
-
         var area_scale = d3.scaleLinear()
                     .range([0, 400]);
 
