@@ -5,7 +5,7 @@
     <title>dummy3</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.7.3/d3.min.js"></script>
     <style>
-    html, body, #vis {
+    html, body, #vis1 {
         height: 100%;
         margin: 0;
         background-color: "white";
@@ -131,7 +131,7 @@
     </ul>
     <p>The production function relationship between GVAI and GVAP is illustrated in the following diagram. To see different industries, press the RIGHT and LEFT buttons (to move further on or back in the industry list); to see different years, press UP to move on in time or DOWN to move back. You may need to click on the diagram to gte started.</p>
     </div>
-    <div id="vis">
+    <div id="vis1">
     </div>
     <div>
     <p>In the previous section, we asserted that the variables shown in the SUTs are linked and that these linkages are the primary reason for the structure of the SUTs. Investigating these linkages is therefore an obvious focus for the analysis. Before going further, however, we should note some limitations of the SUTs and some features of the analysis which might mitigate them.</p>
@@ -159,10 +159,14 @@
         <li>We test whether this is statistically significant using the simple linear regression on a single dummy variable set to 1 for manufacturing industries in the python file (see python file wageshare_manuf_regression_cleaned). This is equivalent to a t-test except that it gives the intercept and slope (interpretable in this case as the expected wage share difference between a manufacturing and non-manufacturing industry).</li>
         <li>The p-values for all years except 1998 are well above 0.05, indicating that there is no statistically significant difference between the wage share of manufacturing and non-manufacturing industries.</li>
         <li>We can conclude that there is no evidence that the production functions of manufacturing and non-manufacturing industries are different with regard to the use of labour – a surprising result.</li>
-    </ol>   
-
-
+    </ol>  
     </div>
+
+    <div id="vis2">
+    </div>
+
+
+
 
 
     <script>
@@ -177,7 +181,7 @@
         right: 120
     };
 
-    var svg = d3.select('#vis')
+    var svg = d3.select('#vis1')
         .append('svg')
             .attr('width', width)
             .attr('height', height)
@@ -1039,6 +1043,188 @@
             }
         })
 
+    </script>
+
+    <script>
+
+        var width = document.getElementById("vis").clientWidth;
+        var height = document.getElementById("vis").clientHeight;
+
+        var margin = {
+            top: 50,
+            bottom: 100,
+            left: 100,
+            right: 50
+        };
+
+        var svg = d3.select('#vis')
+                    .append('svg')
+                        .attr('height', height)
+                        .attr('width', width)
+                    .append('g')
+                        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+         var tooltip = d3.select('body')
+            .append('div')
+            .attr('class', 'tooltip');
+
+        width = width - margin.left - margin.right;
+        height = height - margin.top - margin.bottom;
+
+        var x_scale = d3.scaleLinear()
+                    .rangeRound([0, width]);
+
+        var y_scale = d3.scaleLinear()
+                    .rangeRound([height, 0])
+                    .domain([0,1]);
+
+        var colour_scale_ran = d3.scaleQuantile()
+                    .range(colorbrewer.Reds[9]);
+
+        var colour_scale_noran = d3.scaleQuantile()
+                    .range(colorbrewer.Blues[9]);
+
+        var area_scale = d3.scaleLinear()
+                    .range([0, 400]);
+
+        var y_axis = d3.axisLeft(y_scale);
+
+        var x_axis = d3.axisBottom(x_scale);
+
+        svg.append("g")
+          .attr("class", "y axis");
+
+        svg.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height + ")");
+
+        refyear = 1997
+
+        function update(){
+        d3.csv('timeseries_manuf_nototals.csv', function(full_data){
+
+            data = full_data.filter(function(d){return +d.DATE === refyear})
+
+            x_scale.domain(d3.extent(data, function(d){ return +d.INDUSTRY; }));
+            area_scale.domain(d3.extent(data, function(d){ return +d.GVA; }));
+
+            var manuf_colour = "black"
+            var other_colour = "white"
+            var dots = svg.selectAll('.dot')
+                            .data(data);
+
+            //exit
+            dots
+                .exit()
+                .remove();
+
+            // enter
+            var new_dots = dots
+                .enter()
+                .append('circle')
+                .attr('class', 'dot')
+                .attr('stroke', 'black')
+                .attr('stroke-width', '0.5px')
+
+            //update
+            new_dots.merge(dots)
+                .attr('cx', function(d){ return x_scale(+d.INDUSTRY); })
+                .attr('cy', function(d){ return y_scale(+d.WAGESHARE); })
+                .attr('fill', function(d){
+                    if(+d.MANUFACTURING === 1) {
+                        return manuf_colour;
+                    } else {
+                        return other_colour;
+                    }
+                 })
+                .attr('r', function(d){
+                    var area = area_scale(+d.GVA);
+                    var radius = Math.sqrt(area / Math.PI);
+                    return radius;
+                })
+                .on('mouseover', mouseOver)
+                .on('mousemove', mouseMove)
+                .on('mouseout', mouseOut);
+
+            function mouseOver(d){
+
+                    d3.select(this)
+                        .transition()
+                        .style('opacity', 1)
+
+                    tooltip
+                        .style('display', null)
+                        .html('<p>Industry: ' + d.NAME + '<br>Wage Share: ' + d.WAGESHARE + '%</p>');
+                };
+
+            function mouseMove(d){
+                    tooltip
+                        .style('top', (d3.event.pageY - 20) + "px")
+                        .style('left', (d3.event.pageX + 20) + "px");
+                };
+
+            function mouseOut(d){
+                    tooltip
+                        .style('display', 'none');
+                };
+            
+
+
+            d3.select('.x.axis')
+                .call(x_axis);
+
+            d3.select('.y.axis')
+                .call(y_axis);
+
+            svg.append("text")
+                  .attr("transform", "translate(" + width/2 +  "," + (height + margin.bottom/2) + ")")
+                  .style("text-anchor", "end")
+                  .text("Industry");
+
+            svg.append("text")
+              .attr("transform", "translate(-60," + height/2 + ")rotate(-90)")
+              .style("text-anchor", "middle")
+              .text("Wage Share");
+
+
+            var title = svg.selectAll('.title')
+                .data([data])
+                title.exit().remove()
+
+            var newtitle = title
+                .enter()
+                .append('text')
+                .attr('class', 'title')
+            newtitle.merge(title)
+                .attr('x', 10)
+                .attr('y', 10)
+                .text("Wage shares by industry, " + refyear)
+                .attr("font-family", "Georgia")
+                .attr("font-size", "20px")
+                .attr("fill", "black");
+
+
+
+
+
+        });
+
+    }
+
+    d3.select("body")
+        .on("keydown", function(){
+            key = d3.event.keyCode
+            if(key == 38){
+                refyear = Math.min(refyear + 1, 2014)
+                update()
+            }
+            else if(key == 40){
+                refyear = Math.max(refyear - 1, 1997)
+                update()
+            }
+        })
+
+    update();
     </script>
 
 </body>
