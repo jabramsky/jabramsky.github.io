@@ -1210,10 +1210,14 @@
             key2 = d3.event.keyCode
             if(key2 == 38){
                 refyear2 = Math.min(refyear2 + 1, 2014)
+                refind = Math.min(refind + 1, 105)
+                update()
                 update2()
             }
             else if(key2 == 40){
                 refyear2 = Math.max(refyear2 - 1, 1997)
+                refind = Math.max(refind - 1, 105)
+                update()
                 update2()
             }
         })
