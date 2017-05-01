@@ -503,7 +503,7 @@
                     .append('rect')
                     .attr('class','lower_rect')
             new_lower_rect.merge(lower_rect)
-                    .attr("fill", "e60000")
+                    .attr("fill", "#e60000")
                     .attr('width', lower_scaled)
                     .attr('height', 100)
                     .attr('y', lower_y) 
@@ -602,7 +602,7 @@
                 ts_x = coe_x
             }
 
-            var coe_colour = "000099"
+            var coe_colour = "#000099"
             var coe_rect = svg.selectAll('.coe_rect')
                 .data([csv_data]);
             coe_rect.exit().remove()
@@ -632,7 +632,7 @@
                     .attr('y', gos_y) 
                     .attr('x', gos_x)
 
-            var ts_colour = "e60073"
+            var ts_colour = "#e60073"
             var ts_rect = svg.selectAll('.ts_rect')
                 .data([csv_data])
             ts_rect.exit().remove()
