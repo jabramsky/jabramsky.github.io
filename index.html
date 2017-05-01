@@ -5,7 +5,7 @@
     <title>dummy3</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.7.3/d3.min.js"></script>
     <style>
-    html, body, #vis, #testtext {
+    html, body, #vis {
         height: 100%;
         margin: 0;
         background-color: "white";
@@ -140,6 +140,10 @@
         <li>Annual Values: All values in the SUTs are annual; there are no quarterly or monthly versions of the SUTs. In effect, this means that series without industry and/or product breakdowns will have insufficient sample sizes for worthwhile analysis, so the analysis should be of these breakdowns rather than the totals.</li>
         <li>Little Metadata: Most professionally produced surveys are published with quality metadata such as coefficients of variation, as recommended in the Statistical Quality Framework. The SUTs are not. Moreover, they were stripped of their National Statistics status in 2014, primarily because the main source of product detail for intermediate consumption, the Purchases Survey (PS), was discontinued in 2005; 2004 patterns have been used ever since insert ref. (The PS was reinstated in 2016 and will be used for this year’s SUTs for the first time since 2005.) Since Limitation 2 means that we should be analysing industry and/or product detail, analysis should avoid intermediate consumption.</li>
     </ul>
+    <p>Combined with the economic linkages described earlier, these limitations impose severe restrictions on the choice of series to analyse. We want an analysis that tells us something about the production function (since deflation analysis cannot be performed using only the SUTs); which uses ratios of variables, rather than the variables themselves; and which avoids intermediate consumption.</p>
+    <p>These restrictions suggest a particular variable to analyse: wage share. Wage share is defined in Schneider (2009) as compensation of employees divided by GVA. It is, therefore, a ratio. Moreover, it relates to the shape of the function defined by the right-hand side of the production function equation (Equation (3) in the Appendix), so it deals with the production function without involving intermediate consumption. Moreover, an industrial analysis is possible. It is reasonable to assume that manufacturing and non-manufacturing industries have different technologies, and the economics literature on the wage share includes industrial studies. We follow de Serres et al (2002) who argue that over 1975-1995, in several developed countries, industrial change contributed to the wage share change – specifically, a decline in manufacturing led to a decline in whole-economy wage share because manufacturing industries had higher wage shares. Although the SUTs do not have the data to replicate their analysis, we can investigate whether the basis of this claim holds in the period 1997-2014 – that is, whether manufacturing industries have higher wage shares than non-manufacturing industries.</p>Limitation 3 also suggests a further area of possible analysis. The last reference year in the dataset is 2014; 10 years before that, the last PS used in these SUTs was collected. To assess the effects of this on the 2014 dataset, it may make sense to analyse intermediate consumption product detail for two reference years while the PS was still being collected. This is of interest because it provides a look behind the sparse metadata for the SUTs at a major quality issue with a key economic dataset.</div>
+    <p>Limitation 3 also suggests a further area of possible analysis. The last reference year in the dataset is 2014; 10 years before that, the last PS used in these SUTs was collected. To assess the effects of this on the 2014 dataset, it may make sense to analyse intermediate consumption product detail for two reference years while the PS was still being collected. This is of interest because it provides a look behind the sparse metadata for the SUTs at a major quality issue with a key economic dataset.</p>
+
 
     </div>
 
@@ -147,7 +151,7 @@
     <script>
 
     var width = 1500;
-    var height = 1800;
+    var height = 2500;
 
     var margin = {
         top: 10,
