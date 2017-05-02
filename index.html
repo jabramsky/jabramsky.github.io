@@ -1382,7 +1382,7 @@
         };
     })
 
-    
+
         var width3 = 1200;
         var height3 = 600;
 
@@ -1429,111 +1429,114 @@
 
         refyear = 1997
 
-        function updat3(){
-        d3.csv('ICshare.csv', function(data3){
+        function update3(){
+            d3.csv('ICshare.csv', function(data3){
 
-            x_scale3.domain(d3.extent(data3, function(d){ return +d.PRODUCT; }));
-            y_scale3.domain(d3.extent(data3, function(d){ return +d.ABSPCHANGE; }))
-            area_scale3.domain(d3.extent(data3, function(d){ return +d.START; }));
+                x_scale3.domain(d3.extent(data3, function(d){ return +d.PRODUCT; }));
+                y_scale3.domain(d3.extent(data3, function(d){ return +d.ABSPCHANGE; }))
+                area_scale3.domain(d3.extent(data3, function(d){ return +d.START; }));
 
-            var ps_colour = "black"
-            var other_colour3 = "white"
-            var dots = svg3.selectAll('.dot')
-                            .data(data3);
+                var ps_colour = "black"
+                var other_colour3 = "white"
+                var dots = svg3.selectAll('.dot')
+                                .data(data3);
 
-            //exit
-            dots
-                .exit()
-                .remove();
+                //exit
+                dots
+                    .exit()
+                    .remove();
 
-            // enter
-            var new_dots = dots
-                .enter()
-                .append('circle')
-                .attr('class', 'dot')
-                .attr('stroke', 'black')
-                .attr('stroke-width', '0.5px')
+                // enter
+                var new_dots = dots
+                    .enter()
+                    .append('circle')
+                    .attr('class', 'dot')
+                    .attr('stroke', 'black')
+                    .attr('stroke-width', '0.5px')
 
-            //update
-            new_dots.merge(dots)
-                .attr('cx', function(d){ return x_scale3(+d.PRODUCT); })
-                .attr('cy', function(d){ return y_scale3(+d.ABSPCHANGE); })
-                .attr('fill', function(d){
-                    if(+d.WITHPS === 1) {
-                        return ps_colour;
-                    } else {
-                        return other_colour3;
-                    }
-                 })
-                .attr('r', function(d){
-                    var area3 = area_scale3(+d.START);
-                    var radius3 = Math.sqrt(area3 / Math.PI);
-                    return radius3;
-                })
-                .on('mouseover', mouseOver3)
-                .on('mousemove', mouseMove3)
-                .on('mouseout', mouseOut3);
+                //update
+                new_dots.merge(dots)
+                    .attr('cx', function(d){ return x_scale3(+d.PRODUCT); })
+                    .attr('cy', function(d){ return y_scale3(+d.ABSPCHANGE); })
+                    .attr('fill', function(d){
+                        if(+d.WITHPS === 1) {
+                            return ps_colour;
+                        } else {
+                            return other_colour3;
+                        }
+                     })
+                    .attr('r', function(d){
+                        var area3 = area_scale3(+d.START);
+                        var radius3 = Math.sqrt(area3 / Math.PI);
+                        return radius3;
+                    })
+                    .on('mouseover', mouseOver3)
+                    .on('mousemove', mouseMove3)
+                    .on('mouseout', mouseOut3);
 
-            
+                
 
-            function mouseOver3(d){
+                function mouseOver3(d){
 
-                    d3.select(this)
-                        .transition()
-                        .style('opacity', 1)
+                        d3.select(this)
+                            .transition()
+                            .style('opacity', 1)
 
-                    tooltip
-                        .style('display', null)
-                        .html('<p>Product: ' + d.NAME + '<br>Absolute % Change: ' + d.ABSPCHANGE + '%</p>');
-                };
+                        tooltip
+                            .style('display', null)
+                            .html('<p>Product: ' + d.NAME + '<br>Absolute % Change: ' + d.ABSPCHANGE + '%</p>');
+                    };
 
-            function mouseMove3(d){
-                    tooltip3
-                        .style('top', (d3.event.pageY - 20) + "px")
-                        .style('left', (d3.event.pageX + 20) + "px");
-                };
+                function mouseMove3(d){
+                        tooltip3
+                            .style('top', (d3.event.pageY - 20) + "px")
+                            .style('left', (d3.event.pageX + 20) + "px");
+                    };
 
-            function mouseOut3(d){
-                    tooltip3
-                        .style('display', 'none');
-                };
-            
-
-
-            d3.select('.x.axis')
-                .call(x_axis3);
-
-            d3.select('.y.axis')
-                .call(y_axis3);
-
-            svg3.append("text")
-                  .attr("transform", "translate(" + width3/2 +  "," + (height3 + margin3.bottom/2) + ")")
-                  .style("text-anchor", "end")
-                  .text("Industry");
-
-            svg3.append("text")
-              .attr("transform", "translate(-60," + height3/2 + ")rotate(-90)")
-              .style("text-anchor", "middle")
-              .text("Share of IC");
+                function mouseOut3(d){
+                        tooltip3
+                            .style('display', 'none');
+                    };
+                
 
 
-            var title3 = svg3.selectAll('.title3')
-                .data([data3])
-                title3.exit().remove()
+                d3.select('.x.axis')
+                    .call(x_axis3);
 
-            var newtitle3 = title3
-                .enter()
-                .append('text')
-                .attr('class', 'title3')
-            newtitle3.merge(title3)
-                .attr('x', 10)
-                .attr('y', 10)
-                .text("Fig. 4: Absolute percentage changes in IC share by product with (black) and without (white) Purchases Survey")
-                .attr("font-family", "Georgia")
-                .attr("font-size", "20px")
-                .attr("fill", "black");
+                d3.select('.y.axis')
+                    .call(y_axis3);
+
+                svg3.append("text")
+                      .attr("transform", "translate(" + width3/2 +  "," + (height3 + margin3.bottom/2) + ")")
+                      .style("text-anchor", "end")
+                      .text("Industry");
+
+                svg3.append("text")
+                  .attr("transform", "translate(-60," + height3/2 + ")rotate(-90)")
+                  .style("text-anchor", "middle")
+                  .text("Share of IC");
 
 
+                var title3 = svg3.selectAll('.title3')
+                    .data([data3])
+                    title3.exit().remove()
+
+                var newtitle3 = title3
+                    .enter()
+                    .append('text')
+                    .attr('class', 'title3')
+                newtitle3.merge(title3)
+                    .attr('x', 10)
+                    .attr('y', 10)
+                    .text("Fig. 4: Absolute percentage changes in IC share by product with (black) and without (white) Purchases Survey")
+                    .attr("font-family", "Georgia")
+                    .attr("font-size", "20px")
+          
+            });
+
+    }
+
+    update3();
     </script>
 
 </body>
