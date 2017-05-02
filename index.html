@@ -27,17 +27,38 @@
         font-size: 11px;
     }
 
+    h1, h2, h3{
+        font-weight: bold
+    }
+
+    h1{
+        font-size: 40px;
+    }
+
+    h2{
+        font-size: 30px;
+    }
+
+    h3{
+        font-size: 20px;
+    }
+
 </style>
 </head>
 <body>
 
     <div>
+    <h1>CMT212 DATA REPORT</h1>
+    <h2>Section 1: Link to Data and Introduction.</h3>
     <p>Link to Data:</p>
     <p>https://www.ons.gov.uk/economy/nationalaccounts/supplyandusetables/datasets/inputoutputsupplyandusetables</p>
     <p>The linked data represent the UK supply and use tables (SUTs) for the years 1997 to 2014. The data in these tables underpins the annual GDP estimates for the UK, illustrates the process used to compile those estimates, and provides a more detailed picture of the economy than GDP alone. Moreover, study of the SUTs can reveal potential problems in compiling this extremely ambitious dataset.</p>
     <p>That said, from the perspective of much econometrics (and statistics in general), the data has important limitations which make it vital to understand exactly what the data is saying and how it can legitimately be used if any analysis is to be valid.</p>
     <p>Below, we first take a brief look at the structure and purpose of the SUTs (what data is included, and how this data is linked) and illustrate this using a simple visualisation. We then describe some of the limitations inherent in this structure and some of the practical issues involved in populating it with estimates. This theoretical analysis indicates some quite restrictive limits on what can be “legitimately” analysed, which allows us to select analyses on the basis of this theoretical discussion rather than try many different ones until we find statistical significance. This is interesting in its own right, and allows us to avoid the undesirable practice of “p-hacking" (Aschwanden 2015, Nuzzo 2014).</p>
     <p>Based on this theoretical discussion, we select two pairs of sub-datasets of the SUTs, subject them to simple statistical evaluations, and describe the results verbally and with further visualisations.</p>
+
+    <h2>Section 2: Theoretical Analysis.</h2>
+    <h3>Section 2.1: The Structure of the SUTs.</h3>
 
     <p>The SUTs contain the following economic variables, broken down by “industry” and/or “product” as shown:</p>
 
@@ -292,22 +313,46 @@
         </tbody>
   </table>
   <p>The material in this section is summarised and extensively clarified and rendered as non-technical as possible from Eurostat (2010), pp. 55-61, sections 3.14 to 2.52; and pp. 275-276, sections 9.01 to 9.14.
-Consider a firm which makes money from selling products. After paying for labour (salaries) and raw materials,  and paying taxes required to produce, the rest is profit. 
-Sales-Salaries-Raw Materials Costs-Taxes on Production=Profit                                (1) 
-This can be rearranged to
-Sales-Raw Materials Costs=Profit+Salaries+Taxes on Production                                (2)                                          
-In terms of National Accounts concepts that are broadly similar to the intuitive concepts in (2), this can be restated as:
-Output-Intermediate Consumption=Gross Operating Surplus+Compensation of Employees+Taxes on Production                                                                        (3)                                          
-Before adjusting for certain taxes and subsidies, GDP is defined as either side of this equation. This pre-adjustment version is known as gross value added (GVA). The left-hand side is known as GVA measured by production (GVAP); the right-hand side is GVA measured by income (GVAI). We have discussed a single firm, but an economy can be understood as the sum of a set of firms or producing units that can be treated the same way; for units that do not sell their output, or where the sale price does not value the output accurately, “sale price” must be (and is) imputed. The SUTs for the UK aggregate data covering all such units resident in the UK. GDP can also be defined in a third way. In economics textbooks, the usual GDP equation is:
-GDP=Household Consumption+Government Expenditure+Investment+Exports-Imports                                                                                                                                                               (4)
-The right-hand side of (4) is linked to (3) as follows. Using (2) in (4), and restating the RHS in National Accounts terms,
-Output-Intermediate Consumption+Net Taxes on Products=Household Final Consumption Expenditure+General Government Final Consumption Expenditure+Gross Capital Formation+Exports-Imports                                                                                                                                         (5)                                                                                       
+Consider a firm which makes money from selling products. After paying for labour (salaries) and raw materials,  and paying taxes required to produce, the rest is profit.</p> 
+<p>Sales-Salaries-Raw Materials Costs-Taxes on Production=Profit                                (1) </p>
+
+<p> This can be rearranged to </p>
+<p>Sales-Raw Materials Costs=Profit+Salaries+Taxes on Production                                (2) </p>                                       
+<p> In terms of National Accounts concepts that are broadly similar to the intuitive concepts in (2), this can be restated as: </p>
+
+<p>Output - Intermediate Consumption = Gross Operating Surplus + Compensation of Employees + Taxes on Production  (3)</p>                                                                                                              
+<p>Before adjusting for certain taxes and subsidies, GDP is defined as either side of this equation. This pre-adjustment version is known as gross value added (GVA). The left-hand side is known as GVA measured by production (GVAP); the right-hand side is GVA measured by income (GVAI). We have discussed a single firm, but an economy can be understood as the sum of a set of firms or producing units that can be treated the same way; for units that do not sell their output, or where the sale price does not value the output accurately, “sale price” must be (and is) imputed. The SUTs for the UK aggregate data covering all such units resident in the UK. GDP can also be defined in a third way. In economics textbooks, the usual GDP equation is: </p>
+
+<p>GDP=Household Consumption+Government Expenditure+Investment+Exports-Imports  (4) </p>                                                                                                                                                              
+<p>The right-hand side of (4) is linked to (3) as follows. Using (2) in (4), and restating the RHS in National Accounts terms, </p>
+<p>Output-Intermediate Consumption+Net Taxes on Products=Household Final Consumption Expenditure+General Government Final Consumption Expenditure+Gross Capital Formation+Exports-Imports                                                       (5) </p>                                                                                      
 This can be restated as:
-Output+Imports+Net Taxes on Production =Intermediate Consumption+Household Final Consumption Expenditure+General Government Final Consumption Expenditure+Gross Capital Formation+Taxes on Products-Subsidies on Products+Exports                                                                     (6)                                                                                      
-The LHS of (6) can be understood as total supply, the RHS as total use. Intuitively, everything that is used in one of the categories on the RHS must be supplied in some way; it can’t just appear out of nowhere. Either it is supplied from the domestic economy (output) or it has to be imported. Similarly, anything that is sold must be purchased by someone for some purpose, and the variables in (6) are defined such that the RHS of (6) covers all possible reasons for purchase.
-Comparing equations (3) and (6) to the table in the previous subsection, it is apparent that the SUTs simply present all the terms in these equations – that is, the components of the three measures of GDP, recalling that “gross capital formation” is defined as (Eurostat 2010, p. 73, section 3.122)
-Gross Capital Formation=GFCF+Change in Inventories+Change in Valuables              (7)
-It remains to justify the product and industry breakdowns. 
+<p>Output+Imports+Net Taxes on Production =Intermediate Consumption+Household Final Consumption Expenditure+General Government Final Consumption Expenditure+Gross Capital Formation+Taxes on Products-Subsidies on Products+Exports (6)</p>                                                                                                                                                          
+<p>The LHS of (6) can be understood as total supply, the RHS as total use. Intuitively, everything that is used in one of the categories on the RHS must be supplied in some way; it can’t just appear out of nowhere. Either it is supplied from the domestic economy (output) or it has to be imported. Similarly, anything that is sold must be purchased by someone for some purpose, and the variables in (6) are defined such that the RHS of (6) covers all possible reasons for purchase.</p>
+<p>Comparing equations (3) and (6) to the table in the previous subsection, it is apparent that the SUTs simply present all the terms in these equations – that is, the components of the three measures of GDP, recalling that “gross capital formation” is defined as (Eurostat 2010, p. 73, section 3.122)</p>
+<p>Gross Capital Formation=GFCF+Change in Inventories+Change in Valuables              (7) </p>
+<p>It remains to justify the product and industry breakdowns.</p>
+
+<p>In this section, we show that presenting the variables described in the previous section by products and industries as they are presented in the SUTs is both conceptually valid and of interest from the perspective of economics. This will allow us to select analyses that provide useful information for economic analysis.</p>
+
+<p>First, we need to define “product” and “industry.” “Product” refers to a type of good or service: for example, banking services (CPA division 64) (Eurostat 2013). “Industry” refers to the sum of all units whose dominant activity is producing the corresponding product. For example, the banking industry (SIC division 64) consists of the sum of all units with the dominant activity of producing banking services (Eurostat 2010, p. 50, section 2.150).</p>
+
+<p>Product breakdowns are available for all components of total supply and total use: all GDP components except GOS and COE. </p>
+
+<ul>
+   <li>This is valid because the supply and use identity expressed in (6) holds for each product separately as well as for the whole economy, with the same logic. For example, all purchases of banking services must also be sales of banking services – it wouldn’t make sense for them to be purchases of motor vehicles, or agricultural products! On the other hand, industries may supply goods or services other than their dominant activity; for example, banks might supply management consultancy (CPA division 70), so the equations don’t hold for them.</li>
+   <li>This breakdown is of interest for two main reasons. Firstly, the breakdown by product gives information on what the UK is producing, what it’s importing and exporting, and what those products are used for. Secondly, it allows more detailed deflation (conversion of nominal to real values) because different products have experienced drastically different price changes over time (eg, computer equipment vs. oil).</li>
+</ul>
+
+<p>Industry breakdowns are available for all components of GVAP and GVAI: all terms in (3).</p>
+
+<ul>
+   <li>This is valid because, recalling that the intuition behind (3) is a simple model of a firm, the identity in (3) should hold for the whole economy as the sum of all firms, and also for industries as subsets of firms.</li>
+   <li>This is of interest because the equation (3) reflects the production function that is fundamental to microeconomics. The production function is Y = f(K, L), that is: value-added (GVA) is a function of capital and labour inputs. (GOS is distributed to the owners of the capital involved, just as COE is distributed to the “owners” of the labour.) In theory, each industry represents a production “technology” that we can measure by measuring all the values in (3) by industry.</li>
+</ul>
+
+
+
 
 
 
