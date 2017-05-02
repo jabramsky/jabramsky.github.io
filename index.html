@@ -5,7 +5,7 @@
     <title>dummy3</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.7.3/d3.min.js"></script>
     <style>
-    html, body, #vis1, #vis2{
+    html, body, #vis1, #vis2, #vis1a{
         height: 100%;
         margin: 0;
         background-color: "white";
@@ -142,10 +142,12 @@
         <li>The variables broken down by product show how each product used in the UK is supplied (output, imports) and used (all other variables broken down by products).</li>
         <li>These product variables are of interest partly because they allow more accurate deflation of these nominal values to produce constant-price or real GDP and GDP components. </li>
     </ul>
-    <p>The production function relationship between GVAI and GVAP is illustrated in the following diagram. To see different industries, press the RIGHT and LEFT buttons (to move further on or back in the industry list); to see different years, press UP to move on in time or DOWN to move back. You may need to click on the diagram to gte started.</p>
+    <p>The production function relationship between GVAI and GVAP is illustrated in the following diagram. To see different industries, press the RIGHT and LEFT buttons (to move further on or back in the industry list); to see different years, press UP to move on in time or DOWN to move back. You may need to click on the diagram to gte started. NB: The preceding is how this is supposed to work. I have been unable to make it work in conjunction with the other visualisations, despite extensive testing that it works in isolation. Please run the htmal file "vis1" to see this diagram functioning properly. You will need the .csv file "industry_gva_and_supply.csv" to be in the same folder.)</p>
+    </div>
+    <div id="vis1a">
     </div>
     <div id="vis1">
-    </div>
+
     <div>
     <p>In the previous section, we asserted that the variables shown in the SUTs are linked and that these linkages are the primary reason for the structure of the SUTs. Investigating these linkages is therefore an obvious focus for the analysis. Before going further, however, we should note some limitations of the SUTs and some features of the analysis which might mitigate them.</p>
     <ul>
@@ -176,7 +178,7 @@
     </div>
     <div id='vis2'>
     </div>
-    <div id='vis1.5'>
+    <div id='vis1a'>
     </div>
    
 
@@ -1220,6 +1222,131 @@
         })
 
     update2();
+
+    var width1 = 1500;
+    var height1 = 1800;
+
+    var margin1 = {
+        top: 10,
+        bottom: 100,
+        left: 100,
+        right: 120
+    };
+
+    var svg1 = d3.select('#vis1a')
+        .append('svg')
+            .attr('width', width1)
+            .attr('height', height1)
+        .append('g')
+            .attr('transform', 'translate(' + margin1.left + ',' + margin1.top + ')');
+
+    var tooltip = d3.select('body')
+        .append('div')
+        .attr('class', 'tooltip');
+
+    width1 = width1 - margin1.left - margin1.right;
+    height1 = height1 - margin1.top - margin1.bottom;
+
+    var dateParse = d3.timeParse('%Y');
+    var tooltipFormat = d3.timeFormat('%Y');
+
+    var x_scale1 = d3.scaleTime()
+        .range([0, width1]);
+
+    var y_scale1 = d3.scaleLinear()
+        .range([height1, 0]);
+
+    var line = d3.line()
+        .x(function(d){
+            return x_scale1(dateParse(d.date));
+        })
+        .y(function(d){
+            return y_scale1(+d.WAGESHARE);
+        });
+
+    var x_axis1 = d3.axisBottom()
+        .scale(x_scale1);
+
+    var y_axis1 = d3.axisLeft()
+        .scale(y_scale1);
+
+    d3.csv('timeseries.csv', function(csv_data1){
+        console.log(csv_data1);
+
+        x_scale1.domain(d3.extent(csv_data1, function(d){
+            return dateParse(d.date);
+        }))
+
+        y_scale1.domain([0, 1]);
+
+        var lines = svg1.selectAll('.line')
+            .data([csv_data1]);
+
+        lines
+            .enter()
+            .append('path')
+            .attr('class', 'line')
+            .attr('fill', 'none')
+            .attr('stroke', 'black')
+            .attr('d', line);
+
+        var points = svg1.selectAll('.point')
+            .data(csv_data1);
+
+        points
+            .enter()
+            .append('circle')
+            .attr('class', 'point')
+            .attr('r', 10)
+            .attr('cx', function(d){
+                return x_scale1(dateParse(d.date));
+            })
+            .attr('cy', function(d){
+                return y_scale1(+d.WAGESHARE);
+            })
+            .attr('fill', 'black')
+            .attr('opacity', 0)
+            .on('mouseover', mouseOver)
+            .on('mousemove', mouseMove)
+            .on('mouseout', mouseOut);
+
+        svg1.append('g')
+            .attr('transform', 'translate(0, ' + height1 + ')')
+            .call(x_axis1);
+
+        svg1.append('g')
+            .call(y_axis1);
+
+        function mouseOver(d){
+            console.log(d);
+            var date = dateParse(d.date);
+            var displayDate = tooltipFormat(date);
+
+            d3.select(this)
+                .transition()
+                .style('opacity', 1)
+
+            tooltip
+                .style('display', null)
+                .html('<p>Date: ' + displayDate + '<br>Wage share: ' + d.WAGESHARE + '%</p>');
+        };
+
+        function mouseMove(d){
+            tooltip
+                .style('top', (d3.event.pageY - 20) + "px")
+                .style('left', (d3.event.pageX + 20) + "px");
+        };
+
+        function mouseOut(d){
+            d3.select(this)
+                .transition()
+                .style('opacity', 0)
+
+            tooltip
+                .style('display', 'none');
+        };
+    })
+
 
     </script>
 
