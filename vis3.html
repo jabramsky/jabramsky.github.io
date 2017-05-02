@@ -6,7 +6,7 @@
     <script src="//d3js.org/d3.v4.min.js"></script>
     <script src="//d3js.org/colorbrewer.v1.js"></script>
     <style>
-        html, body, #vis {
+        html, body, #vis3 {
             margin: 0;
             height: 100%;
             font-family: sans-serif;
@@ -27,72 +27,66 @@
     </style>
 </head>
 <body>
-    <div id="vis"></div>
+    <div id="vis3"></div>
     <script>
 
-        var width = 1000;
-        var height = 1200;
+        var width3 = 1200;
+        var height3 = 600;
 
-        var margin = {
+        var margin3 = {
             top: 50,
             bottom: 100,
             left: 100,
             right: 50
         };
 
-        var svg3 = d3.select('#vis')
-                    .append('svg3')
-                        .attr('height', height)
-                        .attr('width', width)
+        var svg3 = d3.select('#vis3')
+                    .append('svg')
+                        .attr('height', height3)
+                        .attr('width', width3)
                     .append('g')
-                        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+                        .attr('transform', 'translate(' + margin3.left + ',' + margin3.top + ')');
 
-         var tooltip = d3.select('body')
+         var tooltip3 = d3.select('body')
             .append('div')
             .attr('class', 'tooltip');
 
-        width = width - margin.left - margin.right;
-        height = height - margin.top - margin.bottom;
+        width3 = width3 - margin3.left - margin3.right;
+        height3 = height3 - margin3.top - margin3.bottom;
 
-        var x_scale = d3.scaleLinear()
-                    .rangeRound([0, width]);
+        var x_scale3 = d3.scaleLinear()
+                    .rangeRound([0, width3]);
 
-        var y_scale = d3.scaleLinear()
-                    .rangeRound([height, 0])
+        var y_scale3 = d3.scaleLinear()
+                    .rangeRound([height3, 0])
 
-        var colour_scale_ran = d3.scaleQuantile()
-                    .range(colorbrewer.Reds[9]);
-
-        var colour_scale_noran = d3.scaleQuantile()
-                    .range(colorbrewer.Blues[9]);
-
-        var area_scale = d3.scaleLinear()
+        var area_scale3 = d3.scaleLinear()
                     .range([0, 400]);
 
-        var y_axis = d3.axisLeft(y_scale);
+        var y_axis3 = d3.axisLeft(y_scale3);
 
-        var x_axis = d3.axisBottom(x_scale);
+        var x_axis3 = d3.axisBottom(x_scale3);
 
         svg3.append("g")
           .attr("class", "y axis");
 
         svg3.append("g")
           .attr("class", "x axis")
-          .attr("transform", "translate(0," + height + ")");
+          .attr("transform", "translate(0," + height3 + ")");
 
         refyear = 1997
 
-        function update(){
-        d3.csv('ICshare.csv', function(data){
+        function updat3(){
+        d3.csv('ICshare.csv', function(data3){
 
-            x_scale.domain(d3.extent(data, function(d){ return +d.PRODUCT; }));
-            y_scale.domain(d3.extent(data, function(d){ return +d.ABSPCHANGE; }))
-            area_scale.domain(d3.extent(data, function(d){ return +d.START; }));
+            x_scale3.domain(d3.extent(data3, function(d){ return +d.PRODUCT; }));
+            y_scale3.domain(d3.extent(data3, function(d){ return +d.ABSPCHANGE; }))
+            area_scale3.domain(d3.extent(data3, function(d){ return +d.START; }));
 
             var ps_colour = "black"
-            var other_colour = "white"
+            var other_colour3 = "white"
             var dots = svg3.selectAll('.dot')
-                            .data(data);
+                            .data(data3);
 
             //exit
             dots
@@ -109,27 +103,27 @@
 
             //update
             new_dots.merge(dots)
-                .attr('cx', function(d){ return x_scale(+d.PRODUCT); })
-                .attr('cy', function(d){ return y_scale(+d.ABSPCHANGE); })
+                .attr('cx', function(d){ return x_scale3(+d.PRODUCT); })
+                .attr('cy', function(d){ return y_scale3(+d.ABSPCHANGE); })
                 .attr('fill', function(d){
                     if(+d.WITHPS === 1) {
                         return ps_colour;
                     } else {
-                        return other_colour;
+                        return other_colour3;
                     }
                  })
                 .attr('r', function(d){
-                    var area = area_scale(+d.START);
-                    var radius = Math.sqrt(area / Math.PI);
-                    return radius;
+                    var area3 = area_scale3(+d.START);
+                    var radius3 = Math.sqrt(area3 / Math.PI);
+                    return radius3;
                 })
-                .on('mouseover', mouseOver)
-                .on('mousemove', mouseMove)
-                .on('mouseout', mouseOut);
+                .on('mouseover', mouseOver3)
+                .on('mousemove', mouseMove3)
+                .on('mouseout', mouseOut3);
 
             
 
-            function mouseOver(d){
+            function mouseOver3(d){
 
                     d3.select(this)
                         .transition()
@@ -140,48 +134,48 @@
                         .html('<p>Product: ' + d.NAME + '<br>Absolute % Change: ' + d.ABSPCHANGE + '%</p>');
                 };
 
-            function mouseMove(d){
-                    tooltip
+            function mouseMove3(d){
+                    tooltip3
                         .style('top', (d3.event.pageY - 20) + "px")
                         .style('left', (d3.event.pageX + 20) + "px");
                 };
 
-            function mouseOut(d){
-                    tooltip
+            function mouseOut3(d){
+                    tooltip3
                         .style('display', 'none');
                 };
             
 
 
             d3.select('.x.axis')
-                .call(x_axis);
+                .call(x_axis3);
 
             d3.select('.y.axis')
-                .call(y_axis);
+                .call(y_axis3);
 
             svg3.append("text")
-                  .attr("transform", "translate(" + width/2 +  "," + (height + margin.bottom/2) + ")")
+                  .attr("transform", "translate(" + width3/2 +  "," + (height3 + margin3.bottom/2) + ")")
                   .style("text-anchor", "end")
                   .text("Industry");
 
             svg3.append("text")
-              .attr("transform", "translate(-60," + height/2 + ")rotate(-90)")
+              .attr("transform", "translate(-60," + height3/2 + ")rotate(-90)")
               .style("text-anchor", "middle")
-              .text("Wage Share");
+              .text("Share of IC");
 
 
-            var title = svg3.selectAll('.title')
-                .data([data])
-                title.exit().remove()
+            var title3 = svg3.selectAll('.title3')
+                .data([data3])
+                title3.exit().remove()
 
-            var newtitle = title
+            var newtitle3 = title3
                 .enter()
                 .append('text')
-                .attr('class', 'title')
-            newtitle.merge(title)
+                .attr('class', 'title3')
+            newtitle3.merge(title3)
                 .attr('x', 10)
                 .attr('y', 10)
-                .text("Absolute percentage changes in IC share by product with and without Purchases Survey")
+                .text("Fig. 4: Absolute percentage changes in IC share by product with (black) and without (white) Purchases Survey")
                 .attr("font-family", "Georgia")
                 .attr("font-size", "20px")
                 .attr("fill", "black");
@@ -193,7 +187,7 @@
 
     }
 
-    update();
+    update3();
     </script>
 
 </body>
