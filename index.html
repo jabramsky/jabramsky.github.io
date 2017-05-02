@@ -1197,7 +1197,7 @@
             newtitle2.merge(title2)
                 .attr('x', 10)
                 .attr('y', 10)
-                .text("Fig. 3: Wage shares by industry, " + refyear2)
+                .text("Fig. 2: Wage shares by industry, " + refyear2)
                 .attr("font-family", "Georgia")
                 .attr("font-size", "20px")
                 .attr("fill", "black");
@@ -1314,6 +1314,22 @@
 
         svg1.append('g')
             .call(y_axis1);
+
+        var title1a = svg1a.selectAll('.title1a')
+                .data([data])
+                title1a.exit().remove()
+
+            var newtitle1a = title1a
+                .enter()
+                .append('text')
+                .attr('class', 'title1a')
+            newtitle1a.merge(title1a)
+                .attr('x', 10)
+                .attr('y', 10)
+                .text("Fig. 3: UK wage shares, 1997-2014")
+                .attr("font-family", "Georgia")
+                .attr("font-size", "20px")
+                .attr("fill", "black");
 
         function mouseOver(d){
             console.log(d);
