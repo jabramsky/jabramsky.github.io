@@ -156,6 +156,8 @@
           </tr>
         </tbody>
   </table>
+
+  <h3>Section 2.2: Why this structure?</h3>
   <p>This may seem like a random assortment of economic variables, but in fact these variables are closely linked. Definitions of the terms above, the rationale for assembling them in one place, and the economic reasons why they are linked are explained in detail in the Appendix. Here, we can summarise the conclusions reached there as follows:</p>
    <ul>
         <li>The variables broken down by industry show how firms (and firm-like units) in each industry produce UK GDP (output, intermediate consumption), and how this production is distributed (COE, GOS).</li>
@@ -169,6 +171,7 @@
     </div>
 
     <div>
+    <h3>Section 2.3: Limitations of the SUTs; Implications for Analysis.</h3>
     <p>In the previous section, we asserted that the variables shown in the SUTs are linked and that these linkages are the primary reason for the structure of the SUTs. Investigating these linkages is therefore an obvious focus for the analysis. Before going further, however, we should note some limitations of the SUTs and some features of the analysis which might mitigate them.</p>
     <ul>
         <li> Nominal Values: All values in the SUTs are nominal, not real. As is well-known, this makes them unsuitable for time-series analysis without taking this into account (Tufte 1983). However, this difficulty can be avoided by analysing ratios of two variables, rather than the variables themselves – because the units which were in nominal £s disappear, so the series can be analysed over time. More intractably, we cannot say anything about deflation using the SUTs alone, as there is no price information.</li>
@@ -176,8 +179,15 @@
         <li>Little Metadata: Most professionally produced surveys are published with quality metadata such as coefficients of variation, as recommended in the Statistical Quality Framework. The SUTs are not. Moreover, they were stripped of their National Statistics status in 2014, primarily because the main source of product detail for intermediate consumption, the Purchases Survey (PS), was discontinued in 2005; 2004 patterns have been used ever since insert ref. (The PS was reinstated in 2016 and will be used for this year’s SUTs for the first time since 2005.) Since Limitation 2 means that we should be analysing industry and/or product detail, analysis should avoid intermediate consumption.</li>
     </ul>
     <p>Combined with the economic linkages described earlier, these limitations impose severe restrictions on the choice of series to analyse. We want an analysis that tells us something about the production function (since deflation analysis cannot be performed using only the SUTs); which uses ratios of variables, rather than the variables themselves; and which avoids intermediate consumption.</p>
+
+    <h2>Section 2.4: Analysis Choice 1: Wage Share.</h2>
     <p>These restrictions suggest a particular variable to analyse: wage share. Wage share is defined in Schneider (2009) as compensation of employees divided by GVA. It is, therefore, a ratio. Moreover, it relates to the shape of the function defined by the right-hand side of the production function equation (Equation (3) in the Appendix), so it deals with the production function without involving intermediate consumption. Moreover, an industrial analysis is possible. It is reasonable to assume that manufacturing and non-manufacturing industries have different technologies, and the economics literature on the wage share includes industrial studies. We follow de Serres et al (2002) who argue that over 1975-1995, in several developed countries, industrial change contributed to the wage share change – specifically, a decline in manufacturing led to a decline in whole-economy wage share because manufacturing industries had higher wage shares. Although the SUTs do not have the data to replicate their analysis, we can investigate whether the basis of this claim holds in the period 1997-2014 – that is, whether manufacturing industries have higher wage shares than non-manufacturing industries.</p>
+
+    <h3>Section 2.5: Analysis Choice 2: Intermediate Consumption Shares.</h3>
     <p>Limitation 3 also suggests a further area of possible analysis. The last reference year in the dataset is 2014; 10 years before that, the last PS used in these SUTs was collected. To assess the effects of this on the 2014 dataset, it may make sense to analyse intermediate consumption product detail for two reference years while the PS was still being collected. This is of interest because it provides a look behind the sparse metadata for the SUTs at a major quality issue with a key economic dataset.</p>
+
+    <h2>Section 3: Data Report.</h2>
+    <h3>Section 3.1: Wage Share Data Report.</h3>
     <ol>
         <li>The wage share is defined as follows (Schneider 2009): for industry i in period t, the wage share WS is given by WS(i,t) = COE(i,t)⁄GVA(i,t)</li>
         <li>As mentioned above, WS has no units because both the numerator and denominator of the LHS of the equation in 1 are in £ of the year t, so they cancel. It can therefore be analysed over time.</li>
@@ -201,6 +211,7 @@
     <div id='vis1a'>
     </div>
     <div>
+    <h3>Section 3.2: Intermediate Consumption Share Data Report.</h3>
     <ol>
         <li> We want to investigate the effect of not running the Purchases Survey using the product proportions of the total. For clarity, the product proportion for product p in period t is defined as, where there are n products and IC(T,t) is the sum of all IC values across the economy in t, PP(p,t)=  IC(p,t)⁄I(T,t).</li>
         <li>To assess the effect of not using the Purchases Survey, we look at the change in PP across the period since it was run (2005-2014) and compare it to the longest possible time span when it was available (1997-2004).</li>
@@ -220,6 +231,8 @@
     <div id='vis3'>
     </div>
     <div>
+    <h2>Appendix: Detailed Theoretical Discussion of the SUTs.</h2>
+    <h3>Section A.1: Introduction and Definitions.</h3>
     <p>The SUTs are described in detail in Eurostat (2008). To summarise, the SUTs rely on the fact that GDP is an accounting balance which has been defined such that it can be calculated (from different surveys and administrative data) in three separate ways, with the true values of the results always being equal (Eurostat 2008 pp. 46-62).</p>
     <table>
         <thead>
@@ -312,7 +325,8 @@
           </tr>
         </tbody>
   </table>
-  <p>The material in this section is summarised and extensively clarified and rendered as non-technical as possible from Eurostat (2010), pp. 55-61, sections 3.14 to 2.52; and pp. 275-276, sections 9.01 to 9.14.
+<h3>Section A.2: Detailed Discussion of Variables Presented.</h3>
+<p>The material in this section is summarised and extensively clarified and rendered as non-technical as possible from Eurostat (2010), pp. 55-61, sections 3.14 to 2.52; and pp. 275-276, sections 9.01 to 9.14.
 Consider a firm which makes money from selling products. After paying for labour (salaries) and raw materials,  and paying taxes required to produce, the rest is profit.</p> 
 <p>Sales-Salaries-Raw Materials Costs-Taxes on Production=Profit                                (1) </p>
 
@@ -332,6 +346,8 @@ This can be restated as:
 <p>Comparing equations (3) and (6) to the table in the previous subsection, it is apparent that the SUTs simply present all the terms in these equations – that is, the components of the three measures of GDP, recalling that “gross capital formation” is defined as (Eurostat 2010, p. 73, section 3.122)</p>
 <p>Gross Capital Formation=GFCF+Change in Inventories+Change in Valuables              (7) </p>
 <p>It remains to justify the product and industry breakdowns.</p>
+
+<h3>Section A.3: Detailed Discussion of Industry and Product Breakdswns</h3>
 
 <p>In this section, we show that presenting the variables described in the previous section by products and industries as they are presented in the SUTs is both conceptually valid and of interest from the perspective of economics. This will allow us to select analyses that provide useful information for economic analysis.</p>
 
