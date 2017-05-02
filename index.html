@@ -194,9 +194,122 @@
         <li>Again, we perform a simple linear regression of the absolute percentage change on WITHPS, which is 0 for the later changes and 1 for the earlier ones.</li>
         <li>As the p-value is well above 0.05, we can conclude that the analysis has not detected any significant effect.</li>
         <li>This is reinforced by the fact that the coefficient for WITHPS is actually negative; that is, if there is any effect the changes in the earlier period are smaller than the later ones – the opposite of the predicted effect if a problem existed.</li>
+        <li>Also of note is the Durbin-Watson statistic, which is (very slightly) above 2, indicating high autocorrelation - perhaps not a surprising outcome given the nature of the data.</li>
     </ol>
     <div id='vis3'>
     </div>
+    <div>
+    <p>The SUTs are described in detail in Eurostat (2008). To summarise, the SUTs rely on the fact that GDP is an accounting balance which has been defined such that it can be calculated (from different surveys and administrative data) in three separate ways, with the true values of the results always being equal (Eurostat 2008 pp. 46-62).</p>
+    <table>
+        <thead>
+          <tr>
+            <th>Variable</th>
+            <th>Definition</th>
+            <th>Reference</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>Output</th>
+            <td>The sum of all products created during the reference period, valued on a defined basis (see next section).</td>
+            <td>Eurostat (2010), p. 55, section 3.14</td>
+          </tr>
+          <tr>
+            <th>Intermediate consumption</th>
+            <td>The sum of all products consumed during production processes (ie, raw materials), valued on a defined basis (see next section)</td>
+            <td>Eurostat (2010), p. 68, section 3.88</td>
+          </tr>
+          <tr>
+            <th>Compensation of employees</th>
+            <td>Remuneration of employees for labour inputs into the production process</td>
+            <td>Eurostat (2010), p. 87, section 4.02</td>
+          </tr>
+          <tr>
+            <th>Gross operating surplus</th>
+            <td>The residual from output after IC, COE and taxes on production have been deducted</td>
+            <td>Eurostat (2010), p. 200, section 8.15; and p. 201, table 8.3</td>
+          </tr>
+          <tr>
+            <th>Taxes (net of subsidies) on production</th>
+            <td>Taxes incurred as a result of production that do not vary with the amount or price of production (eg, business rates) less subsidies on the same basis (eg, CAP payments)</td>
+            <td>Eurostat (2010), p. 93, section 4.22</td>
+          </tr>
+          <tr>
+            <th>Household final consumption expenditure</th>
+            <td>Expenditure by households to satisfy own needs/wants, not for production</td>
+            <td>Eurostat (2010), p. 70, sections 3.95 and 3.96</td>
+          </tr>
+          <tr>
+            <th>NPISH final consumption expenditure</th>
+            <td>Expenditure by NPISHs (most charities, unions, religious organisations, etc) to satisfy  individual or collective needs or wants</td>
+            <td>Eurostat (2010), pp. 70-71, section 3.97</td>
+          </tr>
+          <tr>
+            <th>Central government final consumption expenditure</th>
+            <td>Expenditure by central government (inc. devolved administrations) to satisfy  individual or collective needs or wants</td>
+            <td>Eurostat (2010), p. 71, section 3.98</td>
+          </tr>
+          <tr>
+            <th>Local government final consumption expenditure</th>
+            <td>Expenditure by local government to satisfy  individual or collective needs or wants</td>
+            <td>Eurostat (2010), p. 71, section 3.98</td>
+          </tr>
+          <tr>
+            <th>Gross fixed capital formation</th>
+            <td>Expenditure on goods and services used in production but not consumed in one reference period, net of sales of such goods or services</td>
+            <td>Eurostat (2010), pp. 73-77, sections 3.122-3.145</td>
+          </tr>
+          <tr>
+            <th>Change in inventories</th>
+            <td>Net increase in the value of goods in inventory and goods or services work in progress from the last ref. period, not including increases/decreases resulting from price changes of existing goods/services (if there was a decrease, this value is negative)</td>
+            <td>Eurostat (2010), pp. 77-78, sections 3.146-3.153</td>
+          </tr>
+          <tr>
+            <th>Change in stock of valuables</th>
+            <td>Net increase in the value of goods with intrinsic (non-production-related) value (if there was a decrease, this value is negative)</td>
+            <td>Eurostat (2010), pp. 78-79, sections 3.154-3.157</td>
+          </tr>
+          <tr>
+            <th>Exports</th>
+            <td>No</td>
+            <td>Yes</td>
+          </tr>
+          <tr>
+            <th>Imports</th>
+            <td>Goods or services purchased by resident units from non-resident units/td>
+            <td>Eurostat (2010), p. 79, section 3.158</td>
+          </tr>
+          <tr>
+            <th>Exports</th>
+            <td>Goods or services purchased by non-resident units from resident units</td>
+            <td>Eurostat (2010), p. 79, section 3.159</td>
+          </tr>
+          <tr>
+            <th>Taxes (net of subsidies) on products</th>
+            <td>Taxes incurred per unit of production or per £ value of production, net of subsidies on the same basis (eg, VAT)</td>
+            <td>Eurostat (2010), p. 92, sections 4.16-4.18</td>
+          </tr>
+        </tbody>
+  </table>
+  <p>The material in this section is summarised and extensively clarified and rendered as non-technical as possible from Eurostat (2010), pp. 55-61, sections 3.14 to 2.52; and pp. 275-276, sections 9.01 to 9.14.
+Consider a firm which makes money from selling products. After paying for labour (salaries) and raw materials,  and paying taxes required to produce, the rest is profit. 
+Sales-Salaries-Raw Materials Costs-Taxes on Production=Profit                                (1) 
+This can be rearranged to
+Sales-Raw Materials Costs=Profit+Salaries+Taxes on Production                                (2)                                          
+In terms of National Accounts concepts that are broadly similar to the intuitive concepts in (2), this can be restated as:
+Output-Intermediate Consumption=Gross Operating Surplus+Compensation of Employees+Taxes on Production                                                                        (3)                                          
+Before adjusting for certain taxes and subsidies, GDP is defined as either side of this equation. This pre-adjustment version is known as gross value added (GVA). The left-hand side is known as GVA measured by production (GVAP); the right-hand side is GVA measured by income (GVAI). We have discussed a single firm, but an economy can be understood as the sum of a set of firms or producing units that can be treated the same way; for units that do not sell their output, or where the sale price does not value the output accurately, “sale price” must be (and is) imputed. The SUTs for the UK aggregate data covering all such units resident in the UK. GDP can also be defined in a third way. In economics textbooks, the usual GDP equation is:
+GDP=Household Consumption+Government Expenditure+Investment+Exports-Imports                                                                                                                                                               (4)
+The right-hand side of (4) is linked to (3) as follows. Using (2) in (4), and restating the RHS in National Accounts terms,
+Output-Intermediate Consumption+Net Taxes on Products=Household Final Consumption Expenditure+General Government Final Consumption Expenditure+Gross Capital Formation+Exports-Imports                                                                                                                                         (5)                                                                                       
+This can be restated as:
+Output+Imports+Net Taxes on Production =Intermediate Consumption+Household Final Consumption Expenditure+General Government Final Consumption Expenditure+Gross Capital Formation+Taxes on Products-Subsidies on Products+Exports                                                                     (6)                                                                                      
+The LHS of (6) can be understood as total supply, the RHS as total use. Intuitively, everything that is used in one of the categories on the RHS must be supplied in some way; it can’t just appear out of nowhere. Either it is supplied from the domestic economy (output) or it has to be imported. Similarly, anything that is sold must be purchased by someone for some purpose, and the variables in (6) are defined such that the RHS of (6) covers all possible reasons for purchase.
+Comparing equations (3) and (6) to the table in the previous subsection, it is apparent that the SUTs simply present all the terms in these equations – that is, the components of the three measures of GDP, recalling that “gross capital formation” is defined as (Eurostat 2010, p. 73, section 3.122)
+Gross Capital Formation=GFCF+Change in Inventories+Change in Valuables              (7)
+It remains to justify the product and industry breakdowns. 
+
+
 
 
 
@@ -1508,7 +1621,7 @@
                 svg3.append("text")
                       .attr("transform", "translate(" + width3/2 +  "," + (height3 + margin3.bottom/2) + ")")
                       .style("text-anchor", "end")
-                      .text("Industry");
+                      .text("Product");
 
                 svg3.append("text")
                   .attr("transform", "translate(-60," + height3/2 + ")rotate(-90)")
