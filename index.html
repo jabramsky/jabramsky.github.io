@@ -179,6 +179,24 @@
     </div>
     <div id='vis1a'>
     </div>
+    <div>
+    <ol>
+        <li> We want to investigate the effect of not running the Purchases Survey using the product proportions of the total. For clarity, the product proportion for product p in period t is defined as, where there are n products, PP(p,t)=  IC(p,t)⁄(∑n^(p=1)〖IC(p,t) )n.</li>
+        <li>To assess the effect of not using the Purchases Survey, we look at the change in PP across the period since it was run (2005-2014) and compare it to the longest possible time span when it was available (1997-2004).</li>
+        <li>If not using the Purchases Survey is a problem, we would expect the change in PP to be significantly smaller in the later period, when product proportions were not updated from the 2004 PS result - as the problem would be that real changes in the product breakdown are not detected because of the lack of data collected since the changes occurred.</li>
+        <li>We cannot use PP changes directly, as the changes would obviously be autocorrelated with the general economic importance of the product. For example, if a product made up 10% of IC in the start period, it is more likely to end up at 15% than a product that was 1% is likely to go to 6%.</li>
+        <li>We therefore use the percentage change in the share – that is, the change in PP divided by the PP in the start year.</li>
+        <li> We further take the absolute of this value – as we are interested in the size of the change, not its sign. Clearly, any positive or negative share error would have to be “compensated” by changes of the opposite sign.</li>
+        <li>Clearly, the true position of the economy changed over the two examined periods, probably in different ways. We need to adjust the PPs to account for this – as, otherwise, the difference is unrelated to the phenomenon we’re trying to measure.</li>
+        <li>We do this by a simple shift-share adjustment inspired by insert ref. For each period, the IC values by industry and product for the end year (2004 or 2014) are divided by the total IC value for each industry for that year (to give a series of shares equivalent to PPs but for specific industries) and multiplied by the corresponding value for the start period (1997 or 2005). The results are then aggregated to product totals to give the adjusted end-period data. This procedure models what the end period results would have been if the industry distribution of the economy had remained as it was in the start period.</li>
+        <li>This adjustment may not cover all the relevant economic changes over the period – but if we could do that, there would be no problem, as we would know the IC data to be accurate!</li>
+        <li>Again, we perform a simple linear regression of the absolute percentage change on WITHPS, which is 0 for the later changes and 1 for the earlier ones.</li>
+        <li>As the p-value is well above 0.05, we can conclude that the analysis has not detected any significant effect.</li>
+        <li>This is reinforced by the fact that the coefficient for WITHPS is actually negative; that is, if there is any effect the changes in the earlier period are smaller than the later ones – the opposite of the predicted effect if a problem existed.</li>
+    </ol>
+
+
+
 
     <script>
 
@@ -1197,7 +1215,7 @@
             newtitle2.merge(title2)
                 .attr('x', 10)
                 .attr('y', 10)
-                .text("Fig. 2: Wage shares by industry, " + refyear2)
+                .text("Fig. 2: Wage shares by industry, " + refyear2 + " (black dots are manufacturing industries, white ones are other industries")
                 .attr("font-family", "Georgia")
                 .attr("font-size", "20px")
                 .attr("fill", "black");
