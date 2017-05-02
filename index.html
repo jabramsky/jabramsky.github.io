@@ -181,7 +181,7 @@
     </div>
     <div>
     <ol>
-        <li> We want to investigate the effect of not running the Purchases Survey using the product proportions of the total. For clarity, the product proportion for product p in period t is defined as, where there are n products, PP(p,t)=  IC(p,t)⁄(∑n^(p=1)〖IC(p,t) )n.</li>
+        <li> We want to investigate the effect of not running the Purchases Survey using the product proportions of the total. For clarity, the product proportion for product p in period t is defined as, where there are n products and IC(T,t) is the sum of all IC values across the economy in t, PP(p,t)=  IC(p,t)⁄I(T,t).</li>
         <li>To assess the effect of not using the Purchases Survey, we look at the change in PP across the period since it was run (2005-2014) and compare it to the longest possible time span when it was available (1997-2004).</li>
         <li>If not using the Purchases Survey is a problem, we would expect the change in PP to be significantly smaller in the later period, when product proportions were not updated from the 2004 PS result - as the problem would be that real changes in the product breakdown are not detected because of the lack of data collected since the changes occurred.</li>
         <li>We cannot use PP changes directly, as the changes would obviously be autocorrelated with the general economic importance of the product. For example, if a product made up 10% of IC in the start period, it is more likely to end up at 15% than a product that was 1% is likely to go to 6%.</li>
@@ -190,10 +190,13 @@
         <li>Clearly, the true position of the economy changed over the two examined periods, probably in different ways. We need to adjust the PPs to account for this – as, otherwise, the difference is unrelated to the phenomenon we’re trying to measure.</li>
         <li>We do this by a simple shift-share adjustment inspired by insert ref. For each period, the IC values by industry and product for the end year (2004 or 2014) are divided by the total IC value for each industry for that year (to give a series of shares equivalent to PPs but for specific industries) and multiplied by the corresponding value for the start period (1997 or 2005). The results are then aggregated to product totals to give the adjusted end-period data. This procedure models what the end period results would have been if the industry distribution of the economy had remained as it was in the start period.</li>
         <li>This adjustment may not cover all the relevant economic changes over the period – but if we could do that, there would be no problem, as we would know the IC data to be accurate!</li>
+        <li>The diagram below suggests that there is no difference between the two periods. Hover over the dots to see which products they represent.</li>
         <li>Again, we perform a simple linear regression of the absolute percentage change on WITHPS, which is 0 for the later changes and 1 for the earlier ones.</li>
         <li>As the p-value is well above 0.05, we can conclude that the analysis has not detected any significant effect.</li>
         <li>This is reinforced by the fact that the coefficient for WITHPS is actually negative; that is, if there is any effect the changes in the earlier period are smaller than the later ones – the opposite of the predicted effect if a problem existed.</li>
     </ol>
+    <div id='vis3'>
+    </div>
 
 
 
@@ -1070,7 +1073,7 @@
 
     update();
 
-      var width2 = 1500
+      var width2 = 1200
         var height2 = 600
 
         var margin2 = {
@@ -1194,7 +1197,7 @@
                 .call(y_axis2);
 
             svg2.append("text")
-                  .attr("transform", "translate(" + width2/2 +  "," + (height + margin2.bottom/2) + ")")
+                  .attr("transform", "translate(" + width2/2 +  "," + (height2 + margin2.bottom/2) + ")")
                   .style("text-anchor", "end")
                   .text("Industry");
 
@@ -1215,7 +1218,7 @@
             newtitle2.merge(title2)
                 .attr('x', 10)
                 .attr('y', 10)
-                .text("Fig. 2: Wage shares by industry, " + refyear2 + " (black dots are manufacturing industries, white ones are other industries")
+                .text("Fig. 2: Wage shares by industry, " + refyear2 + " (black dots are manufacturing industries, white ones are other industries)")
                 .attr("font-family", "Georgia")
                 .attr("font-size", "20px")
                 .attr("fill", "black");
@@ -1239,7 +1242,7 @@
 
     update2();
 
-    var width1 = 1500;
+    var width1 = 1200;
     var height1 = 600;
 
     var margin1 = {
@@ -1378,6 +1381,157 @@
                 .style('display', 'none');
         };
     })
+
+    
+        var width3 = 1200;
+        var height3 = 600;
+
+        var margin3 = {
+            top: 50,
+            bottom: 100,
+            left: 100,
+            right: 50
+        };
+
+        var svg3 = d3.select('#vis3')
+                    .append('svg')
+                        .attr('height', height3)
+                        .attr('width', width3)
+                    .append('g')
+                        .attr('transform', 'translate(' + margin3.left + ',' + margin3.top + ')');
+
+         var tooltip3 = d3.select('body')
+            .append('div')
+            .attr('class', 'tooltip');
+
+        width3 = width3 - margin3.left - margin3.right;
+        height3 = height3 - margin3.top - margin3.bottom;
+
+        var x_scale3 = d3.scaleLinear()
+                    .rangeRound([0, width3]);
+
+        var y_scale3 = d3.scaleLinear()
+                    .rangeRound([height3, 0])
+
+        var area_scale3 = d3.scaleLinear()
+                    .range([0, 400]);
+
+        var y_axis3 = d3.axisLeft(y_scale3);
+
+        var x_axis3 = d3.axisBottom(x_scale3);
+
+        svg3.append("g")
+          .attr("class", "y axis");
+
+        svg3.append("g")
+          .attr("class", "x axis")
+          .attr("transform", "translate(0," + height3 + ")");
+
+        refyear = 1997
+
+        function updat3(){
+        d3.csv('ICshare.csv', function(data3){
+
+            x_scale3.domain(d3.extent(data3, function(d){ return +d.PRODUCT; }));
+            y_scale3.domain(d3.extent(data3, function(d){ return +d.ABSPCHANGE; }))
+            area_scale3.domain(d3.extent(data3, function(d){ return +d.START; }));
+
+            var ps_colour = "black"
+            var other_colour3 = "white"
+            var dots = svg3.selectAll('.dot')
+                            .data(data3);
+
+            //exit
+            dots
+                .exit()
+                .remove();
+
+            // enter
+            var new_dots = dots
+                .enter()
+                .append('circle')
+                .attr('class', 'dot')
+                .attr('stroke', 'black')
+                .attr('stroke-width', '0.5px')
+
+            //update
+            new_dots.merge(dots)
+                .attr('cx', function(d){ return x_scale3(+d.PRODUCT); })
+                .attr('cy', function(d){ return y_scale3(+d.ABSPCHANGE); })
+                .attr('fill', function(d){
+                    if(+d.WITHPS === 1) {
+                        return ps_colour;
+                    } else {
+                        return other_colour3;
+                    }
+                 })
+                .attr('r', function(d){
+                    var area3 = area_scale3(+d.START);
+                    var radius3 = Math.sqrt(area3 / Math.PI);
+                    return radius3;
+                })
+                .on('mouseover', mouseOver3)
+                .on('mousemove', mouseMove3)
+                .on('mouseout', mouseOut3);
+
+            
+
+            function mouseOver3(d){
+
+                    d3.select(this)
+                        .transition()
+                        .style('opacity', 1)
+
+                    tooltip
+                        .style('display', null)
+                        .html('<p>Product: ' + d.NAME + '<br>Absolute % Change: ' + d.ABSPCHANGE + '%</p>');
+                };
+
+            function mouseMove3(d){
+                    tooltip3
+                        .style('top', (d3.event.pageY - 20) + "px")
+                        .style('left', (d3.event.pageX + 20) + "px");
+                };
+
+            function mouseOut3(d){
+                    tooltip3
+                        .style('display', 'none');
+                };
+            
+
+
+            d3.select('.x.axis')
+                .call(x_axis3);
+
+            d3.select('.y.axis')
+                .call(y_axis3);
+
+            svg3.append("text")
+                  .attr("transform", "translate(" + width3/2 +  "," + (height3 + margin3.bottom/2) + ")")
+                  .style("text-anchor", "end")
+                  .text("Industry");
+
+            svg3.append("text")
+              .attr("transform", "translate(-60," + height3/2 + ")rotate(-90)")
+              .style("text-anchor", "middle")
+              .text("Share of IC");
+
+
+            var title3 = svg3.selectAll('.title3')
+                .data([data3])
+                title3.exit().remove()
+
+            var newtitle3 = title3
+                .enter()
+                .append('text')
+                .attr('class', 'title3')
+            newtitle3.merge(title3)
+                .attr('x', 10)
+                .attr('y', 10)
+                .text("Fig. 4: Absolute percentage changes in IC share by product with (black) and without (white) Purchases Survey")
+                .attr("font-family", "Georgia")
+                .attr("font-size", "20px")
+                .attr("fill", "black");
 
 
     </script>
