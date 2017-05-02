@@ -1427,8 +1427,6 @@
           .attr("class", "x axis")
           .attr("transform", "translate(0," + height3 + ")");
 
-        refyear = 1997
-
         function update3(){
             d3.csv('ICshare.csv', function(data3){
 
@@ -1482,7 +1480,7 @@
                             .transition()
                             .style('opacity', 1)
 
-                        tooltip
+                        tooltip3
                             .style('display', null)
                             .html('<p>Product: ' + d.NAME + '<br>Absolute % Change: ' + d.ABSPCHANGE + '%</p>');
                     };
@@ -1500,10 +1498,11 @@
                 
 
 
-                d3.select('.x.axis')
+                svg3.append('g')
+                    .attr('transform', 'translate(0, ' + height3 + ')')
                     .call(x_axis3);
 
-                d3.select('.y.axis')
+                svg3.append('g')
                     .call(y_axis3);
 
                 svg3.append("text")
